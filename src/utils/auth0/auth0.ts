@@ -18,7 +18,6 @@ export const setAuthorisedOrganizationFromTemporaryStorage = () => {
         LOCAL_STORAGE_AUTHORISED_ORG_KEY,
         sessionStorage.getItem(LOCAL_STORAGE_TEMPORARY_ORG_KEY)!
     );
-    sessionStorage.getItem(LOCAL_STORAGE_TEMPORARY_ORG_KEY)!
 }
 
 export const getTemporaryOrganization = (): string | null => {

@@ -13,7 +13,7 @@ export const Home: React.FC<HomeProps> = ({setOrganization}) => {
                     <div className="w-1/3">
                         <hr className="border border-gray-300"/>
                     </div>
-                    <img src="/img/logo.png"/>
+                    <img src="/img/logo.png" alt="logo sikurezza"/>
                     <div className="w-1/3">
                         <hr className="border border-gray-300"/>
                     </div>

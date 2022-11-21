@@ -9,6 +9,8 @@ import {
     isAuth0RedirectUrl,
     setAuthorisedOrganizationFromTemporaryStorage
 } from "./utils/auth0/auth0";
+import {Provider} from "react-redux";
+import {store} from "./store/store";
 
 function App() {
 
@@ -18,26 +20,28 @@ function App() {
             : getAuthorisedOrganization();
     });
 
+    useEffect(() => {
+        console.log(organization)
+    }, []);
 
-
+    if (!organization) {
+        return <Home setOrganization={setOrganization}/>
+    }
     return (
-        <>
-            {!organization && <Home setOrganization={setOrganization}/>}
-            {(organization) &&
-                <Auth0Provider
-                    domain="dev-70zdl84pcu4rhngr.us.auth0.com"
-                    clientId="PGbhUhgNCnhpxDYgZfefIvWHvrgHXM9e"
-                    redirectUri={window.location.origin}
-                    connection={organization as string}
-                    onRedirectCallback={() => setAuthorisedOrganizationFromTemporaryStorage()}
-                >
-                    {organization === "Impresa" && <Impresa/>}
-                    {organization === "Coordinatore" && <Coordinatore/>}
-                </Auth0Provider>
-            }
-        </>
-    );
-
+        <Auth0Provider
+            domain={process.env.REACT_APP_AUTH0_DOMAIN as string}
+            clientId={process.env.REACT_APP_AUTH0_ID as string}
+            redirectUri={window.location.origin}
+            audience={process.env.REACT_APP_AUTH0_AUDIENCE as string}
+            connection={organization as string}
+            onRedirectCallback={() => setAuthorisedOrganizationFromTemporaryStorage()}
+        >
+            <Provider store={store}>
+                {organization === "Impresa" && <Impresa/>}
+                {organization === "Coordinatore" && <Coordinatore/>}
+            </Provider>
+        </Auth0Provider>
+    )
 }
 
 export default App;
