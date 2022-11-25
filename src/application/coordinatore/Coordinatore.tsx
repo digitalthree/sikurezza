@@ -26,6 +26,7 @@ const Coordinatore: React.FC<CoordinatoreProps> = ({}) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
+
         execQuery(getAllCantieriByCreatoDa, user?.email).then(res => {
             res.forEach((r: { id: string, cantiere: Cantiere; }) => dispatch(addCantiere({
                 ...r.cantiere,
