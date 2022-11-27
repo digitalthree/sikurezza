@@ -52,12 +52,9 @@ export const getAllImprese = async (faunaClient: faunadb.Client, faunaQuery: typ
 
 export const getImpresaById = async (faunaClient: faunadb.Client, faunaQuery: typeof faunadb.query, id: string) => {
     const response = await faunaClient.query(
-        faunaQuery.Select("data",
-            faunaQuery.Get(
-                faunaQuery.Match(
-                    faunaQuery.Index("get_impresa_by_id"),
-                    id
-                )
+        faunaQuery.Let({impresa: faunaQuery.Get(faunaQuery.Match("get_impresa_by_id", id))},
+            faunaQuery.Merge(faunaQuery.Select(["data"], faunaQuery.Var("impresa")),
+                {faunaDocumentId: faunaQuery.Select(["ref", "id"], faunaQuery.Var("impresa"))}
             )
         )
     )

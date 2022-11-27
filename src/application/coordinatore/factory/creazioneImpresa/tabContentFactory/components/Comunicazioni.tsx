@@ -6,6 +6,13 @@ import {addImpresa, ImpreseDaCreareSelector, setImpresaDaCreare} from "../../../
 import {impresaTemporanea} from "../../../../../../model/Impresa";
 import {useFaunaQuery} from "../../../../../../faunadb/hooks/useFaunaQuery";
 import {createImpresaInFauna} from "../../../../../../faunadb/api/impresaAPIs";
+import {
+    addImpresaSubOnCantiere, CantiereProxySelector,
+    CantiereSelezionatoSelector,
+    selezionaCantiere
+} from "../../../../../../store/cantiereSlice";
+import {updateCantiereInFauna} from "../../../../../../faunadb/api/cantiereAPIs";
+import {Cantiere} from "../../../../../../model/Cantiere";
 
 interface ComunicazioniProps {
     setObjectToCreate: (s:string|undefined) => void
@@ -15,6 +22,7 @@ export const Comunicazioni: React.FC<ComunicazioniProps> = ({setObjectToCreate})
 
     const dispatch = useDispatch()
     const impresaDaCreare = useSelector(ImpreseDaCreareSelector)
+    const cantiereProxy = useSelector(CantiereProxySelector)
 
     const {execQuery} = useFaunaQuery()
 
@@ -24,7 +32,13 @@ export const Comunicazioni: React.FC<ComunicazioniProps> = ({setObjectToCreate})
             ...impresaDaCreare,
             comunicazioni: data
         }))
-        execQuery(createImpresaInFauna, {...impresaDaCreare, comunicazioni: data})
+        execQuery(createImpresaInFauna, {...impresaDaCreare, comunicazioni: data}).then(res => {
+            let id = res.ref.value.id
+            if(cantiereProxy) {
+                execQuery(updateCantiereInFauna, {...cantiereProxy, impreseSubappaltatrici: [...cantiereProxy.impreseSubappaltatrici, id]})
+                dispatch(addImpresaSubOnCantiere({idCantiere: cantiereProxy.faunaDocumentId as string, impresa: id}))
+            }
+        })
         dispatch(setImpresaDaCreare(impresaTemporanea))
         setObjectToCreate(undefined)
     }

@@ -10,13 +10,12 @@ import {Cantiere} from "../cantiere/Cantiere";
 
 interface HomeCoordinatoreProps {
     setObjectToCreate: (s: string | undefined) => void
-    breadcrumbsItems: string[]
     setBreadcrumbsItems: (s: string[]) => void
 }
 
 export const HomeCoordinatore: React.FC<HomeCoordinatoreProps> = (
     {
-        setObjectToCreate, breadcrumbsItems, setBreadcrumbsItems
+        setObjectToCreate, setBreadcrumbsItems
     }
 ) => {
 
@@ -27,9 +26,9 @@ export const HomeCoordinatore: React.FC<HomeCoordinatoreProps> = (
         dispatch(selezionaCantiere(undefined))
     }
 
-    useEffect(() => {
+    /*useEffect(() => {
         resetCantiereSelezionato()
-    }, []);
+    }, []);*/
 
 
     return (
@@ -46,7 +45,7 @@ export const HomeCoordinatore: React.FC<HomeCoordinatoreProps> = (
             {cantiereSelezionato &&
                 <>
                     <Breadcrumb breadcrumbsItems={["Home", cantiereSelezionato.nome]} onItemClick={resetCantiereSelezionato}/>
-                    <Cantiere/>
+                    <Cantiere setObjectToCreate={setObjectToCreate}/>
                 </>
             }
         </>

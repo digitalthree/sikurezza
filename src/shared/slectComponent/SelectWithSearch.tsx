@@ -3,7 +3,13 @@ import {Combobox, Transition} from "@headlessui/react";
 import {HiArrowsUpDown} from "react-icons/hi2";
 import {BiCheck} from "react-icons/bi";
 import {useDispatch, useSelector} from "react-redux";
-import {CantieriSelector, selezionaCantiere, trovaCantiereByNomeAndIndirizzo} from "../../store/cantiereSlice";
+import {
+    CantieriProxySelector,
+    CantieriSelector,
+    selezionaCantiere,
+    selezionaCantiereProxy,
+    trovaCantiereByNomeAndIndirizzo
+} from "../../store/cantiereSlice";
 import {Cantiere} from "../../model/Cantiere";
 
 
@@ -25,6 +31,7 @@ export const SelectWithSearch: React.FC<SelectWithSearchProps> = (
 
     const dispatch = useDispatch()
     const cantieri = useSelector(CantieriSelector)
+    const cantieriProxy = useSelector(CantieriProxySelector)
     const [query, setQuery] = useState('')
 
     const filteredItems: string[] =
@@ -40,7 +47,10 @@ export const SelectWithSearch: React.FC<SelectWithSearchProps> = (
         <div>
             <Combobox value={selected} onChange={(selected) => {
                 setSelected(selected)
-                if(tipo === "Cantiere") dispatch(selezionaCantiere(trovaCantiereByNomeAndIndirizzo(cantieri, selected) as Cantiere))
+                if(tipo === "Cantiere") {
+                    dispatch(selezionaCantiere(trovaCantiereByNomeAndIndirizzo(cantieri, selected) as Cantiere))
+                    dispatch(selezionaCantiereProxy(trovaCantiereByNomeAndIndirizzo(cantieriProxy, selected) as Cantiere))
+                }
             }}>
                 <div className="relative mt-1">
                     <div

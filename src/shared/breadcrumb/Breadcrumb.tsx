@@ -15,7 +15,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = (
             <ul>
                 {breadcrumbsItems.map(bi => {
                     if(bi === "Home"){
-                        return <li key={bi} onClick={() => onItemClick(undefined)} className="hover:cursor-pointer">{bi}</li>
+                        return <li key={bi} onClick={() => onItemClick("Home")} className="hover:cursor-pointer">{bi}</li>
                     }else{
                         return <li key={bi} className="font-bold">{bi}</li>
                     }

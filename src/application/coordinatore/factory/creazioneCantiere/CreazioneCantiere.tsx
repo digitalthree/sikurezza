@@ -10,7 +10,7 @@ import {addCantiere} from "../../../../store/cantiereSlice";
 import {ImpreseSelector} from "../../../../store/impresaSlice";
 
 interface CreazioneCantiereProps {
-    setObjectToCreate: (s:string|undefined) => void
+    setObjectToCreate: (s: string | undefined) => void
 }
 
 export const CreazioneCantiere: React.FC<CreazioneCantiereProps> = ({setObjectToCreate}) => {
@@ -22,13 +22,23 @@ export const CreazioneCantiere: React.FC<CreazioneCantiereProps> = ({setObjectTo
     const {user} = useAuth0()
     const {execQuery} = useFaunaQuery()
     const onSubmit = (data: any) => {
-        execQuery(createCantiereInFauna, {...data, creatoDa: user?.email, impresaAffidataria: data.impresaAffidataria, impreseSubappaltatrici: []} as Cantiere).then(() => {
-            dispatch(addCantiere({...data, creatoDa: user?.email, impresaAffidataria: data.impresaAffidataria, impreseSubappaltatrici: []}))
+        console.log(data)
+        //TODO: associare all'impresa affidataria l'id del documento fauna e non il nome dell'impresa
+        execQuery(createCantiereInFauna, {
+            ...data,
+            creatoDa: user?.email,
+            impresaAffidataria: data.impresaAffidataria,
+            impreseSubappaltatrici: []
+        } as Cantiere).then(() => {
+            dispatch(addCantiere({
+                ...data,
+                creatoDa: user?.email,
+                impresaAffidataria: data.impresaAffidataria,
+                impreseSubappaltatrici: []
+            }))
             setObjectToCreate(undefined)
         });
     }
-
-
 
 
     return (
@@ -92,7 +102,8 @@ export const CreazioneCantiere: React.FC<CreazioneCantiereProps> = ({setObjectTo
                         <input placeholder="Resp. Lavori" {...register("responsabileLavori", {required: true})}
                                className="rounded border border-gray-400 shadow p-1"
                         />
-                        {errors.responsabileLavori && <span className="font-bold text-red-600">Campo obbligatorio</span>}
+                        {errors.responsabileLavori &&
+                            <span className="font-bold text-red-600">Campo obbligatorio</span>}
                     </div>
                 </div>
 
@@ -100,13 +111,16 @@ export const CreazioneCantiere: React.FC<CreazioneCantiereProps> = ({setObjectTo
                     <span className="font-bold">Impresa Affidataria*: </span>
                     <div className="flex flex-col">
                         <select placeholder="Impresa Affidataria" {...register("impresaAffidataria", {required: true})}
-                               className="rounded border border-gray-400 shadow p-1"
+                                className="rounded border border-gray-400 shadow p-1"
+                                defaultValue={imprese[0].faunaDocumentId}
+                                defaultChecked={true}
                         >
                             {imprese.map(i => {
                                 return <option value={i.faunaDocumentId}>{i.anagrafica.denominazione}</option>
                             })}
                         </select>
-                        {errors.impresaAffidataria && <span className="font-bold text-red-600">Campo obbligatorio</span>}
+                        {errors.impresaAffidataria &&
+                            <span className="font-bold text-red-600">Campo obbligatorio</span>}
                     </div>
                 </div>
 
@@ -115,7 +129,8 @@ export const CreazioneCantiere: React.FC<CreazioneCantiereProps> = ({setObjectTo
                     <div className="rounded-bl rounded-tl bg-amber-600 p-2">
                         <TfiSave size="30px" className="text-white"/>
                     </div>
-                    <button type="submit" className="rounded-br rounded-tr bg-amber-400 p-2 w-full text-white hover:cursor-pointer font-bold">
+                    <button type="submit"
+                            className="rounded-br rounded-tr bg-amber-400 p-2 w-full text-white hover:cursor-pointer font-bold">
                         Crea Cantiere
                     </button>
 

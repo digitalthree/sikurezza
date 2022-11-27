@@ -7,7 +7,7 @@ import {Breadcrumb} from "../../shared/breadcrumb/Breadcrumb";
 import {useFaunaQuery} from "../../faunadb/hooks/useFaunaQuery";
 import {getAllCantieriByCreatoDa} from "../../faunadb/api/cantiereAPIs";
 import {useDispatch} from "react-redux";
-import {addCantiere} from "../../store/cantiereSlice";
+import {addCantiere, addCantiereProxy} from "../../store/cantiereSlice";
 import {Cantiere} from "../../model/Cantiere";
 import {clearOrganizationStorages} from "../../utils/auth0/auth0";
 import {getAllImprese} from "../../faunadb/api/impresaAPIs";
@@ -28,10 +28,10 @@ const Coordinatore: React.FC<CoordinatoreProps> = ({}) => {
     useEffect(() => {
 
         execQuery(getAllCantieriByCreatoDa, user?.email).then(res => {
-            res.forEach((r: { id: string, cantiere: Cantiere; }) => dispatch(addCantiere({
-                ...r.cantiere,
-                faunaDocumentId: r.id
-            } as Cantiere)))
+            res.forEach((r: { id: string, cantiere: Cantiere; }) => {
+                dispatch(addCantiere({...r.cantiere, faunaDocumentId: r.id}))
+                dispatch(addCantiereProxy({...r.cantiere, faunaDocumentId: r.id}))
+            })
         })
         execQuery(getAllImprese).then(res => {
             res.forEach((r: { id: string, impresa: Impresa; }) => {
@@ -46,13 +46,14 @@ const Coordinatore: React.FC<CoordinatoreProps> = ({}) => {
     const [objectToCreate, setObjectToCreate] = useState<string|undefined>(undefined);
     const [breadcrumbsItems, setBreadcrumbsItems] = useState(["Home"]);
 
+
+
+
     return(
         <div className="px-32 py-5">
             <Header/>
             {!objectToCreate
-                ? <HomeCoordinatore setObjectToCreate={setObjectToCreate} setBreadcrumbsItems={setBreadcrumbsItems}
-                                    breadcrumbsItems={breadcrumbsItems}
-                />
+                ? <HomeCoordinatore setObjectToCreate={setObjectToCreate} setBreadcrumbsItems={setBreadcrumbsItems}/>
                 : (
                     <>
                         <Breadcrumb breadcrumbsItems={breadcrumbsItems} onItemClick={setObjectToCreate}/>
@@ -73,4 +74,3 @@ const Coordinatore: React.FC<CoordinatoreProps> = ({}) => {
 }
 
 export default withAuthenticationRequired(Coordinatore)
-
