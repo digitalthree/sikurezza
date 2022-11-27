@@ -20,10 +20,6 @@ function App() {
             : getAuthorisedOrganization();
     });
 
-    useEffect(() => {
-        console.log(organization)
-    }, []);
-
     if (!organization) {
         return <Home setOrganization={setOrganization}/>
     }

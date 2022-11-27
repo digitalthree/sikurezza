@@ -3,6 +3,7 @@ import {useForm} from "react-hook-form";
 import {TfiSave} from "react-icons/tfi";
 import {useDispatch, useSelector} from "react-redux";
 import {ImpreseDaCreareSelector, setImpresaDaCreare} from "../../../../../../store/impresaSlice";
+import {CantiereSelezionatoSelector} from "../../../../../../store/cantiereSlice";
 
 interface AnagraficaProps {
     setTabActive: (s:string) => void
@@ -12,6 +13,7 @@ export const Anagrafica: React.FC<AnagraficaProps> = ({setTabActive}) => {
 
     const dispatch = useDispatch()
     const impresaDaCreare = useSelector(ImpreseDaCreareSelector)
+    const cantiereSelezionato = useSelector(CantiereSelezionatoSelector)
 
     const {register, handleSubmit, formState: {errors}} = useForm();
     const onSubmit = (data: any) => {
@@ -29,7 +31,7 @@ export const Anagrafica: React.FC<AnagraficaProps> = ({setTabActive}) => {
                     <div className="flex flex-col">
                         <select placeholder="Tipologia Impresa" {...register("tipologiaImpresa", {required: true})}
                                 className="rounded border border-gray-400 shadow p-1"
-                                defaultValue={impresaDaCreare.tipo}
+                                defaultValue={(cantiereSelezionato) ? "Subappaltatrice" : "Affidataria"}
                         >
                             <option>Affidataria</option>
                             <option>Subappaltatrice</option>
