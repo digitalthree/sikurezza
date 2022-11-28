@@ -1,6 +1,7 @@
 import React from 'react';
 import {CreazioneImpresa} from "./creazioneImpresa/CreazioneImpresa";
 import {CreazioneCantiere} from "./creazioneCantiere/CreazioneCantiere";
+import CreazioneMaestranza from "./creazioneMaestranza/CreazioneMaestranza";
 
 interface CreationFactoryProps {
     objectToCreate: string | undefined
@@ -16,7 +17,7 @@ export const CreationFactory: React.FC<CreationFactoryProps> = (
         case "Impresa":
             return <CreazioneImpresa setObjectToCreate={setObjectToCreate}/>
         case "Maestranza":
-            return <></>
+            return <CreazioneMaestranza setObjectToCreate={setObjectToCreate}/>
         case "Macchina":
             return <></>
         case "Cantiere":

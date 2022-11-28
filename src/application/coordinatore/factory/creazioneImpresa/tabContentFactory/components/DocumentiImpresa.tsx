@@ -15,7 +15,7 @@ interface DocumentiProps {
     setTabActive: (s: string) => void
 }
 
-export const Documenti: React.FC<DocumentiProps> = ({setTabActive}) => {
+export const DocumentiImpresa: React.FC<DocumentiProps> = ({setTabActive}) => {
     const dispatch = useDispatch()
     const impresaDaCreare = useSelector(ImpreseDaCreareSelector)
 

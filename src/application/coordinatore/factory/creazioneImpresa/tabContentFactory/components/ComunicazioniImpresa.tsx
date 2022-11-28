@@ -18,7 +18,7 @@ interface ComunicazioniProps {
     setObjectToCreate: (s:string|undefined) => void
 }
 
-export const Comunicazioni: React.FC<ComunicazioniProps> = ({setObjectToCreate}) => {
+export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToCreate}) => {
 
     const dispatch = useDispatch()
     const impresaDaCreare = useSelector(ImpreseDaCreareSelector)

@@ -9,7 +9,7 @@ interface AnagraficaProps {
     setTabActive: (s:string) => void
 }
 
-export const Anagrafica: React.FC<AnagraficaProps> = ({setTabActive}) => {
+export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive}) => {
 
     const dispatch = useDispatch()
     const impresaDaCreare = useSelector(ImpreseDaCreareSelector)

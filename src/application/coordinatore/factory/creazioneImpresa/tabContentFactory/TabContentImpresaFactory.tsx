@@ -1,7 +1,7 @@
 import React from 'react';
-import {Anagrafica} from "./components/Anagrafica";
-import {Comunicazioni} from "./components/Comunicazioni";
-import {Documenti} from "./components/Documenti";
+import {AnagraficaImpresa} from "./components/AnagraficaImpresa";
+import {ComunicazioniImpresa} from "./components/ComunicazioniImpresa";
+import {DocumentiImpresa} from "./components/DocumentiImpresa";
 
 interface TabContentImpresaFactoryProps {
     selectedTab: string
@@ -16,11 +16,11 @@ export const TabContentImpresaFactory: React.FC<TabContentImpresaFactoryProps> =
 ) => {
     switch (selectedTab) {
         case "Anagrafica":
-            return <Anagrafica setTabActive={setTabActive}/>
+            return <AnagraficaImpresa setTabActive={setTabActive}/>
         case "Documenti":
-            return <Documenti setTabActive={setTabActive}/>
+            return <DocumentiImpresa setTabActive={setTabActive}/>
         case "Comunicazioni":
-            return <Comunicazioni setObjectToCreate={setObjectToCreate}/>
+            return <ComunicazioniImpresa setObjectToCreate={setObjectToCreate}/>
         /*case "Checklist":
             return <>Tab Checklist</>*/
         default: return <>Tab Anagrafica</>
