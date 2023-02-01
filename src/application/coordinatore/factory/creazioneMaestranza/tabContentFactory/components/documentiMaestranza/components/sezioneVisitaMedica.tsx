@@ -5,12 +5,13 @@ import {Maestranza} from "../../../../../../../../model/Maestranza";
 export interface SezioneVisitaMedicaProps{
     register: Function,
     errors: FieldErrors<FieldValues>,
-    maestranzaDaCreare: Maestranza
+    maestranzaDaCreare: Maestranza,
+    onChange: Function
 }
 
 const SezioneVisitaMedica: React.FC<SezioneVisitaMedicaProps> = (
     {
-        register, errors, maestranzaDaCreare
+        register, errors, maestranzaDaCreare, onChange
     }
 ) => {
     return(
@@ -29,8 +30,14 @@ const SezioneVisitaMedica: React.FC<SezioneVisitaMedicaProps> = (
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
                        defaultValue={maestranzaDaCreare.documenti.visitaMedica.scadenza}
                 />
-                <input type="file" {...register("visitaMedicaFile")}
-                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4" />
+                <input type="file"
+                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4"
+                       onChange={(e) => {
+                           if (e.target.files && e.target.files[0]) {
+                               onChange(e.target.files[0], 'visitaMedicaFile')
+                           }
+                       }}
+                />
             </div>
             <div className="grid grid-cols-12 mt-2">
                 <span className="font-bold col-span-3">Prescrizioni o limitazioni: </span>

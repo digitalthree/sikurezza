@@ -30,12 +30,12 @@ export interface DocumentiMaestranza {
     },
     corsoFormazioneArt3637: Corso,
     corsoFormazioneCovid: Corso,
-    corsoMacchineMovTerra?: Corso,
-    corsoPonteggi?: Corso,
-    corsoPLE?: Corso,
-    corsoConduzioneGRU?: Corso,
-    corsoGRUSuAutocarro?: Corso,
-    corsoEscavatoriIdraulici?: Corso,
+    corsoMacchineMovTerra: Corso,
+    corsoPonteggi: Corso,
+    corsoPLE: Corso,
+    corsoConduzioneGRU: Corso,
+    corsoGRUSuAutocarro: Corso,
+    corsoEscavatoriIdraulici: Corso,
     consegnaDPI: Consegna,
     consegnaDPICovid: Consegna,
     consegnaTesserino: Consegna,
@@ -44,11 +44,11 @@ export interface DocumentiMaestranza {
     nominaDaRLS: Nomina,
     nominaDaAddettoPSoccorso: Nomina,
     nominaDaAddettoPrevIncendi: Nomina,
-    corsoPrimoSoccorso?: Corso,
-    corsoPrevIncendi?: Corso,
-    corsoPreposto?: Corso,
-    corsoRLS?: Corso,
-    corsoRSPP?: Corso,
+    corsoPrimoSoccorso: Corso,
+    corsoPrevIncendi: Corso,
+    corsoPreposto: Corso,
+    corsoRLS: Corso,
+    corsoRSPP: Corso,
 }
 
 export interface ComunicazioniMaestranza {
@@ -107,12 +107,36 @@ export const maestranzaDefault: Maestranza = {
             scadenza: "",
             file: {name: "", value: undefined}
         },
-        corsoMacchineMovTerra: undefined,
-        corsoPonteggi: undefined,
-        corsoPLE: undefined,
-        corsoConduzioneGRU: undefined,
-        corsoGRUSuAutocarro: undefined,
-        corsoEscavatoriIdraulici: undefined,
+        corsoMacchineMovTerra: {
+            effettuatoIl: "",
+            scadenza: "",
+            file: {name: "", value: undefined}
+        },
+        corsoPonteggi: {
+            effettuatoIl: "",
+            scadenza: "",
+            file: {name: "", value: undefined}
+        },
+        corsoPLE: {
+            effettuatoIl: "",
+            scadenza: "",
+            file: {name: "", value: undefined}
+        },
+        corsoConduzioneGRU: {
+            effettuatoIl: "",
+            scadenza: "",
+            file: {name: "", value: undefined}
+        },
+        corsoGRUSuAutocarro: {
+            effettuatoIl: "",
+            scadenza: "",
+            file: {name: "", value: undefined}
+        },
+        corsoEscavatoriIdraulici: {
+            effettuatoIl: "",
+            scadenza: "",
+            file: {name: "", value: undefined}
+        },
         consegnaDPI: {
             consegnato: false,
             consegnatoIl: "",
@@ -148,11 +172,31 @@ export const maestranzaDefault: Maestranza = {
             nomina: false,
             file: {name: "", value: undefined}
         },
-        corsoPrimoSoccorso: undefined,
-        corsoPrevIncendi: undefined,
-        corsoPreposto: undefined,
-        corsoRLS: undefined,
-        corsoRSPP: undefined
+        corsoPrimoSoccorso: {
+            effettuatoIl: "",
+            scadenza: "",
+            file: {name: "", value: undefined}
+        },
+        corsoPrevIncendi: {
+            effettuatoIl: "",
+            scadenza: "",
+            file: {name: "", value: undefined}
+        },
+        corsoPreposto: {
+            effettuatoIl: "",
+            scadenza: "",
+            file: {name: "", value: undefined}
+        },
+        corsoRLS: {
+            effettuatoIl: "",
+            scadenza: "",
+            file: {name: "", value: undefined}
+        },
+        corsoRSPP: {
+            effettuatoIl: "",
+            scadenza: "",
+            file: {name: "", value: undefined}
+        }
     },
     comunicazioni: {
         telefono: undefined,

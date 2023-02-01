@@ -28,7 +28,11 @@ const DocumentiMaestranza: React.FC<DocumentiMaestranzaProps> = (
     const dispatch = useDispatch()
     const maestranzaDaCreare = useSelector(MaestranzaDaCreareSelector)
 
-    const {register, handleSubmit, formState: {errors}} = useForm();
+    const onChange = (file: File, target: string) => {
+        setValue(target, file)
+    }
+
+    const {register, handleSubmit, formState: {errors}, setValue} = useForm();
     const onSubmit = (data: any) => {
         dispatch(setDocumentiMaestranza(convertiInDocumentiMaestranza(data)))
         setTabActive("Comunicazioni")
@@ -36,13 +40,13 @@ const DocumentiMaestranza: React.FC<DocumentiMaestranzaProps> = (
 
     return(
         <form onSubmit={handleSubmit(onSubmit)} className="mt-20 w-[70%] p-10 shadow-2xl">
-            <SezioneContratto register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare}/>
-            <SezioneVisitaMedica register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare}/>
-            <SezioneCorsoFormazione register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare}/>
-            <SezioneCorsi1 register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare}/>
-            <SezioneConsegne register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare}/>
-            <SezioneNomine register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare}/>
-            <SezioneCorsi2 register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare}/>
+            <SezioneContratto register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare} onChange={onChange}/>
+            <SezioneVisitaMedica register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare} onChange={onChange}/>
+            <SezioneCorsoFormazione register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare} onChange={onChange}/>
+            <SezioneCorsi1 register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare} onChange={onChange}/>
+            <SezioneConsegne register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare} onChange={onChange}/>
+            <SezioneNomine register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare} onChange={onChange}/>
+            <SezioneCorsi2 register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare} onChange={onChange}/>
             <div className="flex mt-10">
                 <div className="rounded-bl rounded-tl bg-amber-600 p-2">
                     <TfiSave size="30px" className="text-white"/>

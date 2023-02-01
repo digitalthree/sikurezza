@@ -5,12 +5,13 @@ import {Maestranza} from "../../../../../../../../model/Maestranza";
 export interface SezioneCorsi1Props{
     register: Function,
     errors: FieldErrors,
-    maestranzaDaCreare: Maestranza
+    maestranzaDaCreare: Maestranza,
+    onChange: Function
 }
 
 const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
     {
-        register, errors, maestranzaDaCreare
+        register, errors, maestranzaDaCreare, onChange
     }
 ) => {
     return(
@@ -28,8 +29,14 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
                        defaultValue={maestranzaDaCreare.documenti.corsoMacchineMovTerra?.scadenza}
                 />
-                <input type="file" {...register("corsoMacchineMovTerraFile")}
-                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4" />
+                <input type="file"
+                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4"
+                       onChange={(e) => {
+                           if (e.target.files && e.target.files[0]) {
+                               onChange(e.target.files[0], 'corsoMacchineMovTerraFile')
+                           }
+                       }}
+                />
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
                 <span className="font-bold col-span-3">Corso Ponteggi: </span>
@@ -44,8 +51,14 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
                        defaultValue={maestranzaDaCreare.documenti.corsoPonteggi?.scadenza}
                 />
-                <input type="file" {...register("corsoPonteggiFile")}
-                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4" />
+                <input type="file"
+                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4"
+                       onChange={(e) => {
+                               if(e.target.files && e.target.files[0]){
+                                   onChange(e.target.files[0], 'corsoPonteggiFile')
+                               }
+                           }}
+                />
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
                 <span className="font-bold col-span-3">Corso PLE: </span>
@@ -60,8 +73,14 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
                        defaultValue={maestranzaDaCreare.documenti.corsoPLE?.scadenza}
                 />
-                <input type="file" {...register("corsoPLEFile")}
-                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4" />
+                <input type="file"
+                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4"
+                       onChange={(e) => {
+                               if(e.target.files && e.target.files[0]){
+                                   onChange(e.target.files[0], 'corsoPLEFile')
+                               }
+                           }}
+                />
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
                 <span className="font-bold col-span-3">Corso Conduzione GRU: </span>
@@ -76,8 +95,14 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
                        defaultValue={maestranzaDaCreare.documenti.corsoConduzioneGRU?.scadenza}
                 />
-                <input type="file" {...register("corsoConduzioneGRUFile")}
-                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4" />
+                <input type="file"
+                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4"
+                       onChange={(e) => {
+                               if(e.target.files && e.target.files[0]){
+                                   onChange(e.target.files[0], 'corsoConduzioneGRUFile')
+                               }
+                           }}
+                />
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
                 <span className="font-bold col-span-3">Corso GRU su Autocarro: </span>
@@ -92,8 +117,14 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
                        defaultValue={maestranzaDaCreare.documenti.corsoGRUSuAutocarro?.scadenza}
                 />
-                <input type="file" {...register("corsoGRUSuAutocarroFile")}
-                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4" />
+                <input type="file"
+                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4"
+                       onChange={(e) => {
+                               if(e.target.files && e.target.files[0]){
+                                   onChange(e.target.files[0], 'corsoGRUSuAutocarroFile')
+                               }
+                           }}
+                />
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
                 <span className="font-bold col-span-3">Corso Escavatori Idraulici: </span>
@@ -108,8 +139,14 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
                        defaultValue={maestranzaDaCreare.documenti.corsoEscavatoriIdraulici?.scadenza}
                 />
-                <input type="file" {...register("corsoEscavatoriIdrauliciFile")}
-                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4" />
+                <input type="file"
+                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4"
+                       onChange={(e) => {
+                               if(e.target.files && e.target.files[0]){
+                                   onChange(e.target.files[0], 'corsoEscavatoriIdrauliciFile')
+                               }
+                           }}
+                />
             </div>
             <hr className="my-5"/>
         </>

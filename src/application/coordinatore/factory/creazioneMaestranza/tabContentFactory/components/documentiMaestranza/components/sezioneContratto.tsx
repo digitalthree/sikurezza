@@ -1,16 +1,17 @@
 import React from 'react';
-import {FieldErrors, FieldValues} from "react-hook-form";
+import {FieldErrors} from "react-hook-form";
 import {Maestranza} from "../../../../../../../../model/Maestranza";
 
 export interface SezioneContrattoProps{
     register: Function,
-    errors: FieldErrors<FieldValues>,
-    maestranzaDaCreare: Maestranza
+    errors: FieldErrors,
+    maestranzaDaCreare: Maestranza,
+    onChange: Function
 }
 
 const SezioneContratto: React.FC<SezioneContrattoProps> = (
     {
-        register, errors, maestranzaDaCreare
+        register, errors, maestranzaDaCreare, onChange
     }
 ) => {
     return(
@@ -28,9 +29,18 @@ const SezioneContratto: React.FC<SezioneContrattoProps> = (
                     {errors.tipologiaContratto && <span className="font-bold text-red-600">Campo obbligatorio</span>}
                 </div>
                 <div className="flex justify-center col-span-4">
-                    <input type="file" {...register("contrattoFile")}
-                           className="file-input file-input-secondary file-input-sm w-full max-w-xs" />
+                    <input type="file"
+                           className="file-input file-input-secondary file-input-sm w-full max-w-xs"
+                           onChange={(e) => {
+                               if(e.target.files && e.target.files[0]){
+                                   onChange(e.target.files[0], 'contrattoFile')
+                               }
+                           }}
+                    />
                 </div>
+                {/*(maestranzaDaCreare.documenti.contratto.file.value) ? <span className="col-span-3">{maestranzaDaCreare.documenti.contratto.file.name.length < 20 ? maestranzaDaCreare.documenti.contratto.file.name : maestranzaDaCreare.documenti.contratto.file.name.substring(0, 20)+"..."}</span>
+                    : <span className="col-span-3">Nessun file selezionato</span>*/
+                }
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
                 <span className="font-bold col-span-3">Data Assunzione: </span>

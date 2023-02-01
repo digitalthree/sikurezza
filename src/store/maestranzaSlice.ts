@@ -6,6 +6,8 @@ import {
     Maestranza,
     maestranzaDefault
 } from "../model/Maestranza";
+import {stat} from "fs";
+import {setPropertyFileMaestranza} from "./switcCaseFunctions";
 
 export interface MaestranzaState {
     maestranze: Maestranza[],
@@ -28,14 +30,17 @@ export const MaestranzaSlice = createSlice({
         setDocumentiMaestranza(state: MaestranzaState, action: PayloadAction<DocumentiMaestranza>){
             state.maestranzaDaCreare.documenti = action.payload
         },
-        setComunicazioniMaestranza(state: MaestranzaState, action: PayloadAction<ComunicazioniMaestranza>){
-            state.maestranzaDaCreare.comunicazioni = action.payload
+        setMaestranzaDaCreare(state: MaestranzaState, action: PayloadAction<Maestranza>){
+            state.maestranzaDaCreare = action.payload
+        },
+        setFileUrlMaestranza(state: MaestranzaState, action: PayloadAction<{property: string, url: string}>){
+            setPropertyFileMaestranza(state, action.payload.property, action.payload.url)
         }
     }
 })
 
 export const {
-    addMaestranza, setAnagraficaMaestranza, setComunicazioniMaestranza, setDocumentiMaestranza
+    addMaestranza, setAnagraficaMaestranza, setDocumentiMaestranza, setMaestranzaDaCreare, setFileUrlMaestranza
 } = MaestranzaSlice.actions
 
 
