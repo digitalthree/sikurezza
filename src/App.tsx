@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {Home} from "./application/home/Home";
-import Coordinatore from "./application/coordinatore/Coordinatore";
-import Impresa from "./application/impresa/Impresa";
+import React, {useState} from 'react';
+import {Login} from "./application/login/Login";
+
 import {Auth0Provider} from "@auth0/auth0-react";
 import {
     getAuthorisedOrganization,
@@ -11,6 +10,7 @@ import {
 } from "./utils/auth0/auth0";
 import {Provider} from "react-redux";
 import {store} from "./store/store";
+import Home from "./application/components/home/Home";
 
 function App() {
 
@@ -21,7 +21,7 @@ function App() {
     });
 
     if (!organization) {
-        return <Home setOrganization={setOrganization}/>
+        return <Login setOrganization={setOrganization}/>
     }
     return (
         <Auth0Provider
@@ -33,8 +33,9 @@ function App() {
             onRedirectCallback={() => setAuthorisedOrganizationFromTemporaryStorage()}
         >
             <Provider store={store}>
-                {organization === "Impresa" && <Impresa/>}
-                {organization === "Coordinatore" && <Coordinatore/>}
+                {/*{organization === "Impresa" && <Home/>}
+                {organization === "Coordinatore" && <Home/>}*/}
+                <Home/>
             </Provider>
         </Auth0Provider>
     )

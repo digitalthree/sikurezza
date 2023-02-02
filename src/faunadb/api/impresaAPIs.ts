@@ -15,13 +15,14 @@ export const createImpresaInFauna = async (faunaClient: faunadb.Client, faunaQue
     return response
 }
 
-export const getAllImprese = async (faunaClient: faunadb.Client, faunaQuery: typeof faunadb.query) => {
+export const getAllImpreseByCreataDa = async (faunaClient: faunadb.Client, faunaQuery: typeof faunadb.query, email: string) => {
     const response = await faunaClient.query(
         faunaQuery.Select("data",
             faunaQuery.Map(
                 faunaQuery.Paginate(
                     faunaQuery.Match(
-                        faunaQuery.Index("get_all_imprese"),
+                        faunaQuery.Index("get_impresa_by_creataDa"),
+                        email
                     )
                 ),
                 faunaQuery.Lambda("impresa", {
@@ -41,12 +42,6 @@ export const getAllImprese = async (faunaClient: faunadb.Client, faunaQuery: typ
             )
         )
     )
-        .catch((err) => console.error(
-            'Error: [%s] %s: %s',
-            err.name,
-            err.message,
-            err.errors()[0].description,
-        ));
     return response as Impresa[]
 }
 

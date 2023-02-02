@@ -19,13 +19,14 @@ export interface Impresa {
     impreseSubappaltatrici: Impresa[],
     documentiIdoneitaImpresa: Autodichiarazione[],
     comunicazioni: Comunicazioni,
+    creataDa: string
     faunaDocumentId?: string
 }
 
 export interface Autodichiarazione {
     nome: string,
     presenza: boolean
-    file: {name: string, value: string|undefined}
+    file: File|string|undefined
 }
 
 interface Comunicazioni {
@@ -67,25 +68,25 @@ export const impresaTemporanea: Impresa = {
                 "oggetto di provvedimenti di \n" +
                 "sospensione",
             presenza: false,
-            file: {name: "", value: undefined}
+            file: undefined
         },
         {
             nome: "Autodichiarazione Organico\n" +
                 "medio annuo",
             presenza: false,
-            file: {name: "", value: undefined}
+            file: undefined
         },
         {
             nome: "Autodichiarazione CCNL applicato\n" +
                 "ai dipendenti",
             presenza: false,
-            file: {name: "", value: undefined}
+            file: undefined
         },
         {
             nome: "Autodichiarazione di iscrizione alla \n" +
                 "CCIAA con diciitura antimafia",
             presenza: false,
-            file: {name: "", value: undefined}
+            file: undefined
         }
     ],
     comunicazioni: {
@@ -101,5 +102,6 @@ export const impresaTemporanea: Impresa = {
         nomeResponsabileUfficioDocumentazione: "",
         telefonoResponsabileUfficioDocumentazione: "",
         mailResponsabileUfficioDocumentazione: "",
-    }
+    },
+    creataDa: ""
 }

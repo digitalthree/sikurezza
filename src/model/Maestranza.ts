@@ -1,7 +1,8 @@
 export interface Maestranza {
     anagrafica: AnagraficaMaestranza,
-    documenti: DocumentiMaestranza,
-    comunicazioni: ComunicazioniMaestranza
+    documenti: Documento[],
+    comunicazioni: ComunicazioniMaestranza,
+    creatoDa: string
 }
 
 export interface AnagraficaMaestranza {
@@ -14,43 +15,6 @@ export interface AnagraficaMaestranza {
     datoreLavoro: boolean
 }
 
-export interface DocumentiMaestranza {
-    contratto: {
-        tipologia: 'Indeterminato' | 'Determinato',
-        dataAssunzione?: string,
-        dataFineContratto: string,
-        mansione?: string,
-        file: {name: string, value: string|undefined}
-    },
-    visitaMedica: {
-        effettuataIl: string,
-        scadenza: string,
-        prescrizioniLimitazioni: string,
-        file: {name: string, value: string|undefined}
-    },
-    corsoFormazioneArt3637: Corso,
-    corsoFormazioneCovid: Corso,
-    corsoMacchineMovTerra: Corso,
-    corsoPonteggi: Corso,
-    corsoPLE: Corso,
-    corsoConduzioneGRU: Corso,
-    corsoGRUSuAutocarro: Corso,
-    corsoEscavatoriIdraulici: Corso,
-    consegnaDPI: Consegna,
-    consegnaDPICovid: Consegna,
-    consegnaTesserino: Consegna,
-    nominaDaPreposto: Nomina,
-    nominaDaRSPP: Nomina,
-    nominaDaRLS: Nomina,
-    nominaDaAddettoPSoccorso: Nomina,
-    nominaDaAddettoPrevIncendi: Nomina,
-    corsoPrimoSoccorso: Corso,
-    corsoPrevIncendi: Corso,
-    corsoPreposto: Corso,
-    corsoRLS: Corso,
-    corsoRSPP: Corso,
-}
-
 export interface ComunicazioniMaestranza {
     telefono?: number,
     cellularePrivato?: number,
@@ -58,20 +22,21 @@ export interface ComunicazioniMaestranza {
     email: string
 }
 
-interface Corso {
-    effettuatoIl: string,
-    scadenza: string,
-    file: {name: string, value: string|undefined}
+export interface Documento {
+    nome: string
+    tipologia?: 'Indeterminato' | 'Determinato',
+    dataAssunzione?: string,
+    dataFineContratto?: string,
+    mansione?: string,
+    effettuatoIl?: string,
+    scadenza?: string,
+    prescrizioniLimitazioni?: string,
+    consegnato?: boolean,
+    consegnatoIl?: string,
+    nomina?: boolean,
+    file: string|File|undefined
 }
-interface Consegna {
-    consegnato: boolean,
-    consegnatoIl: string,
-    file: {name: string, value: string|undefined}
-}
-interface Nomina {
-    nomina: boolean,
-    file: {name: string, value: string|undefined}
-}
+
 
 export const maestranzaDefault: Maestranza = {
     anagrafica: {
@@ -83,125 +48,149 @@ export const maestranzaDefault: Maestranza = {
         impresaAppartenenza: "",
         datoreLavoro: false
     },
-    documenti: {
-        contratto: {
+    documenti: [
+        {
+            nome: 'contratto',
             tipologia: "Indeterminato",
             dataAssunzione: undefined,
             dataFineContratto: "",
             mansione: undefined,
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        visitaMedica: {
-            effettuataIl: "",
+        {
+            nome: 'visitaMedica',
+            effettuatoIl: "",
             scadenza: "",
             prescrizioniLimitazioni: "",
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        corsoFormazioneArt3637: {
+        {
+            nome: 'corsoFormazioneArt3637',
             effettuatoIl: "",
             scadenza: "",
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        corsoFormazioneCovid: {
+        {
+            nome: 'corsoFormazioneCovid',
             effettuatoIl: "",
             scadenza: "",
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        corsoMacchineMovTerra: {
+        {
+            nome: 'corsoMacchineMovTerra',
             effettuatoIl: "",
             scadenza: "",
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        corsoPonteggi: {
+        {
+            nome: 'corsoPonteggi',
             effettuatoIl: "",
             scadenza: "",
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        corsoPLE: {
+        {
+            nome: 'corsoPLE',
             effettuatoIl: "",
             scadenza: "",
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        corsoConduzioneGRU: {
+        {
+            nome: 'corsoConduzioneGRU',
             effettuatoIl: "",
             scadenza: "",
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        corsoGRUSuAutocarro: {
+        {
+            nome: 'corsoGRUSuAutocarro',
             effettuatoIl: "",
             scadenza: "",
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        corsoEscavatoriIdraulici: {
+        {
+            nome: 'corsoEscavatoriIdraulici',
             effettuatoIl: "",
             scadenza: "",
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        consegnaDPI: {
+        {
+            nome: 'consegnaDPI',
             consegnato: false,
             consegnatoIl: "",
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        consegnaDPICovid: {
+        {
+            nome: 'consegnaDPICovid',
             consegnato: false,
             consegnatoIl: "",
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        consegnaTesserino: {
+        {
+            nome: 'consegnaTesserino',
             consegnato: false,
             consegnatoIl: "",
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        nominaDaPreposto: {
+        {
+            nome: 'nominaDaPreposto',
             nomina: false,
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        nominaDaRSPP: {
+        {
+            nome: 'nominaDaRSPP',
             nomina: false,
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        nominaDaRLS: {
+        {
+            nome: 'nominaDaRLS',
             nomina: false,
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        nominaDaAddettoPSoccorso: {
+        {
+            nome: 'nominaDaAddettoPSoccorso',
             nomina: false,
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        nominaDaAddettoPrevIncendi: {
+        {
+            nome: 'nominaDaAddettoPrevIncendi',
             nomina: false,
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        corsoPrimoSoccorso: {
+        {
+            nome: 'corsoPrimoSoccorso',
             effettuatoIl: "",
             scadenza: "",
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        corsoPrevIncendi: {
+        {
+            nome: 'corsoPrevIncendi',
             effettuatoIl: "",
             scadenza: "",
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        corsoPreposto: {
+        {
+            nome: 'corsoPreposto',
             effettuatoIl: "",
             scadenza: "",
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        corsoRLS: {
+        {
+            nome: 'corsoRLS',
             effettuatoIl: "",
             scadenza: "",
-            file: {name: "", value: undefined}
+            file: undefined
         },
-        corsoRSPP: {
+        {
+            nome: 'corsoRSPP',
             effettuatoIl: "",
             scadenza: "",
-            file: {name: "", value: undefined}
+            file: undefined
         }
-    },
+    ],
     comunicazioni: {
         telefono: undefined,
         cellularePrivato: undefined,
         cellulareAziendale: undefined,
         email: ""
-    }
+    },
+    creatoDa: ""
 }

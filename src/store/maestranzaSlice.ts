@@ -1,13 +1,9 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {
-    AnagraficaMaestranza,
-    ComunicazioniMaestranza,
-    DocumentiMaestranza,
+    AnagraficaMaestranza, Documento,
     Maestranza,
-    maestranzaDefault
+    maestranzaDefault,
 } from "../model/Maestranza";
-import {stat} from "fs";
-import {setPropertyFileMaestranza} from "./switcCaseFunctions";
 
 export interface MaestranzaState {
     maestranze: Maestranza[],
@@ -27,20 +23,24 @@ export const MaestranzaSlice = createSlice({
         setAnagraficaMaestranza(state: MaestranzaState, action: PayloadAction<AnagraficaMaestranza>){
             state.maestranzaDaCreare.anagrafica = action.payload
         },
-        setDocumentiMaestranza(state: MaestranzaState, action: PayloadAction<DocumentiMaestranza>){
+        setDocumentiMaestranza(state: MaestranzaState, action: PayloadAction<Documento[]>){
             state.maestranzaDaCreare.documenti = action.payload
         },
         setMaestranzaDaCreare(state: MaestranzaState, action: PayloadAction<Maestranza>){
             state.maestranzaDaCreare = action.payload
         },
-        setFileUrlMaestranza(state: MaestranzaState, action: PayloadAction<{property: string, url: string}>){
-            setPropertyFileMaestranza(state, action.payload.property, action.payload.url)
+        setFileInDocumentiMaestranza(state: MaestranzaState, action: PayloadAction<{nome: string, file: string|File}>){
+            state.maestranzaDaCreare.documenti.forEach((d) => {
+                if(d.nome === action.payload.nome) {
+                    d.file = action.payload.file
+                }
+            })
         }
     }
 })
 
 export const {
-    addMaestranza, setAnagraficaMaestranza, setDocumentiMaestranza, setMaestranzaDaCreare, setFileUrlMaestranza
+    addMaestranza, setAnagraficaMaestranza, setDocumentiMaestranza, setMaestranzaDaCreare, setFileInDocumentiMaestranza
 } = MaestranzaSlice.actions
 
 
