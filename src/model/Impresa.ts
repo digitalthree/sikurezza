@@ -26,7 +26,7 @@ export interface Impresa {
 export interface Autodichiarazione {
     nome: string,
     presenza: boolean
-    file: File|string|undefined
+    file: {nome: string, value: File|string|undefined}
 }
 
 interface Comunicazioni {
@@ -68,25 +68,25 @@ export const impresaTemporanea: Impresa = {
                 "oggetto di provvedimenti di \n" +
                 "sospensione",
             presenza: false,
-            file: undefined
+            file: {nome: "", value: undefined}
         },
         {
             nome: "Autodichiarazione Organico\n" +
                 "medio annuo",
             presenza: false,
-            file: undefined
+            file: {nome: "", value: undefined}
         },
         {
             nome: "Autodichiarazione CCNL applicato\n" +
                 "ai dipendenti",
             presenza: false,
-            file: undefined
+            file: {nome: "", value: undefined}
         },
         {
             nome: "Autodichiarazione di iscrizione alla \n" +
                 "CCIAA con diciitura antimafia",
             presenza: false,
-            file: undefined
+            file: {nome: "", value: undefined}
         }
     ],
     comunicazioni: {

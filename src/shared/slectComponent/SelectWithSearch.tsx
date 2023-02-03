@@ -4,13 +4,12 @@ import {HiArrowsUpDown} from "react-icons/hi2";
 import {BiCheck} from "react-icons/bi";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    CantieriProxySelector,
     CantieriSelector,
     selezionaCantiere,
-    selezionaCantiereProxy,
     trovaCantiereByNomeAndIndirizzo
 } from "../../store/cantiereSlice";
 import {Cantiere} from "../../model/Cantiere";
+import {ImpreseSelector, setImpresaSelezionata} from "../../store/impresaSlice";
 
 
 
@@ -31,7 +30,7 @@ export const SelectWithSearch: React.FC<SelectWithSearchProps> = (
 
     const dispatch = useDispatch()
     const cantieri = useSelector(CantieriSelector)
-    const cantieriProxy = useSelector(CantieriProxySelector)
+    const imprese = useSelector(ImpreseSelector)
     const [query, setQuery] = useState('')
 
     const filteredItems: string[] =
@@ -49,7 +48,8 @@ export const SelectWithSearch: React.FC<SelectWithSearchProps> = (
                 setSelected(selected)
                 if(tipo === "Cantiere") {
                     dispatch(selezionaCantiere(trovaCantiereByNomeAndIndirizzo(cantieri, selected) as Cantiere))
-                    dispatch(selezionaCantiereProxy(trovaCantiereByNomeAndIndirizzo(cantieriProxy, selected) as Cantiere))
+                }else if(tipo === "Impresa"){
+                    dispatch(setImpresaSelezionata(imprese.filter(i => i.anagrafica.denominazione === selected)[0]))
                 }
             }}>
                 <div className="relative mt-1">

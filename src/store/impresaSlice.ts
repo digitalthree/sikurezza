@@ -31,7 +31,7 @@ export const ImpresaSlice = createSlice({
                 if(index === action.payload.id) d.presenza = action.payload.value
             })
         },
-        setFileInDocumenti(state: ImpresaState, action: PayloadAction<{nome: string, file: string|File}>){
+        setFileInDocumenti(state: ImpresaState, action: PayloadAction<{nome: string, file: {nome: string, value: string|File}}>){
             state.impresaDaCreare.documentiIdoneitaImpresa.forEach((d) => {
                 if(d.nome === action.payload.nome) {
                     d.file = action.payload.file
@@ -49,3 +49,4 @@ export const {
 export const ImpreseSelector = (state: { impresaSlice: ImpresaState }) => state.impresaSlice.imprese;
 export const ImpresaSelezionataSelector = (state: { impresaSlice: ImpresaState }) => state.impresaSlice.impresaSelezionata;
 export const ImpreseDaCreareSelector = (state: { impresaSlice: ImpresaState }) => state.impresaSlice.impresaDaCreare;
+

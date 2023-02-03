@@ -2,7 +2,11 @@ import React from 'react';
 import {useForm} from "react-hook-form";
 import {TfiSave} from "react-icons/tfi";
 import {useDispatch, useSelector} from "react-redux";
-import {ImpreseDaCreareSelector, setImpresaDaCreare} from "../../../../../../store/impresaSlice";
+import {
+    ImpresaSelezionataSelector,
+    ImpreseDaCreareSelector,
+    setImpresaDaCreare
+} from "../../../../../../store/impresaSlice";
 import {CantiereSelezionatoSelector} from "../../../../../../store/cantiereSlice";
 
 interface AnagraficaProps {
@@ -14,6 +18,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive}) => 
     const dispatch = useDispatch()
     const impresaDaCreare = useSelector(ImpreseDaCreareSelector)
     const cantiereSelezionato = useSelector(CantiereSelezionatoSelector)
+    const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
 
     const {register, handleSubmit, formState: {errors}} = useForm();
     const onSubmit = (data: any) => {
@@ -31,7 +36,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive}) => 
                     <div className="flex flex-col">
                         <select placeholder="Tipologia Impresa" {...register("tipologiaImpresa", {required: true})}
                                 className="rounded border border-gray-400 shadow p-1"
-                                defaultValue={(cantiereSelezionato) ? "Subappaltatrice" : "Affidataria"}
+                                defaultValue={(impresaSelezionata) ? impresaSelezionata.tipo : "Affidataria"}
                         >
                             <option>Affidataria</option>
                             <option>Subappaltatrice</option>
@@ -45,7 +50,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive}) => 
                     <div className="flex flex-col">
                         <input placeholder="Denominazione" {...register("denominazione", {required: true})}
                                className="rounded border border-gray-400 shadow p-1"
-                               defaultValue={impresaDaCreare.anagrafica.denominazione}
+                               defaultValue={(impresaSelezionata) ? impresaSelezionata.anagrafica.denominazione :impresaDaCreare.anagrafica.denominazione}
                         />
                         {errors.denominazione && <span className="font-bold text-red-600">Campo obbligatorio</span>}
                     </div>
@@ -57,7 +62,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive}) => 
                     <div className="flex flex-col">
                         <input placeholder="Sede Legale" {...register("sedeLegale", {required: true})}
                                className="rounded border border-gray-400 shadow p-1"
-                               defaultValue={impresaDaCreare.anagrafica.sedeLegale}
+                               defaultValue={(impresaSelezionata) ? impresaSelezionata.anagrafica.sedeLegale :impresaDaCreare.anagrafica.sedeLegale}
                         />
                         {errors.sedeLegale && <span className="font-bold text-red-600">Campo obbligatorio</span>}
                     </div>
@@ -67,7 +72,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive}) => 
                     <span className="font-bold">Codice Fiscale: </span>
                     <input {...register("codiceFiscale")}
                            className="rounded border border-gray-400 shadow p-1 w-[262px]"
-                           defaultValue={impresaDaCreare.anagrafica.codiceFiscale}
+                           defaultValue={(impresaSelezionata) ? impresaSelezionata.anagrafica.codiceFiscale :impresaDaCreare.anagrafica.codiceFiscale}
                     />
                 </div>
 
@@ -75,7 +80,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive}) => 
                     <span className="font-bold">P. Iva </span>
                     <input {...register("partitaIva")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={impresaDaCreare.anagrafica.partitaIva}
+                           defaultValue={(impresaSelezionata) ? impresaSelezionata.anagrafica.partitaIva :impresaDaCreare.anagrafica.partitaIva}
                     />
                 </div>
 
@@ -83,7 +88,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive}) => 
                     <span className="font-bold">Forma Giuridica: </span>
                     <input {...register("formaGiuridica")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={impresaDaCreare.anagrafica.formaGiuridica}
+                           defaultValue={(impresaSelezionata) ? impresaSelezionata.anagrafica.formaGiuridica :impresaDaCreare.anagrafica.formaGiuridica}
                     />
                 </div>
 
@@ -91,7 +96,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive}) => 
                     <span className="font-bold">Amministratore: </span>
                     <input {...register("amministratore")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={impresaDaCreare.anagrafica.amministratore}
+                           defaultValue={(impresaSelezionata) ? impresaSelezionata.anagrafica.amministratore :impresaDaCreare.anagrafica.amministratore}
                     />
                 </div>
 
@@ -99,7 +104,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive}) => 
                     <span className="font-bold">Codice fiscale Amministratore: </span>
                     <input {...register("codiceFiscaleAmministratore")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={impresaDaCreare.anagrafica.codiceFiscaleAmministratore}
+                           defaultValue={(impresaSelezionata) ? impresaSelezionata.anagrafica.codiceFiscaleAmministratore :impresaDaCreare.anagrafica.codiceFiscaleAmministratore}
                     />
                 </div>
 
@@ -108,14 +113,14 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive}) => 
                         <span className="font-bold">DURC: </span>
                         <input type="date" {...register("durc")}
                                className="rounded border border-gray-400 shadow p-1"
-                               defaultValue={impresaDaCreare.anagrafica.durc}
+                               defaultValue={(impresaSelezionata) ? impresaSelezionata.anagrafica.durc :impresaDaCreare.anagrafica.durc}
                         />
                     </div>
                     <div className="flex justify-between items-center mt-2">
                         <span className="font-bold">scadenza: </span>
                         <input type="date" {...register("scadenza")}
                                className="rounded border border-gray-400 shadow p-1"
-                               defaultValue={impresaDaCreare.anagrafica.scadenza}
+                               defaultValue={(impresaSelezionata) ? impresaSelezionata.anagrafica.scadenza :impresaDaCreare.anagrafica.scadenza}
                         />
                     </div>
                 </div>

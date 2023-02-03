@@ -32,6 +32,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
 
     const [uploadToFauna, setUploadToFauna] = useState(false)
     const [comunicazioni, setComunicazioni] = useState<any>()
+    const [creaImpresa, setCreaImpresa] = useState(false)
 
     const {user} = useAuth0()
 
@@ -41,22 +42,22 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
     const  onSubmit = (data: any) => {
         setComunicazioni(data)
         impresaDaCreare.documentiIdoneitaImpresa.forEach(d => {
-            if (d.file && typeof d.file !== 'string') {
-                uploadFileS3(d.file as File).then(res => {
-                    dispatch(setFileInDocumenti({nome: d.nome, file: res?.location as string}))
+            if (d.file && typeof d.file.value !== 'string') {
+                uploadFileS3(d.file.value as File).then(res => {
+                    dispatch(setFileInDocumenti({nome: d.nome, file: {nome: d.file.nome, value: res?.key as string}}))
                 })
             }
         })
     }
 
     useEffect(() => {
-        if(impresaDaCreare.documentiIdoneitaImpresa.filter(d => !d.file || typeof d.file === 'string').length === impresaDaCreare.documentiIdoneitaImpresa.length){
+        if(impresaDaCreare.documentiIdoneitaImpresa.filter(d => !d.file.value || typeof d.file.value === 'string').length === impresaDaCreare.documentiIdoneitaImpresa.length){
             setUploadToFauna(true)
         }
     }, [impresaDaCreare])
 
     useEffect(() => {
-        if(uploadToFauna){
+        if(uploadToFauna && creaImpresa){
             execQuery(createImpresaInFauna, {
                 ...impresaDaCreare,
                 comunicazioni: comunicazioni,
@@ -75,7 +76,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                 console.log(err)
             })
         }
-    }, [uploadToFauna])
+    }, [uploadToFauna, creaImpresa])
 
 
     return (
@@ -189,6 +190,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                         <TfiSave size="30px" className="text-white"/>
                     </div>
                     <button type="submit"
+                            onClick={() => setCreaImpresa(true)}
                             className="rounded-br rounded-tr bg-amber-400 p-2 w-full text-white hover:cursor-pointer font-bold">
                         Crea Impresa
                     </button>

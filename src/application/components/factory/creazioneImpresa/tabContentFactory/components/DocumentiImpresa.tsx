@@ -1,15 +1,15 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {
+    ImpresaSelezionataSelector,
     ImpreseDaCreareSelector,
     setFileInDocumenti,
-    setImpresaDaCreare,
     setPresenzaInDocumenti
 } from "../../../../../../store/impresaSlice";
 import {useForm} from "react-hook-form";
 import {TfiSave} from "react-icons/tfi";
-import {IoAttach, IoCheckmarkDone} from "react-icons/io5";
-import {Autodichiarazione} from "../../../../../../model/Impresa";
+import {Impresa} from "../../../../../../model/Impresa";
+import {s3} from "../../../../../../aws/s3Config";
 
 interface DocumentiProps {
     setTabActive: (s: string) => void
@@ -19,16 +19,20 @@ export const DocumentiImpresa: React.FC<DocumentiProps> = ({setTabActive}) => {
 
     const dispatch = useDispatch()
     const impresaDaCreare = useSelector(ImpreseDaCreareSelector)
+    const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
+
+    let impresa: Impresa = (impresaSelezionata) ? impresaSelezionata : impresaDaCreare
 
     const {handleSubmit} = useForm();
-    const onSubmit = () => {setTabActive("Comunicazioni")}
+    const onSubmit = () => {
+        setTabActive("Comunicazioni")
+    }
 
 
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)} className="w-[60%] p-10 shadow-2xl">
-
-                {impresaDaCreare.documentiIdoneitaImpresa.map((d, index) => {
+                {impresa.documentiIdoneitaImpresa.map((d, index) => {
                     return (
                         <div className="grid grid-cols-5 text-center py-3" key={d.nome}>
 
@@ -39,7 +43,10 @@ export const DocumentiImpresa: React.FC<DocumentiProps> = ({setTabActive}) => {
                                 <input type="checkbox"
                                        className="toggle"
                                        defaultChecked={d.presenza}
-                                       onChange={() => dispatch(setPresenzaInDocumenti({id: index, value: !d.presenza}))}
+                                       onChange={() => dispatch(setPresenzaInDocumenti({
+                                           id: index,
+                                           value: !d.presenza
+                                       }))}
                                 />
                             </div>
                             <div className="col-span-2" key={`div${index}`}>
@@ -48,11 +55,44 @@ export const DocumentiImpresa: React.FC<DocumentiProps> = ({setTabActive}) => {
                                            className="w-2/5 file-input file-input-ghost bg-gray-400 font-bold text-white file-input-bordered file-input-xs mr-3 w-1/4 max-w-xs"
                                            onChange={(e) => {
                                                if (e.target.files && e.target.files[0]) {
-                                                   dispatch(setFileInDocumenti({nome: d.nome, file: e.target.files[0]}))
+                                                   dispatch(setFileInDocumenti({
+                                                       nome: d.nome,
+                                                       file: {nome: e.target.files[0].name, value: e.target.files[0]}
+                                                   }))
                                                }
                                            }}/>
-                                    {(d.file) ? <span className="w-3/5">{(d.file as File).name.length < 20 ? (d.file as File).name : (d.file as File).name.substring(0, 20)+"..."}</span>
-                                              : <span className="w-3/5">Nessun file selezionato</span>
+                                    {(d.file) ?
+                                        <span className="w-3/5 hover:underline hover:cursor-pointer"
+                                              onClick={() => {
+                                                  if (impresaSelezionata) {
+                                                      impresaSelezionata.documentiIdoneitaImpresa.forEach(d => {
+                                                          s3.getObject({
+                                                              Bucket: process.env.REACT_APP_AWS_BUCKET_NAME as string,
+                                                              Key: d.file.value as string,
+                                                          }, (err, data) => {
+                                                              if(data){
+                                                                  const file = new Blob([data.Body as Uint8Array], {type: "application/pdf"})
+                                                                  const fileURL = URL.createObjectURL(file);
+                                                                  const pdfWindow = window.open();
+                                                                  if(pdfWindow){
+                                                                      pdfWindow.location.href = fileURL;
+                                                                  }
+                                                              }
+                                                          })
+                                                      })
+                                                  }else{
+                                                      const fileURL = URL.createObjectURL(d.file.value as File);
+                                                      const pdfWindow = window.open();
+                                                      if(pdfWindow){
+                                                          pdfWindow.location.href = fileURL;
+                                                      }
+                                                  }
+                                                }
+                                              }
+                                        >
+                                            {d.file.nome.length < 20 ? d.file.nome : d.file.nome.substring(0, 20) + "..."}
+                                    </span>
+                                        : <span className="w-3/5">Nessun file selezionato</span>
                                     }
                                 </div>
 
