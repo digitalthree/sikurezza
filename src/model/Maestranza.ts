@@ -65,13 +65,13 @@ export const maestranzaDefault: Maestranza = {
             file: undefined
         },
         {
-            nome: 'corsoFormazioneArt3637',
+            nome: 'vaccinazioneAntitetanica',
             effettuatoIl: "",
             scadenza: "",
             file: undefined
         },
         {
-            nome: 'corsoFormazioneCovid',
+            nome: 'corsoFormazioneArt37',
             effettuatoIl: "",
             scadenza: "",
             file: undefined
@@ -119,9 +119,9 @@ export const maestranzaDefault: Maestranza = {
             file: undefined
         },
         {
-            nome: 'consegnaDPICovid',
-            consegnato: false,
-            consegnatoIl: "",
+            nome: 'informazioneLavoratoreArt.36',
+            effettuatoIl: "",
+            scadenza: "",
             file: undefined
         },
         {
