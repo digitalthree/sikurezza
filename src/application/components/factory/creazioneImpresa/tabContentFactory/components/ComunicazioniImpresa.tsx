@@ -3,7 +3,7 @@ import {useForm} from "react-hook-form";
 import {TfiSave} from "react-icons/tfi";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    addImpresa,
+    addImpresa, ImpresaSelezionataSelector,
     ImpreseDaCreareSelector,
     setFileInDocumenti,
     setImpresaDaCreare
@@ -11,13 +11,6 @@ import {
 import {impresaTemporanea} from "../../../../../../model/Impresa";
 import {useFaunaQuery} from "../../../../../../faunadb/hooks/useFaunaQuery";
 import {createImpresaInFauna} from "../../../../../../faunadb/api/impresaAPIs";
-import {
-    addImpresaSubOnCantiere, CantiereProxySelector,
-    CantiereSelezionatoSelector,
-    selezionaCantiere
-} from "../../../../../../store/cantiereSlice";
-import {updateCantiereInFauna} from "../../../../../../faunadb/api/cantiereAPIs";
-import {Cantiere} from "../../../../../../model/Cantiere";
 import {uploadFileS3} from "../../../../../../aws/s3APIs";
 import {useAuth0} from "@auth0/auth0-react";
 
@@ -29,6 +22,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
 
     const dispatch = useDispatch()
     const impresaDaCreare = useSelector(ImpreseDaCreareSelector)
+    const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
 
     const [uploadToFauna, setUploadToFauna] = useState(false)
     const [comunicazioni, setComunicazioni] = useState<any>()
@@ -57,6 +51,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
     }, [impresaDaCreare])
 
     useEffect(() => {
+        //TODO: aggiungere l'update dell'impresa nel caso in cui l'utente sia nel tab anagrafica della sezione impresa
         if(uploadToFauna && creaImpresa){
             execQuery(createImpresaInFauna, {
                 ...impresaDaCreare,
@@ -87,7 +82,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                     <span className="font-bold">Direttore Tecnico di Cantiere: </span>
                     <input {...register("nomeDirettoreTecnico")}
                            className="rounded border border-gray-400 shadow p-1 w-[262px]"
-                           defaultValue={impresaDaCreare.comunicazioni.nomeDirettoreTecnico}
+                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.nomeDirettoreTecnico :impresaDaCreare.comunicazioni.nomeDirettoreTecnico}
                     />
                 </div>
 
@@ -95,7 +90,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                     <span className="font-bold">Telefono: </span>
                     <input type="number" {...register("telefonoDirettoreTecnico")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={impresaDaCreare.comunicazioni.telefonoDirettoreTecnico}
+                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.telefonoDirettoreTecnico :impresaDaCreare.comunicazioni.telefonoDirettoreTecnico}
                     />
                 </div>
 
@@ -103,7 +98,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                     <span className="font-bold">Mail: </span>
                     <input type="email" {...register("mailDirettoreTecnico")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={impresaDaCreare.comunicazioni.mailDirettoreTecnico}
+                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.mailDirettoreTecnico :impresaDaCreare.comunicazioni.mailDirettoreTecnico}
                     />
                 </div>
 
@@ -113,7 +108,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                     <span className="font-bold">RLS: </span>
                     <input {...register("nomeRls")}
                            className="rounded border border-gray-400 shadow p-1 w-[262px]"
-                           defaultValue={impresaDaCreare.comunicazioni.nomeRls}
+                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.nomeRls :impresaDaCreare.comunicazioni.nomeRls}
                     />
                 </div>
 
@@ -121,7 +116,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                     <span className="font-bold">Telefono: </span>
                     <input type="number" {...register("telefonoRls")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={impresaDaCreare.comunicazioni.telefonoRls}
+                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.telefonoRls :impresaDaCreare.comunicazioni.telefonoRls}
                     />
                 </div>
 
@@ -129,7 +124,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                     <span className="font-bold">Mail: </span>
                     <input type="email" {...register("mailRls")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={impresaDaCreare.comunicazioni.mailRls}
+                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.mailRls :impresaDaCreare.comunicazioni.mailRls}
                     />
                 </div>
 
@@ -139,7 +134,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                     <span className="font-bold">RSPP: </span>
                     <input {...register("nomeRspp")}
                            className="rounded border border-gray-400 shadow p-1 w-[262px]"
-                           defaultValue={impresaDaCreare.comunicazioni.nomeRspp}
+                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.nomeRspp :impresaDaCreare.comunicazioni.nomeRspp}
                     />
                 </div>
 
@@ -147,7 +142,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                     <span className="font-bold">Telefono: </span>
                     <input type="number" {...register("telefonoRspp")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={impresaDaCreare.comunicazioni.telefonoRspp}
+                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.telefonoRspp :impresaDaCreare.comunicazioni.telefonoRspp}
                     />
                 </div>
 
@@ -155,7 +150,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                     <span className="font-bold">Mail: </span>
                     <input type="email" {...register("mailRspp")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={impresaDaCreare.comunicazioni.mailRspp}
+                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.mailRspp :impresaDaCreare.comunicazioni.mailRspp}
                     />
                 </div>
 
@@ -165,7 +160,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                     <span className="font-bold">Responsabile d'ufficio per la documentazione: </span>
                     <input {...register("nomeResponsabileUfficioDocumentazione")}
                            className="rounded border border-gray-400 shadow p-1 w-[262px]"
-                           defaultValue={impresaDaCreare.comunicazioni.nomeResponsabileUfficioDocumentazione}
+                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.nomeResponsabileUfficioDocumentazione :impresaDaCreare.comunicazioni.nomeResponsabileUfficioDocumentazione}
                     />
                 </div>
 
@@ -173,7 +168,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                     <span className="font-bold">Telefono: </span>
                     <input type="number" {...register("telefonoResponsabileUfficioDocumentazione")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={impresaDaCreare.comunicazioni.telefonoResponsabileUfficioDocumentazione}
+                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.telefonoResponsabileUfficioDocumentazione :impresaDaCreare.comunicazioni.telefonoResponsabileUfficioDocumentazione}
                     />
                 </div>
 
@@ -181,7 +176,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                     <span className="font-bold">Mail: </span>
                     <input type="email" {...register("mailResponsabileUfficioDocumentazione")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={impresaDaCreare.comunicazioni.mailResponsabileUfficioDocumentazione}
+                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.mailResponsabileUfficioDocumentazione :impresaDaCreare.comunicazioni.mailResponsabileUfficioDocumentazione}
                     />
                 </div>
 

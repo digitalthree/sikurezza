@@ -65,29 +65,29 @@ export const DocumentiImpresa: React.FC<DocumentiProps> = ({setTabActive}) => {
                                         <span className="w-3/5 hover:underline hover:cursor-pointer"
                                               onClick={() => {
                                                   if (impresaSelezionata) {
-                                                      impresaSelezionata.documentiIdoneitaImpresa.forEach(d => {
-                                                          s3.getObject({
-                                                              Bucket: process.env.REACT_APP_AWS_BUCKET_NAME as string,
-                                                              Key: d.file.value as string,
-                                                          }, (err, data) => {
-                                                              if(data){
-                                                                  const file = new Blob([data.Body as Uint8Array], {type: "application/pdf"})
-                                                                  const fileURL = URL.createObjectURL(file);
-                                                                  const pdfWindow = window.open();
-                                                                  if(pdfWindow){
-                                                                      pdfWindow.location.href = fileURL;
-                                                                  }
+
+                                                      s3.getObject({
+                                                          Bucket: process.env.REACT_APP_AWS_BUCKET_NAME as string,
+                                                          Key: d.file.value as string,
+                                                      }, (err, data) => {
+                                                          if (data) {
+                                                              const file = new Blob([data.Body as Uint8Array], {type: "application/pdf"})
+                                                              const fileURL = URL.createObjectURL(file);
+                                                              const pdfWindow = window.open();
+                                                              if (pdfWindow) {
+                                                                  pdfWindow.location.href = fileURL;
                                                               }
-                                                          })
+                                                          }
                                                       })
-                                                  }else{
+
+                                                  } else {
                                                       const fileURL = URL.createObjectURL(d.file.value as File);
                                                       const pdfWindow = window.open();
-                                                      if(pdfWindow){
+                                                      if (pdfWindow) {
                                                           pdfWindow.location.href = fileURL;
                                                       }
                                                   }
-                                                }
+                                              }
                                               }
                                         >
                                             {d.file.nome.length < 20 ? d.file.nome : d.file.nome.substring(0, 20) + "..."}
