@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {Impresa, impresaTemporanea} from "../model/Impresa";
+import {Impresa, impresaTemporanea, ItemComunicazione} from "../model/Impresa";
 
 export type ImpresaState = {
     imprese: Impresa[],
@@ -37,13 +37,26 @@ export const ImpresaSlice = createSlice({
                     d.file = action.payload.file
                 }
             })
+        },
+        setComunicazioneInComunicazioni(state: ImpresaState, action: PayloadAction<{mansione: string,  attributo: string, valore: string}>){
+            state.impresaDaCreare.comunicazioni.forEach(c => {
+                if(c.mansione === action.payload.mansione){
+                    if (action.payload.attributo === 'nome') c.nome = action.payload.valore
+                    if (action.payload.attributo === 'email') c.email = action.payload.valore
+                    if (action.payload.attributo === 'telefono') c.telefono = action.payload.valore
+                }
+            })
+        },
+        addComunicazioneInComunicazioni(state: ImpresaState, action: PayloadAction<ItemComunicazione>){
+            state.impresaDaCreare.comunicazioni.push(action.payload)
         }
     }
 })
 
 
 export const {
-    addImpresa, setImpresaDaCreare, setPresenzaInDocumenti, setFileInDocumenti, setTipologiaImpresa, setImpresaSelezionata
+    addImpresa, setImpresaDaCreare, setPresenzaInDocumenti, setFileInDocumenti, setComunicazioneInComunicazioni,
+    setImpresaSelezionata, addComunicazioneInComunicazioni
 } = ImpresaSlice.actions
 
 export const ImpreseSelector = (state: { impresaSlice: ImpresaState }) => state.impresaSlice.imprese;
