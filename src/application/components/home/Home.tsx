@@ -25,11 +25,11 @@ import {getAllMaestranzeByCreatoDa} from "../../../faunadb/api/maestranzaAPIs";
 import {Maestranza} from "../../../model/Maestranza";
 import {addMaestranza} from "../../../store/maestranzaSlice";
 
-interface CoordinatoreProps {
+interface HomeProps {
 
 }
 
-const Home: React.FC<CoordinatoreProps> = ({}) => {
+const Home: React.FC<HomeProps> = ({}) => {
 
 
     const {logout, user} = useAuth0();

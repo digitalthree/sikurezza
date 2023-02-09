@@ -41,8 +41,9 @@ export interface Autodichiarazione {
     file: {nome: string, value: File|string|undefined}
 }
 
-interface ItemComunicazione {
+export interface ItemComunicazione {
     mansione: string,
+    nome: string
     telefono: string,
     email: string
 }
@@ -107,16 +108,19 @@ export const impresaTemporanea: Impresa = {
     comunicazioni: [
         {
             mansione: "RLS",
+            nome: "",
             telefono: "",
             email: ""
         },
         {
             mansione: "RSPP",
+            nome: "",
             telefono: "",
             email: ""
         },
         {
             mansione: "Responsabile d'ufficio per la documentazione",
+            nome: "",
             telefono: "",
             email: ""
         }

@@ -3,12 +3,13 @@ import {useForm} from "react-hook-form";
 import {TfiSave} from "react-icons/tfi";
 import {useDispatch, useSelector} from "react-redux";
 import {
+    addComunicazioneInComunicazioni,
     addImpresa, ImpresaSelezionataSelector,
-    ImpreseDaCreareSelector,
+    ImpreseDaCreareSelector, setComunicazioneInComunicazioni,
     setFileInDocumenti,
     setImpresaDaCreare
 } from "../../../../../../store/impresaSlice";
-import {impresaTemporanea} from "../../../../../../model/Impresa";
+import {impresaTemporanea, ItemComunicazione} from "../../../../../../model/Impresa";
 import {useFaunaQuery} from "../../../../../../faunadb/hooks/useFaunaQuery";
 import {createImpresaInFauna} from "../../../../../../faunadb/api/impresaAPIs";
 import {uploadFileS3} from "../../../../../../aws/s3APIs";
@@ -24,17 +25,21 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
     const impresaDaCreare = useSelector(ImpreseDaCreareSelector)
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
 
+    console.log(impresaDaCreare)
+
     const [uploadToFauna, setUploadToFauna] = useState(false)
-    const [comunicazioni, setComunicazioni] = useState<any>()
     const [creaImpresa, setCreaImpresa] = useState(false)
+    const [nuovaMansione, setNuovaMansione] = useState<ItemComunicazione>({
+        mansione: "", telefono: "", nome: "", email: ""
+    })
+
 
     const {user} = useAuth0()
 
     const {execQuery} = useFaunaQuery()
 
-    const {register, handleSubmit} = useForm();
-    const  onSubmit = (data: any) => {
-        setComunicazioni(data)
+    const {setValue, handleSubmit} = useForm();
+    const onSubmit = () => {
         impresaDaCreare.documentiIdoneitaImpresa.forEach(d => {
             if (d.file && typeof d.file.value !== 'string') {
                 uploadFileS3(d.file.value as File).then(res => {
@@ -45,22 +50,20 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
     }
 
     useEffect(() => {
-        if(impresaDaCreare.documentiIdoneitaImpresa.filter(d => !d.file.value || typeof d.file.value === 'string').length === impresaDaCreare.documentiIdoneitaImpresa.length){
+        if (impresaDaCreare.documentiIdoneitaImpresa.filter(d => !d.file.value || typeof d.file.value === 'string').length === impresaDaCreare.documentiIdoneitaImpresa.length) {
             setUploadToFauna(true)
         }
     }, [impresaDaCreare])
 
     useEffect(() => {
         //TODO: aggiungere l'update dell'impresa nel caso in cui l'utente sia nel tab anagrafica della sezione impresa
-        if(uploadToFauna && creaImpresa){
+        if (uploadToFauna && creaImpresa) {
             execQuery(createImpresaInFauna, {
                 ...impresaDaCreare,
-                comunicazioni: comunicazioni,
                 creataDa: user?.email
             }).then(() => {
                 dispatch(addImpresa({
                     ...impresaDaCreare,
-                    comunicazioni: comunicazioni,
                     creataDa: user?.email as string
                 }))
                 dispatch(setImpresaDaCreare(impresaTemporanea))
@@ -76,110 +79,94 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)} className="mt-20 w-[50%] p-10 shadow-2xl">
+            <form onSubmit={handleSubmit(onSubmit)} className="mt-20 w-[50%] p-10 shadow-2xl flex flex-col">
+                {impresaDaCreare.comunicazioni.map(c => {
+                        setValue('mansione', c.mansione)
+                        return (
+                            <div key={c.mansione}>
+                                <div className="flex justify-between items-center">
+                                    <span className="font-bold">{c.mansione}: </span>
+                                    <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.filter(cs => cs.mansione === c.mansione)[0].nome : c.nome}
+                                           onChange={e => dispatch(setComunicazioneInComunicazioni({mansione: c.mansione, attributo: 'nome', valore: e.target.value}))}
+                                    />
+                                </div>
+                                <div className="flex justify-between items-center mt-2">
+                                    <span className="font-bold">Telefono: </span>
+                                    <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.filter(cs => cs.mansione === c.mansione)[0].telefono : c.telefono}
+                                           onChange={e => dispatch(setComunicazioneInComunicazioni({mansione: c.mansione, attributo: 'telefono', valore: e.target.value}))}
+                                    />
+                                </div>
+                                <div className="flex justify-between items-center mt-2">
+                                    <span className="font-bold">Email: </span>
+                                    <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.filter(cs => cs.mansione === c.mansione)[0].email : c.email}
+                                           onChange={e => dispatch(setComunicazioneInComunicazioni({mansione: c.mansione, attributo: 'email', valore: e.target.value}))}
+                                    />
+                                </div>
+                                <hr className="mt-5 mb-5"/>
+                            </div>
+                        )
+                    })}
+                {/* The button to open modal */}
+                <label htmlFor="my-modal-4" className="btn btn-warning w-1/2 m-auto">Aggiungi Mansione</label>
 
-                <div className="flex justify-between items-center">
-                    <span className="font-bold">Direttore Tecnico di Cantiere: </span>
-                    <input {...register("nomeDirettoreTecnico")}
-                           className="rounded border border-gray-400 shadow p-1 w-[262px]"
-                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.nomeDirettoreTecnico :impresaDaCreare.comunicazioni.nomeDirettoreTecnico}
-                    />
-                </div>
-
-                <div className="flex justify-between items-center mt-2">
-                    <span className="font-bold">Telefono: </span>
-                    <input type="number" {...register("telefonoDirettoreTecnico")}
-                           className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.telefonoDirettoreTecnico :impresaDaCreare.comunicazioni.telefonoDirettoreTecnico}
-                    />
-                </div>
-
-                <div className="flex justify-between items-center mt-2">
-                    <span className="font-bold">Mail: </span>
-                    <input type="email" {...register("mailDirettoreTecnico")}
-                           className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.mailDirettoreTecnico :impresaDaCreare.comunicazioni.mailDirettoreTecnico}
-                    />
-                </div>
-
-                <hr className="mt-5 mb-5"/>
-
-                <div className="flex justify-between items-center">
-                    <span className="font-bold">RLS: </span>
-                    <input {...register("nomeRls")}
-                           className="rounded border border-gray-400 shadow p-1 w-[262px]"
-                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.nomeRls :impresaDaCreare.comunicazioni.nomeRls}
-                    />
-                </div>
-
-                <div className="flex justify-between items-center mt-2">
-                    <span className="font-bold">Telefono: </span>
-                    <input type="number" {...register("telefonoRls")}
-                           className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.telefonoRls :impresaDaCreare.comunicazioni.telefonoRls}
-                    />
-                </div>
-
-                <div className="flex justify-between items-center mt-2">
-                    <span className="font-bold">Mail: </span>
-                    <input type="email" {...register("mailRls")}
-                           className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.mailRls :impresaDaCreare.comunicazioni.mailRls}
-                    />
-                </div>
-
-                <hr className="mt-5 mb-5"/>
-
-                <div className="flex justify-between items-center">
-                    <span className="font-bold">RSPP: </span>
-                    <input {...register("nomeRspp")}
-                           className="rounded border border-gray-400 shadow p-1 w-[262px]"
-                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.nomeRspp :impresaDaCreare.comunicazioni.nomeRspp}
-                    />
-                </div>
-
-                <div className="flex justify-between items-center mt-2">
-                    <span className="font-bold">Telefono: </span>
-                    <input type="number" {...register("telefonoRspp")}
-                           className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.telefonoRspp :impresaDaCreare.comunicazioni.telefonoRspp}
-                    />
-                </div>
-
-                <div className="flex justify-between items-center mt-2">
-                    <span className="font-bold">Mail: </span>
-                    <input type="email" {...register("mailRspp")}
-                           className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.mailRspp :impresaDaCreare.comunicazioni.mailRspp}
-                    />
-                </div>
-
-                <hr className="mt-5 mb-5"/>
-
-                <div className="flex justify-between items-center">
-                    <span className="font-bold">Responsabile d'ufficio per la documentazione: </span>
-                    <input {...register("nomeResponsabileUfficioDocumentazione")}
-                           className="rounded border border-gray-400 shadow p-1 w-[262px]"
-                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.nomeResponsabileUfficioDocumentazione :impresaDaCreare.comunicazioni.nomeResponsabileUfficioDocumentazione}
-                    />
-                </div>
-
-                <div className="flex justify-between items-center mt-2">
-                    <span className="font-bold">Telefono: </span>
-                    <input type="number" {...register("telefonoResponsabileUfficioDocumentazione")}
-                           className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.telefonoResponsabileUfficioDocumentazione :impresaDaCreare.comunicazioni.telefonoResponsabileUfficioDocumentazione}
-                    />
-                </div>
-
-                <div className="flex justify-between items-center mt-2">
-                    <span className="font-bold">Mail: </span>
-                    <input type="email" {...register("mailResponsabileUfficioDocumentazione")}
-                           className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.mailResponsabileUfficioDocumentazione :impresaDaCreare.comunicazioni.mailResponsabileUfficioDocumentazione}
-                    />
-                </div>
-
+                {/* Put this part before </body> tag */}
+                <input type="checkbox" id="my-modal-4" className="modal-toggle" />
+                <label htmlFor="my-modal-4" className="modal cursor-pointer">
+                    <label className="modal-box relative">
+                        <div className="flex justify-between items-center">
+                            <span className="font-bold">Mansione: </span>
+                            <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                   onChange={e => {
+                                       setNuovaMansione({
+                                           ...nuovaMansione,
+                                           mansione: e.target.value
+                                       })
+                                   }}
+                            />
+                        </div>
+                        <div className="flex justify-between items-center mt-1">
+                            <span className="font-bold">Nome: </span>
+                            <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                   onChange={e => {
+                                       setNuovaMansione({
+                                           ...nuovaMansione,
+                                           nome: e.target.value
+                                       })
+                                   }}
+                            />
+                        </div>
+                        <div className="flex justify-between items-center mt-1">
+                            <span className="font-bold">Telefono: </span>
+                            <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                   onChange={e => {
+                                       setNuovaMansione({
+                                           ...nuovaMansione,
+                                           telefono: e.target.value
+                                       })
+                                   }}
+                            />
+                        </div>
+                        <div className="flex justify-between items-center mt-1">
+                            <span className="font-bold">Email: </span>
+                            <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                   onChange={e => {
+                                       setNuovaMansione({
+                                           ...nuovaMansione,
+                                           email: e.target.value
+                                       })
+                                   }}
+                            />
+                        </div>
+                        <div className="modal-action"
+                            onClick={() => dispatch(addComunicazioneInComunicazioni(nuovaMansione))}
+                        >
+                            <label htmlFor="my-modal-4" className="btn btn-warning">Crea Mansione</label>
+                        </div>
+                    </label>
+                </label>
                 <div className="flex mt-10">
                     <div className="rounded-bl rounded-tl bg-amber-600 p-2">
                         <TfiSave size="30px" className="text-white"/>
