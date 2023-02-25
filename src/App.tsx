@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import {Login} from "./application/login/Login";
 
-import {Auth0Provider} from "@auth0/auth0-react";
+import {Auth0Provider, useAuth0} from "@auth0/auth0-react";
 import {
+    clearOrganizationStorages,
     getAuthorisedOrganization,
     getTemporaryOrganization,
     isAuth0RedirectUrl,
@@ -11,6 +12,10 @@ import {
 import {Provider} from "react-redux";
 import {store} from "./store/store";
 import Home from "./application/components/home/Home";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {Header} from "./shared/header/Header";
+import SezioneImpresa from "./application/components/home/components/SezioneImpresa";
+import {CreazioneImpresa} from "./application/components/factory/creazioneImpresa/CreazioneImpresa";
 
 function App() {
 
@@ -19,10 +24,27 @@ function App() {
             ? getTemporaryOrganization()
             : getAuthorisedOrganization();
     });
+    const [objectToCreate, setObjectToCreate] = useState<string | undefined>(undefined);
 
     if (!organization) {
         return <Login setOrganization={setOrganization}/>
     }
+
+    const router = createBrowserRouter([
+        {
+            path: "/",
+            element: <Home/>
+        },
+        {
+            path: "/impresa",
+            element: <SezioneImpresa/>
+        },
+        {
+            path: "/creazione/impresa",
+            element: <CreazioneImpresa setObjectToCreate={setObjectToCreate} primoAccesso={false}/>
+        }
+    ])
+
     return (
         <Auth0Provider
             domain={process.env.REACT_APP_AUTH0_DOMAIN as string}
@@ -35,7 +57,10 @@ function App() {
             <Provider store={store}>
                 {/*{organization === "Impresa" && <Home/>}
                 {organization === "Coordinatore" && <Home/>}*/}
-                <Home/>
+                <div className="lg:px-32 px-10 py-5">
+                    <Header/>
+                    <RouterProvider router={router}/>
+                </div>
             </Provider>
         </Auth0Provider>
     )

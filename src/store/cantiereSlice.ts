@@ -30,7 +30,7 @@ export const CantiereSlice = createSlice({
         selezionaCantiereProxy(state: CantiereState, action: PayloadAction<Cantiere | undefined>){
             state.cantiereProxy = action.payload
         },
-        setImpresaAffidatariaOnCantiere(state: CantiereState, action: PayloadAction<{ cantiere: string, impresa: Impresa }>){
+        /*setImpresaAffidatariaOnCantiere(state: CantiereState, action: PayloadAction<{ cantiere: string, impresa: Impresa }>){
             let cantiereDaModificare = state.cantieri.filter(c => c.indirizzo === action.payload.cantiere)[0]
             cantiereDaModificare.impresaAffidataria = action.payload.impresa
             state.cantieri = state.cantieri.filter(c => c.faunaDocumentId !== cantiereDaModificare.faunaDocumentId)
@@ -58,14 +58,13 @@ export const CantiereSlice = createSlice({
                     state.cantiereProxy = c
                 }
             })
-        }
+        }*/
     }
 })
 
 
 export const {
-    addCantiere, addCantiereProxy, selezionaCantiere, selezionaCantiereProxy, setImpresaAffidatariaOnCantiere,
-    setImpresaSubOnCantiere, addImpresaSubOnCantiere
+    addCantiere, addCantiereProxy, selezionaCantiere, selezionaCantiereProxy
 } = CantiereSlice.actions
 
 export const CantieriSelector = (state: { cantiereSlice: CantiereState }) => state.cantiereSlice.cantieri;
@@ -74,10 +73,10 @@ export const CantiereSelezionatoSelector = (state: { cantiereSlice: CantiereStat
 export const CantiereProxySelector = (state: { cantiereSlice: CantiereState }) => state.cantiereSlice.cantiereProxy;
 
 const findCantiereByIndirizzo = (cantieri: Cantiere[], indirizzo: string) => {
-    return cantieri.filter(c => c.indirizzo === indirizzo)[0]
+    return cantieri.filter(c => c.anagrafica.indirizzo === indirizzo)[0]
 }
 
 export const trovaCantiereByNomeAndIndirizzo = (cantieri:Cantiere[], cantiereSelezionato: string) => {
     let stringa = cantiereSelezionato.split("-")
-    return cantieri.filter(c => c.indirizzo === stringa[1] && c.civico.toString() === stringa[2] && c.comune === stringa[3])[0]
+    //return cantieri.filter(c => c.anagrafica.indirizzo === stringa[1] && c.anagrafica.civico.toString() === stringa[2] && c.comune === stringa[3])[0]
 }

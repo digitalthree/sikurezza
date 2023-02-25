@@ -15,8 +15,6 @@ export const SelectionAndSearchGrid: React.FC<SelectionAndSearchGridProps> = ({}
     const [selectedLuogo, setSelectedLuogo] = useState("");
     const [selectedMaestranza, setSelectedMaestranza] = useState("");
 
-    const cantieri = useSelector(CantieriSelector)
-    const nomiCantieri = cantieri.map(c => `${c.nome}-${c.indirizzo}-${c.civico}-${c.comune}`)
 
     const imprese = useSelector(ImpreseSelector)
     const nomiImprese = imprese.map(i => i.anagrafica.denominazione)
@@ -27,8 +25,6 @@ export const SelectionAndSearchGrid: React.FC<SelectionAndSearchGridProps> = ({}
 
     return (
         <div className="grid grid-cols-4 gap-24 mt-14">
-            <SelectWithSearch tipo="Cantiere" selected={selectedCantiere} setSelected={setSelectedCantiere}
-                              items={nomiCantieri} placeholder="Cantiere"/>
             <SelectWithSearch tipo="Impresa" selected={selectedImpresa} setSelected={setSelectedImpresa}
                               items={nomiImprese} placeholder="Impresa"/>
             <SelectWithSearch tipo="Luogo" selected={selectedLuogo} setSelected={setSelectedLuogo}

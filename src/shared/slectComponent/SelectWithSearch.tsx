@@ -47,7 +47,7 @@ export const SelectWithSearch: React.FC<SelectWithSearchProps> = (
             <Combobox value={selected} onChange={(selected) => {
                 setSelected(selected)
                 if(tipo === "Cantiere") {
-                    dispatch(selezionaCantiere(trovaCantiereByNomeAndIndirizzo(cantieri, selected) as Cantiere))
+                    //dispatch(selezionaCantiere(trovaCantiereByNomeAndIndirizzo(cantieri, selected) as Cantiere))
                 }else if(tipo === "Impresa"){
                     dispatch(setImpresaSelezionata(imprese.filter(i => i.anagrafica.denominazione === selected)[0]))
                 }

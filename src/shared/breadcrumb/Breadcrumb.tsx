@@ -1,6 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {ImpresaSelezionataSelector, setImpresaSelezionata} from "../../store/impresaSlice";
+import {useNavigate} from "react-router-dom";
 
 interface BreadcrumbProps {
     breadcrumbsItems: string[],
@@ -15,6 +16,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = (
 
     const dispatch = useDispatch()
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
+    const navigate = useNavigate()
 
     return(
         <div className="text-sm breadcrumbs">
@@ -27,6 +29,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = (
                             }else{
                                 setObjectToCreate(undefined)
                             }
+                            navigate('/')
                         }} className="hover:cursor-pointer">{bi}</li>
                     }else{
                         return <li key={bi} className="font-bold">{bi}</li>
