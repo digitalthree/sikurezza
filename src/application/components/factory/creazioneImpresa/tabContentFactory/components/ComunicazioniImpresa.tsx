@@ -14,6 +14,7 @@ import {useFaunaQuery} from "../../../../../../faunadb/hooks/useFaunaQuery";
 import {createImpresaInFauna} from "../../../../../../faunadb/api/impresaAPIs";
 import {uploadFileS3} from "../../../../../../aws/s3APIs";
 import {useAuth0} from "@auth0/auth0-react";
+import {useNavigate} from "react-router-dom";
 
 interface ComunicazioniProps {
     setObjectToCreate: (s: string | undefined) => void
@@ -25,7 +26,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
     const impresaDaCreare = useSelector(ImpreseDaCreareSelector)
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
 
-    console.log(impresaDaCreare)
+    const impresa = (impresaSelezionata) ? impresaSelezionata : impresaDaCreare
 
     const [uploadToFauna, setUploadToFauna] = useState(false)
     const [creaImpresa, setCreaImpresa] = useState(false)
@@ -37,6 +38,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
     const {user} = useAuth0()
 
     const {execQuery} = useFaunaQuery()
+    const navigate = useNavigate()
 
     const {setValue, handleSubmit} = useForm();
     const onSubmit = () => {
@@ -68,10 +70,12 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                 }))
                 dispatch(setImpresaDaCreare(impresaTemporanea))
                 setObjectToCreate(undefined)
+                navigate('/')
             }).catch(err => {
                 dispatch(setImpresaDaCreare(impresaTemporanea))
                 setObjectToCreate(undefined)
                 console.log(err)
+                navigate('/')
             })
         }
     }, [uploadToFauna, creaImpresa])
@@ -80,8 +84,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)} className="mt-20 w-[50%] p-10 shadow-2xl flex flex-col">
-                {impresaDaCreare.comunicazioni.map(c => {
-                        setValue('mansione', c.mansione)
+                {impresa.comunicazioni.map(c => {
                         return (
                             <div key={c.mansione}>
                                 <div className="flex justify-between items-center">

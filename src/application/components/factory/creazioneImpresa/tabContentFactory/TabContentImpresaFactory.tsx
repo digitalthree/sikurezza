@@ -6,17 +6,18 @@ import {DocumentiImpresa} from "./components/DocumentiImpresa";
 interface TabContentImpresaFactoryProps {
     selectedTab: string
     setTabActive: (s:string) => void
-    setObjectToCreate: (s:string|undefined) => void
+    setObjectToCreate: (s:string|undefined) => void,
+    primoAccesso: boolean
 }
 
 export const TabContentImpresaFactory: React.FC<TabContentImpresaFactoryProps> = (
     {
-        selectedTab, setTabActive, setObjectToCreate
+        selectedTab, setTabActive, setObjectToCreate, primoAccesso
     }
 ) => {
     switch (selectedTab) {
         case "Anagrafica":
-            return <AnagraficaImpresa setTabActive={setTabActive}/>
+            return <AnagraficaImpresa setTabActive={setTabActive} primoAccesso={primoAccesso}/>
         case "Documenti":
             return <DocumentiImpresa setTabActive={setTabActive}/>
         case "Comunicazioni":

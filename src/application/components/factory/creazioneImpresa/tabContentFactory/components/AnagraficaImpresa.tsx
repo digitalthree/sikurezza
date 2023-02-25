@@ -10,10 +10,11 @@ import {
 import {CantiereSelezionatoSelector} from "../../../../../../store/cantiereSlice";
 
 interface AnagraficaProps {
-    setTabActive: (s:string) => void
+    setTabActive: (s:string) => void,
+    primoAccesso: boolean
 }
 
-export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive}) => {
+export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, primoAccesso}) => {
 
     const dispatch = useDispatch()
     const impresaDaCreare = useSelector(ImpreseDaCreareSelector)
@@ -36,10 +37,11 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive}) => 
                     <div className="flex flex-col">
                         <select placeholder="Tipologia Impresa" {...register("tipologiaImpresa", {required: true})}
                                 className="rounded border border-gray-400 shadow p-1"
-                                defaultValue={(impresaSelezionata) ? impresaSelezionata.tipo : "Affidataria"}
+                                defaultValue={(impresaSelezionata) ? impresaSelezionata.tipo : "Subappaltatrice"}
+                                disabled={!!(impresaSelezionata)}
                         >
-                            <option>Affidataria</option>
-                            <option>Subappaltatrice</option>
+                            <option disabled={!primoAccesso}>Affidataria</option>
+                            <option disabled={primoAccesso}>Subappaltatrice</option>
                         </select>
                         {errors.denominazione && <span className="font-bold text-red-600">Campo obbligatorio</span>}
                     </div>
@@ -132,7 +134,6 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive}) => 
                     <button type="submit" className="rounded-br rounded-tr bg-amber-400 p-2 w-full text-white hover:cursor-pointer font-bold">
                         Salva e Prosegui
                     </button>
-
                 </div>
             </form>
         </>

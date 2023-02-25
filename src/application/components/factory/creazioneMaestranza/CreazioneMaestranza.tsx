@@ -32,11 +32,6 @@ const CreazioneMaestranza: React.FC<CreazioneMaestranzaProps> = (
                 >
                     Comunicazioni
                 </a>
-                <a className={`tab tab-bordered p-[50px] text-xl ${tabActive === "Checklist" ? 'tab-active' : ''}`}
-                   onClick={() => setTabActive("Checklist")}
-                >
-                    Checklist
-                </a>
             </div>
             <TabContentMaestranzaFactory selectedTab={tabActive} setTabActive={setTabActive} setObjectToCreate={setObjectToCreate}/>
         </div>

@@ -15,22 +15,6 @@ export const createCantiereInFauna = async (faunaClient: faunadb.Client, faunaQu
     return response
 }
 
-export const updateCantiereInFauna = async (faunaClient: faunadb.Client, faunaQuery: typeof faunadb.query, cantiere: Cantiere) => {
-    const response = await faunaClient.query(
-        faunaQuery.Update(faunaQuery.Ref(faunaQuery.Collection('Cantieri'), cantiere.faunaDocumentId), {
-            data: {
-                impreseSubappaltatrici: cantiere.impreseSubappaltatrici
-            }
-        })
-    )
-        .catch((err) => console.error(
-            'Error: [%s] %s: %s',
-            err.name,
-            err.message,
-            err.errors()[0].description,
-        ));
-    return response
-}
 
 export const getAllCantieriByCreatoDa = async (faunaClient: faunadb.Client, faunaQuery: typeof faunadb.query, creatoDa: string) => {
     const response = await faunaClient.query(
