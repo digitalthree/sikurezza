@@ -14,8 +14,10 @@ import {store} from "./store/store";
 import Home from "./application/components/home/Home";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {Header} from "./shared/header/Header";
+import { Footer } from './shared/footer/Footer';
 import SezioneImpresa from "./application/components/home/components/SezioneImpresa";
 import {CreazioneImpresa} from "./application/components/factory/creazioneImpresa/CreazioneImpresa";
+import EstintoreTab from './application/mirkoComponents/EstintoreTab';
 
 function App() {
 
@@ -57,9 +59,12 @@ function App() {
             <Provider store={store}>
                 {/*{organization === "Impresa" && <Home/>}
                 {organization === "Coordinatore" && <Home/>}*/}
-                <div className="lg:px-32 px-10 py-5">
+                <div className="flex flex-col justify-between min-h-screen">
+                <div className=" lg:px-32 px-10 py-5">
                     <Header/>
                     <RouterProvider router={router}/>
+                </div>
+                <Footer/>
                 </div>
             </Provider>
         </Auth0Provider>
