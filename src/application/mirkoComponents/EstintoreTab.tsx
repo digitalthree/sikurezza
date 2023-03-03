@@ -7,14 +7,14 @@ const EstintoreTab: React.FC<EstintoreTabProps> = ({}) => {
   return (
     <>
       <div className="flex flex-col justify-center items-center w-100">
-        <div className="flex flex-row w-6/12 sm:w-5/12 md:w-3/12 justify-center">
+        <div className="flex flex-row justify-center w-10/12 sm:w-7/12 md:w-5/12 xl:w-4/12">
           <img
             src="\img\loghi_schede\logo_estintori.png"
-            className="pt-2"
+            className="pt-2 w-full"
             alt="estintori logo"
           ></img>
         </div>
-        <div className="flex-col text-3xl py-5 text-zinc-400 font-semibold underline">
+        <div className="flex-col text-2xl sm:text-3xl py-5 text-zinc-400 font-semibold underline">
           MENU' ESTINTORI
         </div>
         <div className="flex flex-row w-full justify-center items-center mt-2 mb-5">
@@ -31,17 +31,17 @@ const EstintoreTab: React.FC<EstintoreTabProps> = ({}) => {
             <option>Città</option>
           </select>
         </div>
-        <div className="overflow-x-auto w-full mt-3">
-          <table className="table table-zebra w-full">
+        <div className="overflow-x-auto overflow-y-hidden w-full mt-3 border-t-zinc-300 border rounded-xl">
+          <table className="table table-zebra w-full ">
             {/* head */}
-            <thead>
+            {/* <thead>
               <tr>
                 <th></th>
                 <th>Nome</th>
                 <th>Città</th>
                 <th>Opzioni</th>
               </tr>
-            </thead>
+            </thead> */}
             <tbody>
               {/* row 1 */}
               <tr className="link link-hover hover:text-sky-500">
