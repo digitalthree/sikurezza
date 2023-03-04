@@ -13,7 +13,7 @@ const MacchineAttrezzatureTab: React.FC<
           <img
             src="\img\loghi_schede\logo_macchine_attrezzature.png"
             className="pt-2 w-full"
-            alt="estintori logo"
+            alt="macchine logo"
           ></img>
         </div>
         <div className="flex-col text-xl sm:text-2xl md:text-3xl text-center py-5 text-zinc-400 font-semibold underline">

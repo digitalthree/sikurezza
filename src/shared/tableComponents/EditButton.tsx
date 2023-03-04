@@ -9,7 +9,7 @@ const EditButton: React.FC<EditButtonProps> = ({}) => {
       <span className="mr-4">apri</span>
       {/* Icona ingranaggio */}
 
-      <div className="tooltip tooltip-bottom tooltip-info" data-tip="Opzioni">
+      <div className="tooltip tooltip-left tooltip-info" data-tip="Opzioni">
 
       <button className="btn btn-link btn-xs hover:bg-sky-500">
         <svg
@@ -29,7 +29,7 @@ const EditButton: React.FC<EditButtonProps> = ({}) => {
       </div>
 
       {/* Icona chiave inglese */}
-      <div className="tooltip tooltip-bottom tooltip-info" data-tip="Modifica">
+      <div className="tooltip tooltip-left tooltip-info" data-tip="Modifica">
       <button className="btn btn-link btn-xs hover:bg-sky-500">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +47,7 @@ const EditButton: React.FC<EditButtonProps> = ({}) => {
       </div>
 
       {/* Icona cestino */}
-      <div className="tooltip tooltip-bottom tooltip-info" data-tip="Elimina">
+      <div className="tooltip tooltip-left tooltip-info z-10" data-tip="Elimina">
       <button className="btn btn-link btn-xs hover:bg-sky-500">
         <svg
           xmlns="http://www.w3.org/2000/svg"

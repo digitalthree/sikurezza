@@ -32,6 +32,7 @@ import {addMaestranza} from "../../../store/maestranzaSlice";
 import {AiOutlinePlus} from "react-icons/ai";
 import {CreazioneImpresa} from "../factory/creazioneImpresa/CreazioneImpresa";
 import {useNavigate} from "react-router-dom";
+import { HeaderImpresa } from '../../../shared/header/HeaderImpresa';
 
 interface HomeProps {
 
@@ -89,6 +90,7 @@ const Home: React.FC<HomeProps> = ({}) => {
 
     return (
         <>
+        <HeaderImpresa/>
             {imprese.length === 0 ?
                 <>
                     <CreazioneImpresa setObjectToCreate={setObjectToCreate} primoAccesso={true}/>

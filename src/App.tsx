@@ -18,6 +18,7 @@ import { Footer } from './shared/footer/Footer';
 import SezioneImpresa from "./application/components/home/components/SezioneImpresa";
 import {CreazioneImpresa} from "./application/components/factory/creazioneImpresa/CreazioneImpresa";
 import EstintoreTab from './application/mirkoComponents/EstintoreTab';
+import { HeaderImpresa } from './shared/header/HeaderImpresa';
 
 function App() {
 
@@ -60,8 +61,9 @@ function App() {
                 {/*{organization === "Impresa" && <Home/>}
                 {organization === "Coordinatore" && <Home/>}*/}
                 <div className="flex flex-col justify-between min-h-screen">
-                <div className=" lg:px-32 px-10 py-5">
-                    <Header/>
+                <div className=" lg:px-32 px-10 py-5 pt-3">
+                    
+                    {/* <Header/> */}
                     <RouterProvider router={router}/>
                 </div>
                 <Footer/>
