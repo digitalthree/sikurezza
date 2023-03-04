@@ -10,7 +10,7 @@ const GruTab: React.FC<GruTabProps> = ({}) => {
           <img
             src="\img\loghi_schede\logo_gru.png"
             className="pt-2 w-full"
-            alt="estintori logo"
+            alt="gru logo"
           ></img>
         </div>
         <div className="flex-col text-xl sm:text-2xl md:text-3xl text-center py-5 text-zinc-400 font-semibold underline">
