@@ -50,7 +50,7 @@ const MaestranzeTab: React.FC<MaestranzeTabProps> = ({}) => {
                 <td>Giorgio Giorgetti</td>
                 <td>Capo supremo</td>
                 <td>
-                  <EditButton />
+                  <EditButton setEditabile={() => {}} setModifica={() => {}} />
                 </td>
               </tr>
               {/* row 2 */}
@@ -59,7 +59,7 @@ const MaestranzeTab: React.FC<MaestranzeTabProps> = ({}) => {
                 <td>Herbet Ballerina</td>
                 <td>Vice Dio</td>
                 <td>
-                  <EditButton />
+                  <EditButton setEditabile={() => {}} setModifica={() => {}} />
                 </td>
               </tr>
               {/* row 3 */}
@@ -68,7 +68,7 @@ const MaestranzeTab: React.FC<MaestranzeTabProps> = ({}) => {
                 <td>Pinco Pallo</td>
                 <td>Assistente</td>
                 <td>
-                  <EditButton />
+                  <EditButton setEditabile={() => {}} setModifica={() => {}} />
                 </td>
               </tr>
               <tr className="link link-hover hover:text-sky-500">
@@ -76,7 +76,7 @@ const MaestranzeTab: React.FC<MaestranzeTabProps> = ({}) => {
                 <td>Conte Vlad</td>
                 <td>Coglitore di pommodori</td>
                 <td>
-                  <EditButton />
+                  <EditButton setEditabile={() => {}} setModifica={() => {}} />
                 </td>
               </tr>
             </tbody>

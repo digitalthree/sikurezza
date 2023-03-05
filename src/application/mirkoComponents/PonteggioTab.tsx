@@ -50,7 +50,7 @@ const PonteggioTab: React.FC<PonteggioTabProps> = ({}) => {
                 <td>Condominio Panorama</td>
                 <td>Teramo</td>
                 <td>
-                  <EditButton />
+                  <EditButton setEditabile={() => {}} setModifica={() => {}} />
                 </td>
               </tr>
               {/* row 2 */}
@@ -59,7 +59,7 @@ const PonteggioTab: React.FC<PonteggioTabProps> = ({}) => {
                 <td>Condominio Albani</td>
                 <td>Giulianova</td>
                 <td>
-                  <EditButton />
+                  <EditButton setEditabile={() => {}} setModifica={() => {}} />
                 </td>
               </tr>
               {/* row 3 */}
@@ -68,7 +68,7 @@ const PonteggioTab: React.FC<PonteggioTabProps> = ({}) => {
                 <td>Condominio Virgilio</td>
                 <td>Teramo</td>
                 <td>
-                  <EditButton />
+                  <EditButton setEditabile={() => {}} setModifica={() => {}} />
                 </td>
               </tr>
               <tr className="link link-hover hover:text-sky-500">
@@ -76,7 +76,7 @@ const PonteggioTab: React.FC<PonteggioTabProps> = ({}) => {
                 <td>Condominio Giordani</td>
                 <td>Teramo</td>
                 <td>
-                  <EditButton />
+                  <EditButton setEditabile={() => {}} setModifica={() => {}} />
                 </td>
               </tr>
             </tbody>

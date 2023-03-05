@@ -2,11 +2,13 @@ import { Action, combineReducers, configureStore, ThunkAction } from '@reduxjs/t
 import {CantiereSlice} from "./cantiereSlice"
 import {ImpresaSlice} from "./impresaSlice";
 import {MaestranzaSlice} from "./maestranzaSlice";
+import {EstintoreSlice} from "./estintoreSlice";
 
 const rootReducer = combineReducers({
     cantiereSlice: CantiereSlice.reducer,
     impresaSlice: ImpresaSlice.reducer,
-    maestranzaSlice: MaestranzaSlice.reducer
+    maestranzaSlice: MaestranzaSlice.reducer,
+    estintoreSlice: EstintoreSlice.reducer
 });
 
 export const store = configureStore({
