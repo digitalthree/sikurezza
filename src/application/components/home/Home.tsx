@@ -32,7 +32,10 @@ import {addMaestranza} from "../../../store/maestranzaSlice";
 import {AiOutlinePlus} from "react-icons/ai";
 import {CreazioneImpresa} from "../factory/creazioneImpresa/CreazioneImpresa";
 import {useNavigate} from "react-router-dom";
-import { HeaderImpresa } from '../../../shared/header/HeaderImpresa';
+import {HeaderImpresa} from '../../../shared/header/HeaderImpresa';
+import {addEstintore, EstintoriSelector} from "../../../store/estintoreSlice";
+import {getAllEstintoreByCreatoDa} from "../../../faunadb/api/estintoreAPIs";
+import {Estintore} from "../../../model/Estintore";
 
 interface HomeProps {
 
@@ -45,25 +48,15 @@ const Home: React.FC<HomeProps> = ({}) => {
     const {execQuery} = useFaunaQuery()
 
     const imprese = useSelector(ImpreseSelector)
-
+    const estintori = useSelector(EstintoriSelector)
 
     const navigate = useNavigate()
 
 
-    function resetCantiereSelezionato() {
-        dispatch(selezionaCantiere(undefined))
-    }
-
     const dispatch = useDispatch()
 
     useEffect(() => {
-        /*execQuery(getAllCantieriByCreatoDa, user?.email).then(res => {
-            res.forEach((r: { id: string, cantiere: Cantiere; }) => {
-                dispatch(addCantiere({...r.cantiere, faunaDocumentId: r.id}))
-                dispatch(addCantiereProxy({...r.cantiere, faunaDocumentId: r.id}))
-            })
-        })*/
-        if(imprese.length === 0){
+        if (imprese.length === 0) {
             execQuery(getAllImpreseByCreataDa, user?.email).then(res => {
                 res.forEach((r: { id: string, impresa: Impresa; }) => {
                     dispatch(addImpresa({
@@ -73,15 +66,16 @@ const Home: React.FC<HomeProps> = ({}) => {
                 })
             })
         }
-
-        /*execQuery(getAllMaestranzeByCreatoDa, user?.email).then(res => {
-            res.forEach((r: { id: string, maestranza: Maestranza; }) => {
-                dispatch(addMaestranza({
-                    ...r.maestranza,
-                    faunaDocumentId: r.id
-                } as Maestranza))
+        if(estintori.length === 0){
+            execQuery(getAllEstintoreByCreatoDa, user?.email).then(res => {
+                res.forEach((r: { id: string, estintore: Estintore; }) => {
+                    dispatch(addEstintore({
+                        ...r.estintore,
+                        faunaDocumentId: r.id
+                    } as Estintore))
+                })
             })
-        })*/
+        }
     }, []);
 
     const [objectToCreate, setObjectToCreate] = useState<string | undefined>(undefined);
@@ -90,7 +84,7 @@ const Home: React.FC<HomeProps> = ({}) => {
 
     return (
         <>
-        <HeaderImpresa/>
+            <HeaderImpresa/>
             {imprese.length === 0 ?
                 <>
                     <CreazioneImpresa setObjectToCreate={setObjectToCreate} primoAccesso={true}/>
@@ -122,8 +116,10 @@ const Home: React.FC<HomeProps> = ({}) => {
                                                     navigate('/impresa')
                                                 }}
                                             >
-                                                <span className="text-white font-semibold text-xl uppercase text-center">{(is as Impresa).anagrafica && (is as Impresa).anagrafica.denominazione}</span>
-                                                <span className="text-white font-semibold text-sm uppercase text-center mt-5">Impresa Subappaltatrice</span>
+                                                <span
+                                                    className="text-white font-semibold text-xl uppercase text-center">{(is as Impresa).anagrafica && (is as Impresa).anagrafica.denominazione}</span>
+                                                <span
+                                                    className="text-white font-semibold text-sm uppercase text-center mt-5">Impresa Subappaltatrice</span>
                                             </div>
                                         )
                                     })}
