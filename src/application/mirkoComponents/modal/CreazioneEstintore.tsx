@@ -132,7 +132,6 @@ const CreazioneEstintore: React.FC<CreazioneEstintoreProps> = (
                                      ...estintoreDaCreare,
                                      creatoDa: user?.email
                                  }).then((res) => {
-                                     console.log(res.ref.value.id)
                                      dispatch(addEstintore({
                                          ...estintoreDaCreare,
                                          faunaDocumentId: res.ref.value.id,

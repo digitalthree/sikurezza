@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {IoArrowBackCircle} from "react-icons/io5";
 import {TabContentImpresaFactory} from "./tabContentFactory/TabContentImpresaFactory";
 import {Breadcrumb} from "../../../../shared/breadcrumb/Breadcrumb";
 import {useSelector} from "react-redux";
@@ -18,6 +17,7 @@ export const CreazioneImpresa: React.FC<CreazioneImpresaProps> = ({setObjectToCr
     return (
         <>
             {!impresaSelezionata && <Breadcrumb breadcrumbsItems={["Home", 'Creazione Impresa']}
+                                                setBreadcrumbsItems={() => {}}
                                                 setObjectToCreate={setObjectToCreate}/>}
             <div className="w-full flex flex-col items-center">
                 <div className="tabs">
