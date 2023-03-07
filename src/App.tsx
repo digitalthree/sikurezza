@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
 import {Login} from "./application/login/Login";
 
-import {Auth0Provider, useAuth0} from "@auth0/auth0-react";
+import {Auth0Provider} from "@auth0/auth0-react";
 import {
-    clearOrganizationStorages,
     getAuthorisedOrganization,
     getTemporaryOrganization,
     isAuth0RedirectUrl,
@@ -12,13 +11,22 @@ import {
 import {Provider} from "react-redux";
 import {store} from "./store/store";
 import Home from "./application/components/home/Home";
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import {Header} from "./shared/header/Header";
-import { Footer } from './shared/footer/Footer';
+import {
+    BrowserRouter,
+    Route,
+    Routes
+} from "react-router-dom";
 import SezioneImpresa from "./application/components/home/components/SezioneImpresa";
 import {CreazioneImpresa} from "./application/components/factory/creazioneImpresa/CreazioneImpresa";
-import EstintoreTab from './application/mirkoComponents/EstintoreTab';
-import { HeaderImpresa } from './shared/header/HeaderImpresa';
+import SharedLayout from "./shared/sharedLayout/SharedLayout";
+import EstintoreTab from "./application/mirkoComponents/EstintoreTab";
+import PonteggioTab from "./application/mirkoComponents/PonteggioTab";
+import MacchineAttrezzatureTab from "./application/mirkoComponents/MacchineAttrezzatureTab";
+import MaestranzeTab from "./application/mirkoComponents/MaestranzeTab";
+import {
+    AnagraficaImpresa
+} from "./application/components/factory/creazioneImpresa/tabContentFactory/components/AnagraficaImpresa";
+import GruTab from "./application/mirkoComponents/GruTab";
 
 function App() {
 
@@ -33,20 +41,6 @@ function App() {
         return <Login setOrganization={setOrganization}/>
     }
 
-    const router = createBrowserRouter([
-        {
-            path: "/",
-            element: <Home/>
-        },
-        {
-            path: "/impresa",
-            element: <SezioneImpresa/>
-        },
-        {
-            path: "/creazione/impresa",
-            element: <CreazioneImpresa setObjectToCreate={setObjectToCreate} primoAccesso={false}/>
-        }
-    ])
 
     return (
         <Auth0Provider
@@ -58,16 +52,22 @@ function App() {
             onRedirectCallback={() => setAuthorisedOrganizationFromTemporaryStorage()}
         >
             <Provider store={store}>
-                {/*{organization === "Impresa" && <Home/>}
-                {organization === "Coordinatore" && <Home/>}*/}
-                <div className="flex flex-col justify-between min-h-screen">
-                <div className=" lg:px-32 px-10 py-5 pt-3">
-                    
-                    {/* <Header/> */}
-                    <RouterProvider router={router}/>
-                </div>
-                <Footer/>
-                </div>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<SharedLayout/>}>
+                            <Route index element={<Home/>}/>
+                            <Route path="impresa/:faunaDocumentId" element={<SezioneImpresa/>}>
+                                <Route path="estintori" element={<EstintoreTab/>}/>
+                                <Route path="ponteggi" element={<PonteggioTab/>}/>
+                                <Route path="gru" element={<GruTab/>}/>
+                                <Route path="macchineEAttrezzature" element={<MacchineAttrezzatureTab/>}/>
+                                <Route path="maestranze" element={<MaestranzeTab/>}/>
+                                <Route path="anagrafica" element={<CreazioneImpresa setObjectToCreate={setObjectToCreate} primoAccesso={false}/>}/>
+                            </Route>
+                            <Route path="creazione/impresa" element={<CreazioneImpresa setObjectToCreate={setObjectToCreate} primoAccesso={true}/>}/>
+                        </Route>
+                    </Routes>
+                </BrowserRouter>
             </Provider>
         </Auth0Provider>
     )

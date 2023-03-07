@@ -1,5 +1,4 @@
 import React from "react";
-import { HeaderImpresa } from "../../shared/header/HeaderImpresa";
 import EditButton from "../../shared/tableComponents/EditButton";
 
 export interface PonteggioTabProps {}
@@ -7,7 +6,6 @@ export interface PonteggioTabProps {}
 const PonteggioTab: React.FC<PonteggioTabProps> = ({}) => {
   return (
     <>
-      <HeaderImpresa />
       <div className="flex flex-col justify-center items-center w-100">
         <div className="flex flex-row justify-center w-10/12 sm:w-8/12 md:w-6/12 xl:w-5/12">
           <img

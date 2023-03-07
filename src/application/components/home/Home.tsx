@@ -1,38 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {useAuth0, withAuthenticationRequired} from "@auth0/auth0-react";
-import {Header} from "../../../shared/header/Header";
-import {CreationFactory} from "../factory/CreationFactory";
-import {Breadcrumb} from "../../../shared/breadcrumb/Breadcrumb";
 import {useFaunaQuery} from "../../../faunadb/hooks/useFaunaQuery";
 import {useDispatch, useSelector} from "react-redux";
-import {
-    addCantiere,
-    addCantiereProxy,
-    CantiereSelezionatoSelector,
-    selezionaCantiere
-} from "../../../store/cantiereSlice";
 import {clearOrganizationStorages} from "../../../utils/auth0/auth0";
 import {getAllImpreseByCreataDa} from "../../../faunadb/api/impresaAPIs";
 import {Impresa} from "../../../model/Impresa";
 import {
     addImpresa,
-    ImpresaSelezionataSelector,
     ImpreseSelector,
     setImpresaSelezionata
 } from "../../../store/impresaSlice";
-import {SelectionAndSearchGrid} from "./components/SelectionAndSearchGrid";
-import {TableHome} from "./components/TableHome";
-import {CreationBoxGrid} from "./components/CreationBoxGrid";
-import SezioneImpresa from "./components/SezioneImpresa";
-import {getAllCantieriByCreatoDa} from "../../../faunadb/api/cantiereAPIs";
-import {Cantiere} from "../../../model/Cantiere";
-import {getAllMaestranzeByCreatoDa} from "../../../faunadb/api/maestranzaAPIs";
-import {Maestranza} from "../../../model/Maestranza";
-import {addMaestranza} from "../../../store/maestranzaSlice";
 import {AiOutlinePlus} from "react-icons/ai";
 import {CreazioneImpresa} from "../factory/creazioneImpresa/CreazioneImpresa";
 import {useNavigate} from "react-router-dom";
-import {HeaderImpresa} from '../../../shared/header/HeaderImpresa';
 import {addEstintore, EstintoriSelector} from "../../../store/estintoreSlice";
 import {getAllEstintoreByCreatoDa} from "../../../faunadb/api/estintoreAPIs";
 import {Estintore} from "../../../model/Estintore";
@@ -79,12 +59,10 @@ const Home: React.FC<HomeProps> = ({}) => {
     }, []);
 
     const [objectToCreate, setObjectToCreate] = useState<string | undefined>(undefined);
-    const [breadcrumbsItems, setBreadcrumbsItems] = useState(["Home"]);
 
 
     return (
         <>
-            <HeaderImpresa/>
             {imprese.length === 0 ?
                 <>
                     <CreazioneImpresa setObjectToCreate={setObjectToCreate} primoAccesso={true}/>
@@ -97,7 +75,7 @@ const Home: React.FC<HomeProps> = ({}) => {
                                 className="col-span-1 bg-amber-100 p-5 rounded-3xl h-full w-full flex justify-center flex-col items-center hover:cursor-pointer hover:underline text-amber-500"
                                 onClick={() => {
                                     dispatch(setImpresaSelezionata(imprese.filter(i => i.tipo === "Affidataria")[0]))
-                                    navigate('/impresa')
+                                    navigate(`/impresa/${imprese.filter(i => i.tipo === "Affidataria")[0].faunaDocumentId}`)
                                 }}
                             >
                             <span className="font-semibold text-3xl uppercase text-center">
@@ -113,7 +91,7 @@ const Home: React.FC<HomeProps> = ({}) => {
                                                 className="bg-gray-300 rounded-3xl min-h-[180px] flex justify-center flex-col items-center hover:cursor-pointer hover:opacity-60"
                                                 onClick={() => {
                                                     dispatch(setImpresaSelezionata(is))
-                                                    navigate('/impresa')
+                                                    navigate(`impresa/${is.faunaDocumentId}`)
                                                 }}
                                             >
                                                 <span
@@ -146,7 +124,6 @@ const Home: React.FC<HomeProps> = ({}) => {
                             Log Out
                         </button>
                     </div>
-
                 </>
             }
         </>
