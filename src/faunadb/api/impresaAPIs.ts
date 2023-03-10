@@ -1,5 +1,6 @@
 import faunadb from "faunadb";
 import {Impresa} from "../../model/Impresa";
+import {Estintore} from "../../model/Estintore";
 
 export const createImpresaInFauna = async (faunaClient: faunadb.Client, faunaQuery: typeof faunadb.query, impresaDaSalvare: Impresa) => {
     const response = await faunaClient.query(
@@ -13,6 +14,23 @@ export const createImpresaInFauna = async (faunaClient: faunadb.Client, faunaQue
             err.errors()[0].description,
         ));
     return response
+}
+
+export const updateImpresaInFauna = async (faunaClient: faunadb.Client, faunaQuery: typeof faunadb.query, impresaToUpdate: Impresa) => {
+    return await faunaClient.query(
+        faunaQuery.Update(faunaQuery.Ref(faunaQuery.Collection('Imprese'), impresaToUpdate.faunaDocumentId), {
+            data: {
+                ...impresaToUpdate
+            } as Impresa
+        })
+    )
+        .catch((err) => console.error(
+            'Error: [%s] %s: %s',
+            err.name,
+            err.message,
+            err.errors()[0].description,
+        ))
+
 }
 
 export const getAllImpreseByCreataDa = async (faunaClient: faunadb.Client, faunaQuery: typeof faunadb.query, email: string) => {

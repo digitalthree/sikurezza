@@ -14,7 +14,7 @@ export interface EditButtonProps {
   setModifica: (v: boolean) => void;
 }
 
-const EditButton: React.FC<EditButtonProps> = ({
+const EditButtonEstintore: React.FC<EditButtonProps> = ({
   estintoreTarget,
   setEditabile,
   setModifica,
@@ -95,7 +95,7 @@ const EditButton: React.FC<EditButtonProps> = ({
               let messageConfirm = window.confirm(
                 "Sei sicuro di voler eliminare " + removeVar.payload?.nome
               );
-              if (messageConfirm == true) {
+              if (messageConfirm) {
                 execQuery(
                   deleteEstintoreFromFauna,
                   estintoreTarget?.faunaDocumentId
@@ -132,4 +132,4 @@ const EditButton: React.FC<EditButtonProps> = ({
   );
 };
 
-export default EditButton;
+export default EditButtonEstintore;

@@ -17,45 +17,42 @@ import {convertiInDocumentiMaestranza} from "../utils/conversioneDocumentiMaestr
 
 export interface DocumentiMaestranzaProps{
     setTabActive: (s:string) => void,
+    editabile: boolean,
+    modifica: boolean,
 }
 
 const DocumentiMaestranza: React.FC<DocumentiMaestranzaProps> = (
     {
-        setTabActive
+        setTabActive, editabile, modifica
     }
 ) => {
 
-    const dispatch = useDispatch()
-    const maestranzaDaCreare = useSelector(MaestranzaDaCreareSelector)
 
-    const onChange = (file: File, target: string) => {
-        setValue(target, file)
-    }
-
-    const {register, handleSubmit, formState: {errors}, setValue} = useForm();
-    const onSubmit = (data: any) => {
-        dispatch(setDocumentiMaestranza(convertiInDocumentiMaestranza(data)))
+    const {register, handleSubmit, formState: {errors}} = useForm();
+    const onSubmit = () => {
         setTabActive("Comunicazioni")
     }
 
     return(
         <form onSubmit={handleSubmit(onSubmit)} className="mt-20 w-[70%] p-10 shadow-2xl">
-            <SezioneContratto register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare} onChange={onChange}/>
-            <SezioneVisitaMedica register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare} onChange={onChange}/>
-            <SezioneCorsoFormazione register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare} onChange={onChange}/>
-            <SezioneCorsi1 register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare} onChange={onChange}/>
-            <SezioneConsegne register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare} onChange={onChange}/>
-            <SezioneNomine register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare} onChange={onChange}/>
-            <SezioneCorsi2 register={register} errors={errors} maestranzaDaCreare={maestranzaDaCreare} onChange={onChange}/>
-            <div className="flex mt-10">
-                <div className="rounded-bl rounded-tl bg-amber-600 p-2">
-                    <TfiSave size="30px" className="text-white"/>
-                </div>
-                <button type="submit" className="rounded-br rounded-tr bg-amber-400 p-2 w-full text-white hover:cursor-pointer font-bold">
-                    Salva e Prosegui
-                </button>
+            <SezioneContratto register={register} errors={errors} editabile={editabile} modifica={modifica}/>
+            <SezioneVisitaMedica register={register} errors={errors} editabile={editabile} modifica={modifica}/>
+            <SezioneCorsoFormazione register={register} errors={errors} editabile={editabile} modifica={modifica}/>
+            <SezioneCorsi1 register={register} errors={errors} editabile={editabile} modifica={modifica}/>
+            <SezioneConsegne register={register} errors={errors} editabile={editabile} modifica={modifica}/>
+            <SezioneNomine register={register} errors={errors} editabile={editabile} modifica={modifica}/>
+            <SezioneCorsi2 register={register} errors={errors} editabile={editabile} modifica={modifica}/>
+            {editabile &&
+                <div className="flex mt-10">
+                    <div className="rounded-bl rounded-tl bg-amber-600 p-2">
+                        <TfiSave size="30px" className="text-white"/>
+                    </div>
+                    <button type="submit" className="rounded-br rounded-tr bg-amber-400 p-2 w-full text-white hover:cursor-pointer font-bold">
+                        Salva e Prosegui
+                    </button>
 
-            </div>
+                </div>
+            }
         </form>
     )
 }

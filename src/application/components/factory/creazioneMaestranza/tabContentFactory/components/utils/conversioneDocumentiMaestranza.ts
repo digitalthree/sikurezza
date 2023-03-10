@@ -17,10 +17,10 @@ export const convertiInDocumentiMaestranza = (data: any) => {
             file: data.visitaMedicaFile
         },
         {
-            nome: 'corsoFormazioneArt3637',
-            effettuatoIl: data.corsoFormazioneArt3637EffettuatoIl,
-            scadenza: data.corsoFormazioneArt3637Scadenza,
-            file: data.corsoFormazioneArt363File
+            nome: 'corsoFormazioneArt37',
+            effettuatoIl: data.corsoFormazioneArt37EffettuatoIl,
+            scadenza: data.corsoFormazioneArt37Scadenza,
+            file: data.corsoFormazioneArt37File
         },
         {
             nome: 'corsoFormazioneCovid',

@@ -10,6 +10,7 @@ import {
     removeEstintore,
     setEstintoreSelezionato
 } from "../../../store/estintoreSlice";
+import {ImpresaSelezionataSelector} from "../../../store/impresaSlice";
 
 export interface CreazioneEstintoreProps{
     estintoreDaCreare: Estintore,
@@ -29,6 +30,7 @@ const CreazioneEstintore: React.FC<CreazioneEstintoreProps> = (
     const {execQuery} = useFaunaQuery()
     const dispatch = useDispatch()
     const estintoreSelezionato = useSelector(EstintoreSelezionatoSelector)
+    const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
 
     useEffect(() => {
         if(estintoreSelezionato && editabile){
@@ -130,12 +132,12 @@ const CreazioneEstintore: React.FC<CreazioneEstintoreProps> = (
                              onClick={() => {
                                  execQuery(createEstintoreInFauna, {
                                      ...estintoreDaCreare,
-                                     creatoDa: user?.email
+                                     creatoDa: impresaSelezionata?.faunaDocumentId
                                  }).then((res) => {
                                      dispatch(addEstintore({
                                          ...estintoreDaCreare,
                                          faunaDocumentId: res.ref.value.id,
-                                         creatoDa: user?.email as string
+                                         creatoDa: impresaSelezionata?.faunaDocumentId as string
                                      }))
                                      setEstintoreDaCreare(estintoreDefault)
                                      dispatch(setEstintoreSelezionato(undefined))
@@ -150,12 +152,12 @@ const CreazioneEstintore: React.FC<CreazioneEstintoreProps> = (
                              onClick={() => {
                                  execQuery(updateEstintoreInFauna, {
                                      ...estintoreDaCreare,
-                                     creatoDa: user?.email
+                                     creatoDa: impresaSelezionata?.faunaDocumentId
                                  }).then(() => {
                                      dispatch(removeEstintore(estintoreSelezionato?.faunaDocumentId as string))
                                      dispatch(addEstintore({
                                          ...estintoreDaCreare,
-                                         creatoDa: user?.email as string
+                                         creatoDa: impresaSelezionata?.faunaDocumentId as string
                                      }))
                                      setEstintoreDaCreare(estintoreDefault)
                                      setModifica(false)

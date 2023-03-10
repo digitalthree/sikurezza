@@ -1,10 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {setImpresaSelezionata} from "../../store/impresaSlice";
+import {setMaestranzaSelezionata} from "../../store/maestranzaSlice";
 
 interface HeaderImpresaProps {}
 
 export const HeaderImpresa: React.FC<HeaderImpresaProps> = ({}) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   return (
     <div className="navbar p-0 bg-base-100 border-b-2">
@@ -12,6 +16,8 @@ export const HeaderImpresa: React.FC<HeaderImpresaProps> = ({}) => {
         <div>
           <img
             onClick={() => {
+              dispatch(setImpresaSelezionata(undefined))
+              dispatch(setMaestranzaSelezionata(undefined))
               navigate("/");
             }}
             src="/img/logo.png"
@@ -27,6 +33,8 @@ export const HeaderImpresa: React.FC<HeaderImpresaProps> = ({}) => {
             <a
               className="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-tl-3xl rounded-br-3xl mr-1"
               onClick={() => {
+                dispatch(setImpresaSelezionata(undefined))
+                dispatch(setMaestranzaSelezionata(undefined))
                 navigate("/");
               }}
             >

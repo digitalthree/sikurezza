@@ -1,5 +1,5 @@
 import React from "react";
-import EditButton from "../../shared/tableComponents/EditButton";
+import EditButtonEstintore from "../../shared/tableComponents/EditButtonEstintore";
 export interface GruTabProps {}
 
 const GruTab: React.FC<GruTabProps> = ({}) => {
@@ -51,7 +51,7 @@ const GruTab: React.FC<GruTabProps> = ({}) => {
                 <td>Condominio Panorama</td>
                 <td>Teramo</td>
                 <td>
-                  <EditButton setEditabile={() => {}} setModifica={() => {}}/>
+                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}}/>
                 </td>
               </tr>
               {/* row 2 */}
@@ -61,7 +61,7 @@ const GruTab: React.FC<GruTabProps> = ({}) => {
                 <td>Condominio Albani</td>
                 <td>Giulianova</td>
                 <td>
-                  <EditButton setEditabile={() => {}} setModifica={() => {}}/>
+                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}}/>
                 </td>
               </tr>
               {/* row 3 */}
@@ -71,7 +71,7 @@ const GruTab: React.FC<GruTabProps> = ({}) => {
                 <td>Condominio Virgilio</td>
                 <td>Teramo</td>
                 <td>
-                  <EditButton setEditabile={() => {}} setModifica={() => {}}/>
+                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}}/>
                 </td>
               </tr>
               <tr className="link link-hover hover:text-sky-500">
@@ -80,7 +80,7 @@ const GruTab: React.FC<GruTabProps> = ({}) => {
                 <td>Condominio Giordani</td>
                 <td>Teramo</td>
                 <td>
-                  <EditButton setEditabile={() => {}} setModifica={() => {}}/>
+                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}}/>
                 </td>
               </tr>
               {/* row 4 */}
@@ -90,7 +90,7 @@ const GruTab: React.FC<GruTabProps> = ({}) => {
                 <td>Condominio Panorama</td>
                 <td>Teramo</td>
                 <td>
-                  <EditButton setEditabile={() => {}} setModifica={() => {}}/>
+                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}}/>
                 </td>
               </tr>
               </tbody>

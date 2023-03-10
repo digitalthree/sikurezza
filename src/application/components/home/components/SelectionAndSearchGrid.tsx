@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
 import {SelectWithSearch} from "../../../../shared/slectComponent/SelectWithSearch";
 import {useSelector} from "react-redux";
-import {CantieriSelector} from "../../../../store/cantiereSlice";
 import {ImpreseSelector} from "../../../../store/impresaSlice";
-import {MaestranzeSelector} from "../../../../store/maestranzaSlice";
 
 interface SelectionAndSearchGridProps {
 }
@@ -19,8 +17,8 @@ export const SelectionAndSearchGrid: React.FC<SelectionAndSearchGridProps> = ({}
     const imprese = useSelector(ImpreseSelector)
     const nomiImprese = imprese.map(i => i.anagrafica.denominazione)
 
-    const maestranze = useSelector(MaestranzeSelector)
-    const nomiMaestranze = maestranze.map(m => `${m.anagrafica.nome} ${m.anagrafica.cognome}`)
+    //const maestranze = useSelector(MaestranzeSelector)
+    const nomiMaestranze: string[] = []//maestranze.map(m => `${m.anagrafica.nome} ${m.anagrafica.cognome}`)
 
 
     return (

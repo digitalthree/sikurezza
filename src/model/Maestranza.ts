@@ -3,6 +3,7 @@ export interface Maestranza {
     documenti: Documento[],
     comunicazioni: ComunicazioniMaestranza,
     creatoDa: string
+    faunaDocumentId?: string
 }
 
 export interface AnagraficaMaestranza {

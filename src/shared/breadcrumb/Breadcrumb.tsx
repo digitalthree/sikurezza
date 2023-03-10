@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {ImpresaSelezionataSelector, setImpresaSelezionata} from "../../store/impresaSlice";
 import {useNavigate} from "react-router-dom";
 import {Impresa} from "../../model/Impresa";
+import {setMaestranzaSelezionata} from "../../store/maestranzaSlice";
 
 interface BreadcrumbProps {
     breadcrumbsItems: (string | Impresa)[],
@@ -28,6 +29,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = (
                         return <li key={bi} onClick={() => {
                             if (impresaSelezionata) {
                                 dispatch(setImpresaSelezionata(undefined))
+                                dispatch(setMaestranzaSelezionata(undefined))
                             } else {
                                 setObjectToCreate(undefined)
                             }
@@ -38,6 +40,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = (
                                    className={`${index === breadcrumbsItems.length - 1 ? 'font-bold' : ' hover:cursor-pointer'}`}
                                    onClick={() => {
                                        setObjectToCreate(undefined)
+                                       dispatch(setMaestranzaSelezionata(undefined))
                                        setBreadcrumbsItems(["Home", bi])
                                        navigate(`/impresa/${bi.faunaDocumentId}`)
                                    }}

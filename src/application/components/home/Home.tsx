@@ -4,10 +4,10 @@ import { useFaunaQuery } from "../../../faunadb/hooks/useFaunaQuery";
 import { useDispatch, useSelector } from "react-redux";
 import { clearOrganizationStorages } from "../../../utils/auth0/auth0";
 import { getAllImpreseByCreataDa } from "../../../faunadb/api/impresaAPIs";
-import { Impresa } from "../../../model/Impresa";
+import {Impresa, impresaTemporanea} from "../../../model/Impresa";
 import {
   addImpresa,
-  ImpreseSelector,
+  ImpreseSelector, setImpresaDaCreare,
   setImpresaSelezionata,
 } from "../../../store/impresaSlice";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -31,6 +31,7 @@ const Home: React.FC<HomeProps> = ({}) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(setImpresaDaCreare(impresaTemporanea))
     if (imprese.length === 0) {
       execQuery(getAllImpreseByCreataDa, user?.email).then((res) => {
         res.forEach((r: { id: string; impresa: Impresa }) => {
@@ -39,18 +40,6 @@ const Home: React.FC<HomeProps> = ({}) => {
               ...r.impresa,
               faunaDocumentId: r.id,
             } as Impresa)
-          );
-        });
-      });
-    }
-    if (estintori.length === 0) {
-      execQuery(getAllEstintoreByCreatoDa, user?.email).then((res) => {
-        res.forEach((r: { id: string; estintore: Estintore }) => {
-          dispatch(
-            addEstintore({
-              ...r.estintore,
-              faunaDocumentId: r.id,
-            } as Estintore)
           );
         });
       });

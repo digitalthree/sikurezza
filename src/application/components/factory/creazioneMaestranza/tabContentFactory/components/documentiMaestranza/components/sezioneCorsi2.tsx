@@ -1,19 +1,44 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {FieldErrors} from "react-hook-form";
 import {Maestranza} from "../../../../../../../../model/Maestranza";
+import {useDispatch, useSelector} from "react-redux";
+import {
+    MaestranzaDaCreareSelector,
+    MaestranzaSelezionataSelector,
+    setEffettuatoIlInMaestranza, setScadenzaIlInMaestranza
+} from "../../../../../../../../store/maestranzaSlice";
+import VisualizzaEliminaFile from "../../../../../../../../shared/Files/VisualizzaEliminaFile";
+import InputFile from "../../../../../../../../shared/Files/InputFile";
 
 export interface SezioneCorsi1Props{
     register: Function,
     errors: FieldErrors,
-    maestranzaDaCreare: Maestranza,
-    onChange: Function
+    editabile: boolean,
+    modifica: boolean,
 }
 
 const SezioneCorsi2: React.FC<SezioneCorsi1Props> = (
     {
-        register, errors, maestranzaDaCreare, onChange
+        register, errors, editabile, modifica
     }
 ) => {
+
+    const maestranzaSelezionata = useSelector(MaestranzaSelezionataSelector)
+    const maestranzaDaCreare = useSelector(MaestranzaDaCreareSelector)
+    const [maestranza, setMaestranza] = useState(maestranzaDaCreare)
+    useEffect(() => {
+        if(maestranzaSelezionata){
+            setMaestranza(maestranzaSelezionata)
+        }
+    }, [])
+    let corsoPrimoSoccorso = maestranzaSelezionata?.documenti.filter(d => d.nome === 'corsoPrimoSoccorso')[0].file
+    let corsoPrevIncendi = maestranzaSelezionata?.documenti.filter(d => d.nome === 'corsoPrevIncendi')[0].file
+    let corsoPreposto = maestranzaSelezionata?.documenti.filter(d => d.nome === 'corsoPreposto')[0].file
+    let corsoRLS = maestranzaSelezionata?.documenti.filter(d => d.nome === 'corsoRLS')[0].file
+    let corsoRSPP = maestranzaSelezionata?.documenti.filter(d => d.nome === 'corsoRSPP')[0].file
+    const dispatch = useDispatch()
+
+
     return(
         <>
             <div className="grid grid-cols-12 gap-4">
@@ -21,110 +46,110 @@ const SezioneCorsi2: React.FC<SezioneCorsi1Props> = (
                 <div className="flex flex-col col-span-2">
                     <input type="date" {...register("corsoPrimoSoccorsoEffettuatoIl")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={maestranzaDaCreare.documenti?.filter(d => d.nome === 'corsoPrimoSoccorso')[0].effettuatoIl}
+                           disabled={!editabile}
+                           onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'corsoPrimoSoccorso', value: e.target.value}))}
+                           defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoPrimoSoccorso')[0].effettuatoIl}
                     />
                 </div>
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("corsoPrimoSoccorsoScadenza")}
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
-                       defaultValue={maestranzaDaCreare.documenti?.filter(d => d.nome === 'corsoPrimoSoccorso')[0].scadenza}
+                       disabled={!editabile}
+                       onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'corsoPrimoSoccorso', value: e.target.value}))}
+                       defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoPrimoSoccorso')[0].scadenza}
                 />
-                <input type="file"
-                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4"
-                       onChange={(e) => {
-                           if (e.target.files && e.target.files[0]) {
-                               onChange(e.target.files[0], 'corsoPrimoSoccorsoFile')
-                           }
-                       }}
-                />
+                {(corsoPrimoSoccorso || maestranzaDaCreare.documenti.filter(d => d.nome === 'corsoPrimoSoccorso')[0].file) ?
+                    <VisualizzaEliminaFile file={corsoPrimoSoccorso as string} modifica={editabile} nome="corsoPrimoSoccorso"/>:
+                    <InputFile editabile={editabile} nome="corsoPrimoSoccorso"/>
+                }
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
                 <span className="font-bold col-span-3">Corso Prev. Incendi: </span>
                 <div className="flex flex-col col-span-2">
                     <input type="date" {...register("corsoPrevIncendiEffettuatoIl")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={maestranzaDaCreare.documenti?.filter(d => d.nome === 'corsoPrevIncendi')[0].effettuatoIl}
+                           disabled={!editabile}
+                           onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'corsoPrevIncendi', value: e.target.value}))}
+                           defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoPrevIncendi')[0].effettuatoIl}
                     />
                 </div>
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("corsoPrevIncendiScadenza")}
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
-                       defaultValue={maestranzaDaCreare.documenti?.filter(d => d.nome === 'corsoPrevIncendi')[0].scadenza}
+                       disabled={!editabile}
+                       onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'corsoPrevIncendi', value: e.target.value}))}
+                       defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoPrevIncendi')[0].scadenza}
                 />
-                <input type="file"
-                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4"
-                       onChange={(e) => {
-                           if (e.target.files && e.target.files[0]) {
-                               onChange(e.target.files[0], 'corsoPrevIncendiFile')
-                           }
-                       }}
-                />
+                {(corsoPrevIncendi || maestranzaDaCreare.documenti.filter(d => d.nome === 'corsoPrevIncendi')[0].file) ?
+                    <VisualizzaEliminaFile file={corsoPrevIncendi as string} modifica={editabile} nome="corsoPrevIncendi"/>:
+                    <InputFile editabile={editabile} nome="corsoPrevIncendi"/>
+                }
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
                 <span className="font-bold col-span-3">Corso Preposto: </span>
                 <div className="flex flex-col col-span-2">
                     <input type="date" {...register("corsoPrepostoEffettuatoIl")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={maestranzaDaCreare.documenti?.filter(d => d.nome === 'corsoPreposto')[0].effettuatoIl}
+                           disabled={!editabile}
+                           onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'corsoPreposto', value: e.target.value}))}
+                           defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoPreposto')[0].effettuatoIl}
                     />
                 </div>
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("corsoPrepostoScadenza")}
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
-                       defaultValue={maestranzaDaCreare.documenti?.filter(d => d.nome === 'corsoPreposto')[0].scadenza}
+                       disabled={!editabile}
+                       onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'corsoPreposto', value: e.target.value}))}
+                       defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoPreposto')[0].scadenza}
                 />
-                <input type="file"
-                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4"
-                       onChange={(e) => {
-                           if (e.target.files && e.target.files[0]) {
-                               onChange(e.target.files[0], 'corsoPrepostoFile')
-                           }
-                       }}
-                />
+                {(corsoPreposto || maestranzaDaCreare.documenti.filter(d => d.nome === 'corsoPreposto')[0].file) ?
+                    <VisualizzaEliminaFile file={corsoPreposto as string} modifica={editabile} nome="corsoPreposto"/>:
+                    <InputFile editabile={editabile} nome="corsoPreposto"/>
+                }
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
                 <span className="font-bold col-span-3">Corso RLS: </span>
                 <div className="flex flex-col col-span-2">
                     <input type="date" {...register("corsoRLSEffettuatoIl")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={maestranzaDaCreare.documenti?.filter(d => d.nome === 'corsoRLS')[0].effettuatoIl}
+                           disabled={!editabile}
+                           onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'corsoRLS', value: e.target.value}))}
+                           defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoRLS')[0].effettuatoIl}
                     />
                 </div>
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("corsoRLSScadenza")}
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
-                       defaultValue={maestranzaDaCreare.documenti?.filter(d => d.nome === 'corsoRLS')[0].scadenza}
+                       disabled={!editabile}
+                       onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'corsoRLS', value: e.target.value}))}
+                       defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoRLS')[0].scadenza}
                 />
-                <input type="file"
-                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4"
-                       onChange={(e) => {
-                           if (e.target.files && e.target.files[0]) {
-                               onChange(e.target.files[0], 'corsoRLSFile')
-                           }
-                       }}
-                />
+                {(corsoRLS || maestranzaDaCreare.documenti.filter(d => d.nome === 'corsoRLS')[0].file) ?
+                    <VisualizzaEliminaFile file={corsoRLS as string} modifica={editabile} nome="corsoRLS"/>:
+                    <InputFile editabile={editabile} nome="corsoRLS"/>
+                }
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
                 <span className="font-bold col-span-3">Corso RSPP: </span>
                 <div className="flex flex-col col-span-2">
                     <input type="date" {...register("corsoRSPPEffettuatoIl")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={maestranzaDaCreare.documenti?.filter(d => d.nome === 'corsoRSPP')[0].effettuatoIl}
+                           disabled={!editabile}
+                           onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'corsoRSPP', value: e.target.value}))}
+                           defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoRSPP')[0].effettuatoIl}
                     />
                 </div>
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("corsoRSPPScadenza")}
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
-                       defaultValue={maestranzaDaCreare.documenti?.filter(d => d.nome === 'corsoRSPP')[0].scadenza}
+                       disabled={!editabile}
+                       onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'corsoRSPP', value: e.target.value}))}
+                       defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoRSPP')[0].scadenza}
                 />
-                <input type="file"
-                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4"
-                       onChange={(e) => {
-                           if (e.target.files && e.target.files[0]) {
-                               onChange(e.target.files[0], 'corsoRSPPFile')
-                           }
-                       }}
-                />
+                {(corsoRSPP || maestranzaDaCreare.documenti.filter(d => d.nome === 'corsoRSPP')[0].file) ?
+                    <VisualizzaEliminaFile file={corsoRSPP as string} modifica={editabile} nome="corsoRSPP"/>:
+                    <InputFile editabile={editabile} nome="corsoRSPP"/>
+                }
             </div>
             <hr className="my-5"/>
         </>
