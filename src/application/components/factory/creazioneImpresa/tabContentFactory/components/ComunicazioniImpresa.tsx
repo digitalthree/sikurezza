@@ -5,13 +5,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     addComunicazioneInComunicazioni,
     addImpresa, ImpresaSelezionataSelector,
-    ImpreseDaCreareSelector, setComunicazioneInComunicazioni,
+    ImpreseDaCreareSelector, removeImpresa, setComunicazioneInComunicazioni,
     setFileInDocumenti,
     setImpresaDaCreare
 } from "../../../../../../store/impresaSlice";
-import {impresaTemporanea, ItemComunicazione} from "../../../../../../model/Impresa";
+import {Impresa, impresaTemporanea, ItemComunicazione} from "../../../../../../model/Impresa";
 import {useFaunaQuery} from "../../../../../../faunadb/hooks/useFaunaQuery";
-import {createImpresaInFauna} from "../../../../../../faunadb/api/impresaAPIs";
+import {createImpresaInFauna, updateImpresaInFauna} from "../../../../../../faunadb/api/impresaAPIs";
 import {uploadFileS3} from "../../../../../../aws/s3APIs";
 import {useAuth0} from "@auth0/auth0-react";
 import {useNavigate} from "react-router-dom";
@@ -23,13 +23,12 @@ interface ComunicazioniProps {
 export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToCreate}) => {
 
     const dispatch = useDispatch()
-    const impresaDaCreare = useSelector(ImpreseDaCreareSelector)
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
 
-    const impresa = (impresaSelezionata) ? impresaSelezionata : impresaDaCreare
-
+    const impresaDaCreare = useSelector(ImpreseDaCreareSelector)
     const [uploadToFauna, setUploadToFauna] = useState(false)
     const [creaImpresa, setCreaImpresa] = useState(false)
+    const [aggiornaImpresa, setAggiornaImpresa] = useState(false)
     const [nuovaMansione, setNuovaMansione] = useState<ItemComunicazione>({
         mansione: "", telefono: "", nome: "", email: ""
     })
@@ -40,7 +39,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
     const {execQuery} = useFaunaQuery()
     const navigate = useNavigate()
 
-    const {setValue, handleSubmit} = useForm();
+    const {handleSubmit} = useForm();
     const onSubmit = () => {
         impresaDaCreare.documentiIdoneitaImpresa.forEach(d => {
             if (d.file && typeof d.file.value !== 'string') {
@@ -78,13 +77,33 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                 navigate('/')
             })
         }
-    }, [uploadToFauna, creaImpresa])
+        if (uploadToFauna && aggiornaImpresa) {
+            execQuery(updateImpresaInFauna, {
+                ...impresaDaCreare,
+                creataDa: user?.email
+            }).then(() => {
+                dispatch(removeImpresa(impresaSelezionata as Impresa))
+                dispatch(addImpresa({
+                    ...impresaDaCreare,
+                    creataDa: user?.email as string
+                }))
+                dispatch(setImpresaDaCreare(impresaTemporanea))
+                setObjectToCreate(undefined)
+                navigate('/')
+            }).catch(err => {
+                dispatch(setImpresaDaCreare(impresaTemporanea))
+                setObjectToCreate(undefined)
+                console.log(err)
+                navigate('/')
+            })
+        }
+    }, [uploadToFauna, creaImpresa, aggiornaImpresa])
 
 
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)} className="mt-20 w-[50%] p-10 shadow-2xl flex flex-col">
-                {impresa.comunicazioni.map(c => {
+                {impresaDaCreare.comunicazioni.map(c => {
                         return (
                             <div key={c.mansione}>
                                 <div className="flex justify-between items-center">
@@ -174,11 +193,19 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                     <div className="rounded-bl rounded-tl bg-amber-600 p-2">
                         <TfiSave size="30px" className="text-white"/>
                     </div>
-                    <button type="submit"
-                            onClick={() => setCreaImpresa(true)}
-                            className="rounded-br rounded-tr bg-amber-400 p-2 w-full text-white hover:cursor-pointer font-bold">
-                        Crea Impresa
-                    </button>
+                    {impresaSelezionata ?
+                        <button type="submit"
+                                onClick={() => setAggiornaImpresa(true)}
+                                className="rounded-br rounded-tr bg-amber-400 p-2 w-full text-white hover:cursor-pointer font-bold">
+                            Aggiorna Impresa
+                        </button> :
+                        <button type="submit"
+                                onClick={() => setCreaImpresa(true)}
+                                className="rounded-br rounded-tr bg-amber-400 p-2 w-full text-white hover:cursor-pointer font-bold">
+                            Crea Impresa
+                        </button>
+                    }
+
 
                 </div>
             </form>

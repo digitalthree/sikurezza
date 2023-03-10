@@ -1,5 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {Impresa, impresaTemporanea, ItemComunicazione} from "../model/Impresa";
+import {Maestranza} from "../model/Maestranza";
 
 export type ImpresaState = {
     imprese: Impresa[],
@@ -16,6 +17,9 @@ export const ImpresaSlice = createSlice({
     reducers: {
         addImpresa(state: ImpresaState, action: PayloadAction<Impresa>){
             state.imprese.push(action.payload)
+        },
+        removeImpresa(state: ImpresaState, action: PayloadAction<Impresa>){
+            state.imprese = state.imprese.filter(i => i.faunaDocumentId !== action.payload.faunaDocumentId)
         },
         setImpresaSelezionata(state: ImpresaState, action: PayloadAction<Impresa | undefined>){
             state.impresaSelezionata = action.payload
@@ -49,14 +53,25 @@ export const ImpresaSlice = createSlice({
         },
         addComunicazioneInComunicazioni(state: ImpresaState, action: PayloadAction<ItemComunicazione>){
             state.impresaDaCreare.comunicazioni.push(action.payload)
-        }
+        },
+        addMaestranza(state: ImpresaState, action: PayloadAction<{impresa: string, maestranza: string}>){
+            state.imprese.filter(i => i.faunaDocumentId === action.payload.impresa)[0].maestranze.push(action.payload.maestranza);
+            (state.impresaSelezionata) && state.impresaSelezionata.maestranze.push(action.payload.maestranza)
+        },
+        removeMaestranza(state: ImpresaState, action: PayloadAction<{impresa: string, maestranza: string}>){
+            state.imprese.filter(i => i.faunaDocumentId === action.payload.impresa)[0].maestranze = state.imprese.filter(i => i.faunaDocumentId === action.payload.impresa)[0].maestranze.filter(m => m !== action.payload.maestranza);
+            if(state.impresaSelezionata){
+                state.impresaSelezionata.maestranze = state.impresaSelezionata.maestranze.filter(m => m !== action.payload.maestranza);
+            }
+
+        },
     }
 })
 
 
 export const {
-    addImpresa, setImpresaDaCreare, setPresenzaInDocumenti, setFileInDocumenti, setComunicazioneInComunicazioni,
-    setImpresaSelezionata, addComunicazioneInComunicazioni
+    addImpresa, removeImpresa, setImpresaDaCreare, setPresenzaInDocumenti, setFileInDocumenti, setComunicazioneInComunicazioni,
+    setImpresaSelezionata, addComunicazioneInComunicazioni, addMaestranza, removeMaestranza
 } = ImpresaSlice.actions
 
 export const ImpreseSelector = (state: { impresaSlice: ImpresaState }) => state.impresaSlice.imprese;

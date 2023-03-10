@@ -1,49 +1,71 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {FieldErrors, FieldValues} from "react-hook-form";
-import {Maestranza} from "../../../../../../../../model/Maestranza";
+import {useDispatch, useSelector} from "react-redux";
+import {
+    MaestranzaDaCreareSelector,
+    MaestranzaSelezionataSelector, setEffettuatoIlInMaestranza,
+    setPrescrizioniLimitazioniInMaestranza, setScadenzaIlInMaestranza
+} from "../../../../../../../../store/maestranzaSlice";
+import VisualizzaEliminaFile from "../../../../../../../../shared/Files/VisualizzaEliminaFile";
+import InputFile from "../../../../../../../../shared/Files/InputFile";
 
-export interface SezioneVisitaMedicaProps{
+export interface SezioneVisitaMedicaProps {
     register: Function,
     errors: FieldErrors<FieldValues>,
-    maestranzaDaCreare: Maestranza,
-    onChange: Function
+    editabile: boolean,
+    modifica: boolean,
 }
 
 const SezioneVisitaMedica: React.FC<SezioneVisitaMedicaProps> = (
     {
-        register, errors, maestranzaDaCreare, onChange
+        register, errors, modifica, editabile
     }
 ) => {
-    return(
+
+    const maestranzaSelezionata = useSelector(MaestranzaSelezionataSelector)
+    const maestranzaDaCreare = useSelector(MaestranzaDaCreareSelector)
+    const [maestranza, setMaestranza] = useState(maestranzaDaCreare)
+    useEffect(() => {
+        if(maestranzaSelezionata){
+            setMaestranza(maestranzaSelezionata)
+        }
+    }, [])
+    let visitaMedica = maestranzaSelezionata?.documenti.filter(d => d.nome === 'visitaMedica')[0].file
+    const dispatch = useDispatch()
+
+    return (
         <>
             <div className="grid grid-cols-12 gap-4">
                 <span className="font-bold col-span-3">Visita Medica effettuata il*: </span>
                 <div className="flex flex-col col-span-2">
                     <input type="date" {...register("visitaMedicaEffettuataIl")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={maestranzaDaCreare.documenti?.filter(d => d.nome === 'visitaMedica')[0].effettuatoIl}
+                           disabled={!editabile}
+                           onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'visitaMedica', value: e.target.value}))}
+                           defaultValue={maestranza.documenti?.filter(d => d.nome === 'visitaMedica')[0].effettuatoIl}
                     />
-                    {errors.visitaMedicaEffettuataIl && <span className="font-bold text-red-600">Campo obbligatorio</span>}
+                    {errors.visitaMedicaEffettuataIl &&
+                        <span className="font-bold text-red-600">Campo obbligatorio</span>}
                 </div>
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("visitaMedicascadenza")}
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
-                       defaultValue={maestranzaDaCreare.documenti?.filter(d => d.nome === 'visitaMedica')[0].scadenza}
+                       disabled={!editabile}
+                       onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'visitaMedica', value: e.target.value}))}
+                       defaultValue={maestranza.documenti?.filter(d => d.nome === 'visitaMedica')[0].scadenza}
                 />
-                <input type="file"
-                       className="file-input file-input-secondary file-input-sm w-full max-w-xs col-span-4"
-                       onChange={(e) => {
-                           if (e.target.files && e.target.files[0]) {
-                               onChange(e.target.files[0], 'visitaMedicaFile')
-                           }
-                       }}
-                />
+                {(visitaMedica || maestranzaDaCreare.documenti.filter(d => d.nome === 'visitaMedica')[0].file) ?
+                    <VisualizzaEliminaFile file={visitaMedica as string} modifica={editabile} nome="visitaMedica"/>:
+                    <InputFile editabile={editabile} nome="visitaMedica"/>
+                }
             </div>
             <div className="grid grid-cols-12 mt-2">
                 <span className="font-bold col-span-3">Prescrizioni o limitazioni: </span>
                 <textarea {...register("prescrizioniLimitazioni")}
-                       className="rounded border border-gray-400 shadow p-1 col-span-9 w-1/2"
-                       defaultValue={maestranzaDaCreare.documenti?.filter(d => d.nome === 'visitaMedica')[0].prescrizioniLimitazioni}
+                          className="rounded border border-gray-400 shadow p-1 col-span-9 w-1/2"
+                          disabled={!editabile}
+                          onChange={(e) => dispatch(setPrescrizioniLimitazioniInMaestranza(e.target.value))}
+                          defaultValue={maestranza.documenti?.filter(d => d.nome === 'visitaMedica')[0].prescrizioniLimitazioni}
                 />
             </div>
             <hr className="my-5"/>

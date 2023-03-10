@@ -1,9 +1,12 @@
-import React, {useState} from "react";
-import EditButton from "../../shared/tableComponents/EditButton";
+import React, {useEffect, useState} from "react";
+import EditButtonEstintore from "../../shared/tableComponents/EditButtonEstintore";
 import {useDispatch, useSelector} from "react-redux";
-import {EstintoriSelector, setEstintoreSelezionato} from "../../store/estintoreSlice";
+import {addEstintore, EstintoriSelector, resetEstintori, setEstintoreSelezionato} from "../../store/estintoreSlice";
 import CreazioneEstintore from "./modal/CreazioneEstintore";
 import {Estintore, estintoreDefault} from "../../model/Estintore";
+import {ImpresaSelezionataSelector} from "../../store/impresaSlice";
+import {getAllEstintoreByCreatoDa} from "../../faunadb/api/estintoreAPIs";
+import {useFaunaQuery} from "../../faunadb/hooks/useFaunaQuery";
 
 export interface EstintoreTabProps {
 }
@@ -15,6 +18,24 @@ const EstintoreTab: React.FC<EstintoreTabProps> = ({}) => {
     const [editabile, setEditabile] = useState<boolean>(true)
     const [modifica, setModifica] = useState<boolean>(false)
     const dispatch = useDispatch()
+    const {execQuery} = useFaunaQuery()
+    const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
+
+    useEffect(() => {
+        dispatch(resetEstintori())
+
+        execQuery(getAllEstintoreByCreatoDa, impresaSelezionata?.faunaDocumentId).then((res) => {
+            res.forEach((r: { id: string; estintore: Estintore }) => {
+                dispatch(
+                    addEstintore({
+                        ...r.estintore,
+                        faunaDocumentId: r.id,
+                    } as Estintore)
+                );
+            });
+        });
+
+    }, [impresaSelezionata])
 
     return (
         <>
@@ -55,7 +76,8 @@ const EstintoreTab: React.FC<EstintoreTabProps> = ({}) => {
                                     <td>{e.nome}</td>
                                     <td>{e.cantiere}</td>
                                     <td>
-                                        <EditButton estintoreTarget={e} setEditabile={setEditabile} setModifica={setModifica}/>
+                                        <EditButtonEstintore estintoreTarget={e} setEditabile={setEditabile}
+                                                             setModifica={setModifica}/>
                                     </td>
                                 </tr>
                             )

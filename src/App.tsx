@@ -23,10 +23,8 @@ import EstintoreTab from "./application/mirkoComponents/EstintoreTab";
 import PonteggioTab from "./application/mirkoComponents/PonteggioTab";
 import MacchineAttrezzatureTab from "./application/mirkoComponents/MacchineAttrezzatureTab";
 import MaestranzeTab from "./application/mirkoComponents/MaestranzeTab";
-import {
-    AnagraficaImpresa
-} from "./application/components/factory/creazioneImpresa/tabContentFactory/components/AnagraficaImpresa";
 import GruTab from "./application/mirkoComponents/GruTab";
+import CreazioneMaestranza from "./application/components/factory/creazioneMaestranza/CreazioneMaestranza";
 
 function App() {
 
@@ -62,6 +60,7 @@ function App() {
                                 <Route path="gru" element={<GruTab/>}/>
                                 <Route path="macchineEAttrezzature" element={<MacchineAttrezzatureTab/>}/>
                                 <Route path="maestranze" element={<MaestranzeTab/>}/>
+                                <Route path="maestranza" element={<CreazioneMaestranza setObjectToCreate={setObjectToCreate}/>}/>
                                 <Route path="anagrafica" element={<CreazioneImpresa setObjectToCreate={setObjectToCreate} primoAccesso={false}/>}/>
                             </Route>
                             <Route path="creazione/impresa" element={<CreazioneImpresa setObjectToCreate={setObjectToCreate} primoAccesso={true}/>}/>

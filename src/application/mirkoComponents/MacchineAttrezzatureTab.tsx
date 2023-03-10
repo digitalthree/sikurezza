@@ -1,5 +1,5 @@
 import React from "react";
-import EditButton from "../../shared/tableComponents/EditButton";
+import EditButtonEstintore from "../../shared/tableComponents/EditButtonEstintore";
 
 export interface MacchineAttrezzatureTabProps {}
 
@@ -50,7 +50,7 @@ const MacchineAttrezzatureTab: React.FC<
                 <td>Camion 1</td>
                 <td>EH6756</td>
                 <td>
-                  <EditButton setEditabile={() => {}} setModifica={() => {}}/>
+                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}}/>
                 </td>
               </tr>
               {/* row 2 */}
@@ -59,7 +59,7 @@ const MacchineAttrezzatureTab: React.FC<
                 <td>Bobcat</td>
                 <td>IT7867</td>
                 <td>
-                  <EditButton setEditabile={() => {}} setModifica={() => {}}/>
+                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}}/>
                 </td>
               </tr>
               {/* row 3 */}
@@ -68,7 +68,7 @@ const MacchineAttrezzatureTab: React.FC<
                 <td>Minipala</td>
                 <td>GF6567</td>
                 <td>
-                  <EditButton setEditabile={() => {}} setModifica={() => {}}/>
+                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}}/>
                 </td>
               </tr>
               <tr className="link link-hover hover:text-sky-500">
@@ -76,7 +76,7 @@ const MacchineAttrezzatureTab: React.FC<
                 <td>Bobcat 2</td>
                 <td>FR1895</td>
                 <td>
-                  <EditButton setEditabile={() => {}} setModifica={() => {}}/>
+                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}}/>
                 </td>
               </tr>
               </tbody>

@@ -31,7 +31,7 @@ export const DocumentiImpresa: React.FC<DocumentiProps> = ({setTabActive}) => {
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)} className="w-[60%] p-10 shadow-2xl">
+            <form onSubmit={handleSubmit(onSubmit)} className="w-[80%] p-10 shadow-2xl">
                 {impresa.documentiIdoneitaImpresa.map((d, index) => {
                     return (
                         <div className="grid grid-cols-5 text-center py-3" key={d.nome}>
@@ -52,7 +52,7 @@ export const DocumentiImpresa: React.FC<DocumentiProps> = ({setTabActive}) => {
                             <div className="col-span-2" key={`div${index}`}>
                                 <div className="flex justify-center">
                                     <input type="file" key={`getFile${index}`}
-                                           className="w-2/5 file-input file-input-ghost bg-gray-400 font-bold text-white file-input-bordered file-input-xs mr-3 w-1/4 max-w-xs"
+                                           className={`file-input file-input-secondary file-input-sm max-w-xs ${d.file.value ? 'w-1/4' : 'w-full'}`}
                                            onChange={(e) => {
                                                if (e.target.files && e.target.files[0]) {
                                                    dispatch(setFileInDocumenti({
@@ -65,7 +65,6 @@ export const DocumentiImpresa: React.FC<DocumentiProps> = ({setTabActive}) => {
                                         <span className="w-3/5 hover:underline hover:cursor-pointer"
                                               onClick={() => {
                                                   if (impresaSelezionata) {
-
                                                       s3.getObject({
                                                           Bucket: process.env.REACT_APP_AWS_BUCKET_NAME as string,
                                                           Key: d.file.value as string,

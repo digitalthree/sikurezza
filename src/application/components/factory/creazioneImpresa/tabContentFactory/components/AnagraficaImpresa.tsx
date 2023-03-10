@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useForm} from "react-hook-form";
 import {TfiSave} from "react-icons/tfi";
 import {useDispatch, useSelector} from "react-redux";
@@ -7,7 +7,6 @@ import {
     ImpreseDaCreareSelector,
     setImpresaDaCreare
 } from "../../../../../../store/impresaSlice";
-import {CantiereSelezionatoSelector} from "../../../../../../store/cantiereSlice";
 
 interface AnagraficaProps {
     setTabActive: (s:string) => void,
@@ -18,11 +17,17 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
 
     const dispatch = useDispatch()
     const impresaDaCreare = useSelector(ImpreseDaCreareSelector)
-    const cantiereSelezionato = useSelector(CantiereSelezionatoSelector)
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
+
+    useEffect(() => {
+        if(impresaSelezionata){
+            dispatch(setImpresaDaCreare(impresaSelezionata))
+        }
+    }, [impresaSelezionata])
 
     const {register, handleSubmit, formState: {errors}} = useForm();
     const onSubmit = (data: any) => {
+        console.log(data)
         dispatch(setImpresaDaCreare({...impresaDaCreare, anagrafica: data, tipo: data.tipologiaImpresa}))
         setTabActive("Documenti")
     }
@@ -38,7 +43,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                         <select placeholder="Tipologia Impresa" {...register("tipologiaImpresa", {required: true})}
                                 className="rounded border border-gray-400 shadow p-1"
                                 defaultValue={(impresaSelezionata) ? impresaSelezionata.tipo : "Subappaltatrice"}
-                                disabled={!!(impresaSelezionata)}
+                                value={(impresaSelezionata) ? impresaSelezionata.tipo : "Subappaltatrice"}
                         >
                             <option disabled={!primoAccesso}>Affidataria</option>
                             <option disabled={primoAccesso}>Subappaltatrice</option>

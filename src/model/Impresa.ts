@@ -1,4 +1,5 @@
 import {Cantiere} from "./Cantiere";
+import {Maestranza} from "./Maestranza";
 
 export interface Impresa {
     tipo: 'Affidataria' | 'Subappaltatrice',
@@ -27,7 +28,7 @@ export interface Impresa {
         }
     },
     macchine: string[], //TODO:inserire array di macchine
-    maestranze: string[], //TODO:inserire array di maestranze
+    maestranze: string[],
     impreseSubappaltatrici: Impresa[],
     documentiIdoneitaImpresa: Autodichiarazione[],
     comunicazioni: ItemComunicazione[],

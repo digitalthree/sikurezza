@@ -20,12 +20,15 @@ export const EstintoreSlice = createSlice({
         },
         setEstintoreSelezionato(state: EstintoreState, action: PayloadAction<Estintore|undefined>){
             state.estintoreSelezionato = action.payload
+        },
+        resetEstintori(state: EstintoreState){
+            state.estintori = []
         }
     }
 })
 
 export const {
-    addEstintore, removeEstintore, setEstintoreSelezionato
+    addEstintore, removeEstintore, setEstintoreSelezionato, resetEstintori
 } = EstintoreSlice.actions
 
 /*
