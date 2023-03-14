@@ -1,89 +1,83 @@
 
 export interface Gru {
-    cantiere: string,
-    proprieta: boolean,
-    noleggiatore: string,
-    tipologia: string,
-    marca: string,
-    modello: string,
-    matricolaINAIL: string,
-    numeroDiFabbrica: string,
+    attr: {nome: string, value: string|boolean, label: string}[],
     verifiche: Verifica[],
-    note: string,
-    tecnicoIncaricatoAllaProgettazioneDellaStrutturaDiFondazione: string,
-    documentiFondazioneGru: DocumentoFondazioneGru[],
-    collaudo: {
-        nome: string,
-        presenza: "SI"|"NO"|"NR",
-        file: {nome: string, value: File|string|undefined}
-    }
+    documenti: DocumentoFondazioneGru[]
+    creataDa: string,
+    faunaDocumentId?: string
 }
 
 export interface Verifica {
     nome: string,
     effettuataIl: string,
-    scadenza: string
+    scadenza: string,
+    label: string
 }
 
 export interface DocumentoFondazioneGru {
-    nome: string,
-    presenza: boolean,
+    nome: string
+    presenza: boolean | "SI" | "NO" | "NR",
     file: {nome: string, value: File|string|undefined}
 }
 
 export const gruDefault: Gru = {
-    cantiere: "",
-    proprieta: false,
-    noleggiatore: "",
-    tipologia: "",
-    marca: "",
-    modello: "",
-    matricolaINAIL: "",
-    numeroDiFabbrica: "",
+    attr: [
+        {nome: 'cantiere', value: "", label: 'Attualmente in uso nel cantiere'},
+        {nome: 'proprieta', value: false, label: 'Proprietà'},
+        {nome: 'noleggiatore', value: "", label: 'Noleggiatore'},
+        {nome: 'tipologia', value: "", label: 'Tipologia'},
+        {nome: 'marca', value: "", label: 'Marca'},
+        {nome: 'modello', value: "", label: 'Modello'},
+        {nome: 'matricolaINAIL', value: "", label: 'Matricola INAIL'},
+        {nome: 'numeroDiFabbrica', value: "", label: 'N. Di Fabbrica'},
+        {nome: 'note', value: "", label: 'Note'},
+        {nome: 'tecnicoIncaricatoAllaProgettazioneDellaStrutturaDiFondazione', value: "", label: 'Tecnico Incaricato alla Progettazione'},
+    ],
     verifiche: [
         {
-            nome: "Verifica Periodica",
+            nome: 'verificaPeriodica',
             effettuataIl: "",
-            scadenza: ""
+            scadenza: "",
+            label: 'Verifica Periodica'
         },
         {
-            nome: "Verifica Funi e Catene",
+            nome: 'verificaFuniECatene',
             effettuataIl: "",
-            scadenza: ""
-        }
+            scadenza: "",
+            label: 'Verifica Funi e Catene'
+        },
     ],
-    note: "",
-    tecnicoIncaricatoAllaProgettazioneDellaStrutturaDiFondazione: "",
-    documentiFondazioneGru: [
+    documenti: [
         {
-            nome: "Progetto e relazione della struttura di fondazione",
+            nome: 'Progetto e Relazione della Struttura di Fondazione',
             presenza: false,
             file: {nome: "", value: undefined}
         },
         {
-            nome: "Idoneità del piano di posa",
+            nome: 'Idoneità del Piano Di Posa',
             presenza: false,
             file: {nome: "", value: undefined}
         },
         {
-            nome: "Libretto",
+            nome: 'Libretto',
             presenza: false,
             file: {nome: "", value: undefined}
         },
         {
-            nome: "Dichiarazione di conformità",
+            nome: 'Dichiarazione Di Conformita',
             presenza: false,
             file: {nome: "", value: undefined}
         },
         {
-            nome: "Dichiarzione di corretta installazione",
+            nome: 'Dichiarazione Di Corretta Installazione',
             presenza: false,
             file: {nome: "", value: undefined}
-        }
+        },
+        {
+            nome: 'Collaudo',
+            presenza: "SI",
+            file: {nome: "", value: undefined}
+        },
     ],
-    collaudo: {
-        nome: "Collaudo",
-        presenza: "NR",
-        file: {nome: "", value: undefined}
-    }
+    creataDa: ""
 }

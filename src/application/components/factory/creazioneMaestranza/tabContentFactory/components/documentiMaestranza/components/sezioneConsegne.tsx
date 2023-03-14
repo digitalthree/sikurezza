@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     MaestranzaDaCreareSelector,
     MaestranzaSelezionataSelector, setConsegnatoIlInMaestranza, setConsegnatoInMaestranza,
-    setEffettuatoIlInMaestranza
+    setEffettuatoIlInMaestranza, setFileInDocumentiMaestranza
 } from "../../../../../../../../store/maestranzaSlice";
 import VisualizzaEliminaFile from "../../../../../../../../shared/Files/VisualizzaEliminaFile";
 import InputFile from "../../../../../../../../shared/Files/InputFile";
@@ -54,8 +54,13 @@ const SezioneConsegne: React.FC<SezioneConsegneProps> = (
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'consegnaDPI')[0].consegnatoIl}
                 />
                 {(consegnaDPI || maestranzaDaCreare.documenti.filter(d => d.nome === 'consegnaDPI')[0].file) ?
-                    <VisualizzaEliminaFile file={consegnaDPI as string} modifica={editabile} nome="consegnaDPI"/>:
-                    <InputFile editabile={editabile} nome="consegnaDPI"/>
+                    <VisualizzaEliminaFile file={consegnaDPI as string} modifica={editabile} nome="consegnaDPI"
+                                           eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "consegnaDPI", file: undefined}))}
+                    />:
+                    <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({
+                        nome: 'consegnaDPI',
+                        file: (e.target.files) ? e.target.files[0] : undefined
+                    }))}/>
                 }
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
@@ -73,8 +78,13 @@ const SezioneConsegne: React.FC<SezioneConsegneProps> = (
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'consegnaTesserino')[0].consegnatoIl}
                 />
                 {(consegnaTesserino || maestranzaDaCreare.documenti.filter(d => d.nome === 'consegnaTesserino')[0].file) ?
-                    <VisualizzaEliminaFile file={consegnaTesserino as string} modifica={editabile} nome="consegnaTesserino"/>:
-                    <InputFile editabile={editabile} nome="consegnaTesserino"/>
+                    <VisualizzaEliminaFile file={consegnaTesserino as string} modifica={editabile} nome="consegnaTesserino"
+                                           eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "consegnaTesserino", file: undefined}))}
+                    />:
+                    <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({
+                        nome: 'consegnaTesserino',
+                        file: (e.target.files) ? e.target.files[0] : undefined
+                    }))}/>
                 }
             </div>
             <hr className="my-5"/>

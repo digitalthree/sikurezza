@@ -1,7 +1,6 @@
 import ReactS3Client from 'react-aws-s3-typescript';
 import {s3, s3Config} from './s3Config';
-import {Dispatch} from "@reduxjs/toolkit";
-import {setFileInDocumentiMaestranza} from "../store/maestranzaSlice";
+
 
 export const uploadFileS3 = async (file: File) => {
     const s3 = new ReactS3Client(s3Config);

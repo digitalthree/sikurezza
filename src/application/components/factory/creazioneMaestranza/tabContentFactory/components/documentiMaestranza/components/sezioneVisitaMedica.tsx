@@ -3,7 +3,7 @@ import {FieldErrors, FieldValues} from "react-hook-form";
 import {useDispatch, useSelector} from "react-redux";
 import {
     MaestranzaDaCreareSelector,
-    MaestranzaSelezionataSelector, setEffettuatoIlInMaestranza,
+    MaestranzaSelezionataSelector, setDocumentiMaestranza, setEffettuatoIlInMaestranza, setFileInDocumentiMaestranza,
     setPrescrizioniLimitazioniInMaestranza, setScadenzaIlInMaestranza
 } from "../../../../../../../../store/maestranzaSlice";
 import VisualizzaEliminaFile from "../../../../../../../../shared/Files/VisualizzaEliminaFile";
@@ -55,8 +55,10 @@ const SezioneVisitaMedica: React.FC<SezioneVisitaMedicaProps> = (
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'visitaMedica')[0].scadenza}
                 />
                 {(visitaMedica || maestranzaDaCreare.documenti.filter(d => d.nome === 'visitaMedica')[0].file) ?
-                    <VisualizzaEliminaFile file={visitaMedica as string} modifica={editabile} nome="visitaMedica"/>:
-                    <InputFile editabile={editabile} nome="visitaMedica"/>
+                    <VisualizzaEliminaFile file={visitaMedica as string} modifica={editabile} nome="visitaMedica"
+                        eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "visitaMedica", file: undefined}))}
+                    />:
+                    <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({nome: 'visitaMedica', file: (e.target.files) ? e.target.files[0] : undefined}))}/>
                 }
             </div>
             <div className="grid grid-cols-12 mt-2">

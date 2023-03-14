@@ -1,8 +1,40 @@
-import React from "react";
-import EditButtonEstintore from "../../shared/tableComponents/EditButtonEstintore";
+import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {useFaunaQuery} from "../../faunadb/hooks/useFaunaQuery";
+import {ImpresaSelezionataSelector} from "../../store/impresaSlice";
+import {addGru, GruSelector, resetGru, setGruDaCreare, setGruSelezionata} from "../../store/gruSlice";
+import {Gru, gruDefault} from "../../model/Gru";
+import {getAllGruByCreatoDa} from "../../faunadb/api/gruAPIs";
+import CreazioneGru from "./modal/CreazioneGru";
+import EditButtonGru from "../../shared/tableComponents/EditButtonGru";
 export interface GruTabProps {}
 
 const GruTab: React.FC<GruTabProps> = ({}) => {
+
+  const grus = useSelector(GruSelector)
+  const {execQuery} = useFaunaQuery()
+  const dispatch = useDispatch()
+  const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
+  const [editabile, setEditabile] = useState<boolean>(true)
+  const [modifica, setModifica] = useState<boolean>(false)
+
+
+  useEffect(() => {
+    dispatch(resetGru())
+
+    execQuery(getAllGruByCreatoDa, impresaSelezionata?.faunaDocumentId).then((res) => {
+      res.forEach((g: { id: string; gru: Gru }) => {
+        dispatch(
+            addGru({
+              ...g.gru,
+              faunaDocumentId: g.id,
+            } as Gru)
+        );
+      });
+    });
+
+  }, [impresaSelezionata])
+
   return (
       <>
         <div className="flex flex-col justify-center items-center w-100">
@@ -33,75 +65,38 @@ const GruTab: React.FC<GruTabProps> = ({}) => {
           </div>
           <div className="overflow-x-auto overflow-y-hidden w-full mt-3 border-t-zinc-300 border rounded-xl">
             <table className="table table-zebra w-full ">
-              {/* head */}
-              {/* <thead>
-              <tr>
-                <th></th>
-                <th>Tipologia</th>
-                <th>Cantiere</th>
-                <th>Città</th>
-                <th>Opzioni</th>
-              </tr>
-            </thead> */}
               <tbody>
               {/* row 1 */}
-              <tr className="link link-hover hover:text-sky-500">
-                <th>1</th>
-                <td>Gru a torre</td>
-                <td>Condominio Panorama</td>
-                <td>Teramo</td>
-                <td>
-                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}}/>
-                </td>
-              </tr>
-              {/* row 2 */}
-              <tr className="link link-hover hover:text-sky-500">
-                <th>2</th>
-                <td>Ascensore di ponteggio</td>
-                <td>Condominio Albani</td>
-                <td>Giulianova</td>
-                <td>
-                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}}/>
-                </td>
-              </tr>
-              {/* row 3 */}
-              <tr className="link link-hover hover:text-sky-500">
-                <th>3</th>
-                <td>Gru su autocarro</td>
-                <td>Condominio Virgilio</td>
-                <td>Teramo</td>
-                <td>
-                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}}/>
-                </td>
-              </tr>
-              <tr className="link link-hover hover:text-sky-500">
-                <th>4</th>
-                <td>Merlo</td>
-                <td>Condominio Giordani</td>
-                <td>Teramo</td>
-                <td>
-                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}}/>
-                </td>
-              </tr>
-              {/* row 4 */}
-              <tr className="link link-hover hover:text-sky-500">
-                <th>5</th>
-                <td>Carrello elevatore</td>
-                <td>Condominio Panorama</td>
-                <td>Teramo</td>
-                <td>
-                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}}/>
-                </td>
-              </tr>
+              {grus.map((g, index) => {
+                return(
+                    <tr className="link link-hover hover:text-sky-500">
+                      <th>{index+1}</th>
+                      <td>{g.attr.filter(gr => gr.nome === 'tipologia')[0].value}</td>
+                      <td>{g.attr.filter(gr => gr.nome === 'cantiere')[0].value}</td>
+                      <td>
+                        <EditButtonGru gruTarget={g} setEditabile={setEditabile} setModifica={setModifica}/>
+                      </td>
+                    </tr>
+                )
+              })}
               </tbody>
             </table>
           </div>
           <div>
-            <button className="mt-8 btn btn-circle px-6 border-0 hover:bg-zinc-500 w-full text-white bg-zinc-300">
-              <span className="mr-2">+</span>Aggiungi Mezzo di Sollevamento
-            </button>
+            <label htmlFor="my-modal-5"
+                   className="mt-8 btn btn-circle px-6 border-0 hover:bg-zinc-500 w-full text-white bg-zinc-300"
+                   onClick={() => {
+                     dispatch(setGruSelezionata(undefined))
+                     dispatch(setGruDaCreare(gruDefault))
+                     setModifica(false)
+                     setEditabile(true)
+                   }}
+            >
+              <span className="mr-2">+</span>Aggiungi Gru
+            </label>
           </div>
         </div>
+        <CreazioneGru editabile={editabile} modifica={modifica} setModifica={setModifica}/>
       </>
   );
 };

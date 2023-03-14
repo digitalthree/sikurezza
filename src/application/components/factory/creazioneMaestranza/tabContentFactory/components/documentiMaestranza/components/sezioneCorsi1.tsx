@@ -4,7 +4,7 @@ import {Maestranza} from "../../../../../../../../model/Maestranza";
 import {useDispatch, useSelector} from "react-redux";
 import {
     MaestranzaDaCreareSelector,
-    MaestranzaSelezionataSelector, setEffettuatoIlInMaestranza,
+    MaestranzaSelezionataSelector, setEffettuatoIlInMaestranza, setFileInDocumentiMaestranza,
     setScadenzaIlInMaestranza
 } from "../../../../../../../../store/maestranzaSlice";
 import VisualizzaEliminaFile from "../../../../../../../../shared/Files/VisualizzaEliminaFile";
@@ -59,8 +59,13 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoMacchineMovTerra')[0].scadenza}
                 />
                 {(corsoMacchineMovTerra || maestranzaDaCreare.documenti.filter(d => d.nome === 'corsoMacchineMovTerra')[0].file) ?
-                    <VisualizzaEliminaFile file={corsoMacchineMovTerra as string} modifica={editabile} nome="corsoMacchineMovTerra"/>:
-                    <InputFile editabile={editabile} nome="corsoMacchineMovTerra"/>
+                    <VisualizzaEliminaFile file={corsoMacchineMovTerra as string} modifica={editabile} nome="corsoMacchineMovTerra"
+                                           eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "corsoMacchineMovTerra", file: undefined}))}
+                    />:
+                    <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({
+                        nome: 'corsoMacchineMovTerra',
+                        file: (e.target.files) ? e.target.files[0] : undefined
+                    }))}/>
                 }
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
@@ -81,8 +86,13 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoPonteggi')[0].scadenza}
                 />
                 {(corsoPonteggi || maestranzaDaCreare.documenti.filter(d => d.nome === 'corsoPonteggi')[0].file) ?
-                    <VisualizzaEliminaFile file={corsoPonteggi as string} modifica={editabile} nome="corsoPonteggi"/>:
-                    <InputFile editabile={editabile} nome="corsoPonteggi"/>
+                    <VisualizzaEliminaFile file={corsoPonteggi as string} modifica={editabile} nome="corsoPonteggi"
+                                           eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "corsoPonteggi", file: undefined}))}
+                    />:
+                    <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({
+                        nome: 'corsoPonteggi',
+                        file: (e.target.files) ? e.target.files[0] : undefined
+                    }))}/>
                 }
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
@@ -103,8 +113,13 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoPLE')[0].scadenza}
                 />
                 {(corsoPLE || maestranzaDaCreare.documenti.filter(d => d.nome === 'corsoPLE')[0].file) ?
-                    <VisualizzaEliminaFile file={corsoPLE as string} modifica={editabile} nome="corsoPLE"/>:
-                    <InputFile editabile={editabile} nome="corsoPLE"/>
+                    <VisualizzaEliminaFile file={corsoPLE as string} modifica={editabile} nome="corsoPLE"
+                                           eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "corsoPLE", file: undefined}))}
+                    />:
+                    <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({
+                        nome: 'corsoPLE',
+                        file: (e.target.files) ? e.target.files[0] : undefined
+                    }))}/>
                 }
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
@@ -125,8 +140,13 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoConduzioneGRU')[0].scadenza}
                 />
                 {(corsoConduzioneGRU || maestranzaDaCreare.documenti.filter(d => d.nome === 'corsoConduzioneGRU')[0].file) ?
-                    <VisualizzaEliminaFile file={corsoConduzioneGRU as string} modifica={editabile} nome="corsoConduzioneGRU"/>:
-                    <InputFile editabile={editabile} nome="corsoConduzioneGRU"/>
+                    <VisualizzaEliminaFile file={corsoConduzioneGRU as string} modifica={editabile} nome="corsoConduzioneGRU"
+                                           eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "corsoConduzioneGRU", file: undefined}))}
+                    />:
+                    <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({
+                        nome: 'corsoConduzioneGRU',
+                        file: (e.target.files) ? e.target.files[0] : undefined
+                    }))}/>
                 }
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
@@ -147,8 +167,13 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoGRUSuAutocarro')[0].scadenza}
                 />
                 {(corsoGRUSuAutocarro || maestranzaDaCreare.documenti.filter(d => d.nome === 'corsoGRUSuAutocarro')[0].file) ?
-                    <VisualizzaEliminaFile file={corsoGRUSuAutocarro as string} modifica={editabile} nome="corsoGRUSuAutocarro"/>:
-                    <InputFile editabile={editabile} nome="corsoGRUSuAutocarro"/>
+                    <VisualizzaEliminaFile file={corsoGRUSuAutocarro as string} modifica={editabile} nome="corsoGRUSuAutocarro"
+                                           eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "corsoGRUSuAutocarro", file: undefined}))}
+                    />:
+                    <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({
+                        nome: 'corsoGRUSuAutocarro',
+                        file: (e.target.files) ? e.target.files[0] : undefined
+                    }))}/>
                 }
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
@@ -169,8 +194,13 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoEscavatoriIdraulici')[0].scadenza}
                 />
                 {(corsoEscavatoriIdraulici || maestranzaDaCreare.documenti.filter(d => d.nome === 'corsoEscavatoriIdraulici')[0].file) ?
-                    <VisualizzaEliminaFile file={corsoEscavatoriIdraulici as string} modifica={editabile} nome="corsoEscavatoriIdraulici"/>:
-                    <InputFile editabile={editabile} nome="corsoEscavatoriIdraulici"/>
+                    <VisualizzaEliminaFile file={corsoEscavatoriIdraulici as string} modifica={editabile} nome="corsoEscavatoriIdraulici"
+                                           eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "corsoEscavatoriIdraulici", file: undefined}))}
+                    />:
+                    <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({
+                        nome: 'corsoEscavatoriIdraulici',
+                        file: (e.target.files) ? e.target.files[0] : undefined
+                    }))}/>
                 }
             </div>
             <hr className="my-5"/>
