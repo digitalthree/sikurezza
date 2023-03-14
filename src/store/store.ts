@@ -3,12 +3,14 @@ import {CantiereSlice} from "./cantiereSlice"
 import {ImpresaSlice} from "./impresaSlice";
 import {MaestranzaSlice} from "./maestranzaSlice";
 import {EstintoreSlice} from "./estintoreSlice";
+import {GruSlice} from "./gruSlice";
 
 const rootReducer = combineReducers({
     cantiereSlice: CantiereSlice.reducer,
     impresaSlice: ImpresaSlice.reducer,
     maestranzaSlice: MaestranzaSlice.reducer,
-    estintoreSlice: EstintoreSlice.reducer
+    estintoreSlice: EstintoreSlice.reducer,
+    gruSlice: GruSlice.reducer
 });
 
 export const store = configureStore({

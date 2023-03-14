@@ -1,16 +1,14 @@
 import React from 'react';
 import {deleteFileS3, getFileFromS3} from "../../aws/s3APIs";
-import {setFileInDocumentiMaestranza} from "../../store/maestranzaSlice";
-import {useDispatch} from "react-redux";
 
 export interface VisualizzaEliminaFileProps {
     file: string|File,
     modifica: boolean,
-    nome: string
+    nome: string,
+    eliminaFunction: Function
 }
 
-const VisualizzaEliminaFile: React.FC<VisualizzaEliminaFileProps> = ({file, modifica, nome}) => {
-    const dispatch = useDispatch()
+const VisualizzaEliminaFile: React.FC<VisualizzaEliminaFileProps> = ({file, modifica, nome, eliminaFunction}) => {
     return (
         <>
             <div className="flex col-span-4 gap-10">
@@ -26,12 +24,12 @@ const VisualizzaEliminaFile: React.FC<VisualizzaEliminaFileProps> = ({file, modi
                                     if(confirm){
                                         deleteFileS3(file).then((res) => {
                                             if(res !== false){
-                                                dispatch(setFileInDocumentiMaestranza({nome: nome, file: undefined}))
+                                                eliminaFunction()
                                             }
                                         })
                                     }
                                 }else{
-                                    dispatch(setFileInDocumentiMaestranza({nome: nome, file: undefined}))
+                                        eliminaFunction()
                                 }
                             }}>
                         Elimina File

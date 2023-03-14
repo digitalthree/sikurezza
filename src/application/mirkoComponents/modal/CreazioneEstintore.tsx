@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import {Estintore, estintoreDefault} from "../../../model/Estintore";
-import {useAuth0} from "@auth0/auth0-react";
 import {createEstintoreInFauna, updateEstintoreInFauna} from "../../../faunadb/api/estintoreAPIs";
 import {useFaunaQuery} from "../../../faunadb/hooks/useFaunaQuery";
 import {useDispatch, useSelector} from "react-redux";
@@ -26,20 +25,16 @@ const CreazioneEstintore: React.FC<CreazioneEstintoreProps> = (
     }
 ) => {
 
-    const {user} = useAuth0()
     const {execQuery} = useFaunaQuery()
     const dispatch = useDispatch()
     const estintoreSelezionato = useSelector(EstintoreSelezionatoSelector)
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
 
     useEffect(() => {
-        if(estintoreSelezionato && editabile){
+        if(estintoreSelezionato){
             setEstintoreDaCreare(estintoreSelezionato)
         }
-        if(estintoreSelezionato && !editabile){
-            setEstintoreDaCreare(estintoreSelezionato)
-        }
-        if(!estintoreSelezionato && editabile){
+        else{
             setEstintoreDaCreare(estintoreDefault)
         }
     }, [estintoreSelezionato, editabile])

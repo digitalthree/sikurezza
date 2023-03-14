@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     MaestranzaDaCreareSelector,
     MaestranzaSelezionataSelector,
-    setEffettuatoIlInMaestranza, setScadenzaIlInMaestranza
+    setEffettuatoIlInMaestranza, setFileInDocumentiMaestranza, setScadenzaIlInMaestranza
 } from "../../../../../../../../store/maestranzaSlice";
 import VisualizzaEliminaFile from "../../../../../../../../shared/Files/VisualizzaEliminaFile";
 import InputFile from "../../../../../../../../shared/Files/InputFile";
@@ -55,8 +55,13 @@ const SezioneCorsoFormazione: React.FC<SezioneCorsoFormazioneProps> = (
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoFormazioneArt37')[0].scadenza}
                 />
                 {(corsoFormazioneArt37 || maestranzaDaCreare.documenti.filter(d => d.nome === 'corsoFormazioneArt37')[0].file) ?
-                    <VisualizzaEliminaFile file={corsoFormazioneArt37 as string} modifica={editabile} nome="corsoFormazioneArt37"/>:
-                    <InputFile editabile={editabile} nome="corsoFormazioneArt37"/>
+                    <VisualizzaEliminaFile file={corsoFormazioneArt37 as string} modifica={editabile} nome="corsoFormazioneArt37"
+                                           eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "corsoFormazioneArt37", file: undefined}))}
+                    />:
+                    <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({
+                        nome: 'corsoFormazioneArt37',
+                        file: (e.target.files) ? e.target.files[0] : undefined
+                    }))}/>
                 }
             </div>
             <hr className="my-5"/>
