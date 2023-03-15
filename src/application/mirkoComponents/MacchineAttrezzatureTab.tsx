@@ -1,11 +1,55 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import EditButtonEstintore from "../../shared/tableComponents/EditButtonEstintore";
+import {useDispatch, useSelector} from "react-redux";
+import {
+  addPonteggio,
+  PonteggioSelector,
+  resetPonteggio,
+  setPonteggioDaCreare,
+  setPonteggioSelezionato
+} from "../../store/ponteggioSlice";
+import {useFaunaQuery} from "../../faunadb/hooks/useFaunaQuery";
+import {ImpresaSelezionataSelector} from "../../store/impresaSlice";
+import {getAllPonteggiByCreatoDa} from "../../faunadb/api/ponteggioAPIs";
+import {Ponteggio, ponteggioDefault} from "../../model/Ponteggio";
+import {
+  addMacchinaEAttrezzatura,
+  MacchinaEAttrezzaturaSelector,
+  resetMacchinaEAttrezzatura, setMacchinaEAttrezzaturaDaCreare, setMacchinaEAttrezzaturaSelezionato
+} from "../../store/macchinaEAttrezzaturaSlice";
+import {getAllMacchineEAttrezzatureByCreatoDa} from "../../faunadb/api/macchinaEAttrezzaturaAPIs";
+import {MacchinaEAttrezzatura, macchinaEAttrezzaturaDefault} from "../../model/MacchineEAttrezzature";
+import EditButtonMacchinaEAttrezzatura from "../../shared/tableComponents/EditButtonMacchinaEAttrezzatura";
+import CreazioneMacchinaEAttrezzatura from "./modal/CreazioneMacchinaEAttrezzatura";
 
 export interface MacchineAttrezzatureTabProps {}
 
-const MacchineAttrezzatureTab: React.FC<
-    MacchineAttrezzatureTabProps
-    > = ({}) => {
+const MacchineAttrezzatureTab: React.FC<MacchineAttrezzatureTabProps> = ({}) => {
+
+  const macchineEAttrezzature = useSelector(MacchinaEAttrezzaturaSelector)
+  const {execQuery} = useFaunaQuery()
+  const dispatch = useDispatch()
+  const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
+  const [editabile, setEditabile] = useState<boolean>(true)
+  const [modifica, setModifica] = useState<boolean>(false)
+
+
+  useEffect(() => {
+    dispatch(resetMacchinaEAttrezzatura())
+
+    execQuery(getAllMacchineEAttrezzatureByCreatoDa, impresaSelezionata?.faunaDocumentId).then((res) => {
+      res.forEach((m: { id: string; macchinaEAttrezzatura: MacchinaEAttrezzatura }) => {
+        dispatch(
+            addMacchinaEAttrezzatura({
+              ...m.macchinaEAttrezzatura,
+              faunaDocumentId: m.id,
+            } as MacchinaEAttrezzatura)
+        );
+      });
+    });
+
+  }, [impresaSelezionata])
+
   return (
       <>
         <div className="flex flex-col justify-center items-center w-100">
@@ -35,59 +79,37 @@ const MacchineAttrezzatureTab: React.FC<
           </div>
           <div className="overflow-x-auto overflow-y-hidden w-full mt-3 border-t-zinc-300 border rounded-xl">
             <table className="table table-zebra w-full ">
-              {/* head */}
-              {/* <thead>
-              <tr>
-                <th></th>
-                <th>Nome</th>
-                <th>Targa</th>
-              </tr>
-            </thead> */}
               <tbody>
-              {/* row 1 */}
-              <tr className="link link-hover hover:text-sky-500">
-                <th>1</th>
-                <td>Camion 1</td>
-                <td>EH6756</td>
-                <td>
-                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}}/>
-                </td>
-              </tr>
-              {/* row 2 */}
-              <tr className="link link-hover hover:text-sky-500">
-                <th>2</th>
-                <td>Bobcat</td>
-                <td>IT7867</td>
-                <td>
-                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}}/>
-                </td>
-              </tr>
-              {/* row 3 */}
-              <tr className="link link-hover hover:text-sky-500">
-                <th>3</th>
-                <td>Minipala</td>
-                <td>GF6567</td>
-                <td>
-                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}}/>
-                </td>
-              </tr>
-              <tr className="link link-hover hover:text-sky-500">
-                <th>4</th>
-                <td>Bobcat 2</td>
-                <td>FR1895</td>
-                <td>
-                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}}/>
-                </td>
-              </tr>
+              {macchineEAttrezzature.map((m, index) => {
+                return(
+                    <tr className="link link-hover hover:text-sky-500">
+                      <th>{index+1}</th>
+                      <td>{m.attr.filter(ma => ma.nome === 'denominazione')[0].value}</td>
+                      <td>{m.attr.filter(ma => ma.nome === 'targa')[0].value}</td>
+                      <td>
+                        <EditButtonMacchinaEAttrezzatura macchinaEAttrezzaturaTarget={m} setEditabile={setEditabile} setModifica={setModifica}/>
+                      </td>
+                    </tr>
+                )
+              })}
               </tbody>
             </table>
           </div>
           <div>
-            <button className="mt-8 btn btn-circle px-6 border-0 hover:bg-zinc-500 w-full text-white bg-zinc-300">
-              <span className="mr-2">+</span>Aggiungi Macchina
-            </button>
+            <label htmlFor="my-modal-7"
+                   className="mt-8 btn btn-circle px-6 border-0 hover:bg-zinc-500 w-full text-white bg-zinc-300"
+                   onClick={() => {
+                     dispatch(setMacchinaEAttrezzaturaSelezionato(undefined))
+                     dispatch(setMacchinaEAttrezzaturaDaCreare(macchinaEAttrezzaturaDefault))
+                     setModifica(false)
+                     setEditabile(true)
+                   }}
+            >
+              <span className="mr-2">+</span>Aggiungi Macchina o Attrezzatura
+            </label>
           </div>
         </div>
+        <CreazioneMacchinaEAttrezzatura editabile={editabile} modifica={modifica} setModifica={setModifica}/>
       </>
   );
 };

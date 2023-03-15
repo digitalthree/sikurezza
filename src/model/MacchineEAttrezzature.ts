@@ -1,25 +1,25 @@
 
-export interface MacchineEAttrezzature {
-    nome: string,
-    categoria: "Macchina" | "Attrezzatura",
-    sottoCategoria: string,
-    targa: string,
-    documenti: Documento[],
-    ultimaRevisione: string,
-    scadenza: string
+export interface MacchinaEAttrezzatura {
+    attr: {nome: string, value: string | ("Macchina" | "Attrezzatura"), label: string}[]
+    documenti: DocumentoMacchinaEAttrezzatura[],
+    ultimaRevisione: {nome: string, effettuataIl: string, scadenza: string, label: string},
+    faunaDocumentId?: string,
+    creatoDa: string
 }
 
-export interface Documento {
+export interface DocumentoMacchinaEAttrezzatura {
     nome: string,
     presenza: boolean,
-    file: {nome: string, value: File|string|undefined}
+    file: {nome: string, value: File|string|undefined},
 }
 
-export const MacchinaOAttrezzaturaDefault: MacchineEAttrezzature = {
-    nome: "",
-    categoria: "Macchina",
-    sottoCategoria: "",
-    targa: "",
+export const macchinaEAttrezzaturaDefault: MacchinaEAttrezzatura = {
+    attr: [
+        {nome: 'denominazione', value: '', label: 'Denominazione'},
+        {nome: 'categoria', value: 'Macchina', label: 'Categoria'},
+        {nome: 'sottoCategoria', value: '', label: 'Sotto Categoria'},
+        {nome: 'targa', value: '', label: 'Targa'},
+    ],
     documenti: [
         {
             nome: "Dichiarazione di Conformità",
@@ -37,6 +37,6 @@ export const MacchinaOAttrezzaturaDefault: MacchineEAttrezzature = {
             file: {nome: "", value: undefined}
         }
     ],
-    ultimaRevisione: "",
-    scadenza: ""
+    ultimaRevisione: {nome: 'ultimaRevisione', effettuataIl: '', scadenza: '', label: "Ultima Revisione del"},
+    creatoDa: ""
 }
