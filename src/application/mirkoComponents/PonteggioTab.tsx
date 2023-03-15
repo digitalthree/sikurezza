@@ -1,9 +1,47 @@
-import React from "react";
-import EditButtonEstintore from "../../shared/tableComponents/EditButtonEstintore";
+import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {useFaunaQuery} from "../../faunadb/hooks/useFaunaQuery";
+import {ImpresaSelezionataSelector} from "../../store/impresaSlice";
+import {
+  addPonteggio,
+  PonteggioSelector,
+  resetPonteggio,
+  setPonteggioDaCreare,
+  setPonteggioSelezionato
+} from "../../store/ponteggioSlice";
+import {getAllPonteggiByCreatoDa} from "../../faunadb/api/ponteggioAPIs";
+import {Ponteggio, ponteggioDefault} from "../../model/Ponteggio";
+import EditButtonPonteggio from "../../shared/tableComponents/EditButtonPonteggio";
+import CreazionePonteggio from "./modal/CreazionePonteggio";
 
 export interface PonteggioTabProps {}
 
 const PonteggioTab: React.FC<PonteggioTabProps> = ({}) => {
+
+  const ponteggi = useSelector(PonteggioSelector)
+  const {execQuery} = useFaunaQuery()
+  const dispatch = useDispatch()
+  const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
+  const [editabile, setEditabile] = useState<boolean>(true)
+  const [modifica, setModifica] = useState<boolean>(false)
+
+
+  useEffect(() => {
+    dispatch(resetPonteggio())
+
+    execQuery(getAllPonteggiByCreatoDa, impresaSelezionata?.faunaDocumentId).then((res) => {
+      res.forEach((p: { id: string; ponteggio: Ponteggio }) => {
+        dispatch(
+            addPonteggio({
+              ...p.ponteggio,
+              faunaDocumentId: p.id,
+            } as Ponteggio)
+        );
+      });
+    });
+
+  }, [impresaSelezionata])
+
   return (
     <>
       <div className="flex flex-col justify-center items-center w-100">
@@ -33,59 +71,38 @@ const PonteggioTab: React.FC<PonteggioTabProps> = ({}) => {
         </div>
         <div className="overflow-x-auto overflow-y-hidden w-full mt-3 border-t-zinc-300 border rounded-xl">
           <table className="table table-zebra w-full  ">
-            {/* head */}
-            {/* <thead>
-              <tr>
-                <th></th>
-                <th>Nome</th>
-                <th>Città</th>
-              </tr>
-            </thead> */}
             <tbody>
               {/* row 1 */}
-              <tr className="link link-hover hover:text-sky-500">
-                <th>1</th>
-                <td>Condominio Panorama</td>
-                <td>Teramo</td>
-                <td>
-                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}} />
-                </td>
-              </tr>
-              {/* row 2 */}
-              <tr className="link link-hover hover:text-sky-500">
-                <th>2</th>
-                <td>Condominio Albani</td>
-                <td>Giulianova</td>
-                <td>
-                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}} />
-                </td>
-              </tr>
-              {/* row 3 */}
-              <tr className="link link-hover hover:text-sky-500">
-                <th>3</th>
-                <td>Condominio Virgilio</td>
-                <td>Teramo</td>
-                <td>
-                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}} />
-                </td>
-              </tr>
-              <tr className="link link-hover hover:text-sky-500">
-                <th>4</th>
-                <td>Condominio Giordani</td>
-                <td>Teramo</td>
-                <td>
-                  <EditButtonEstintore setEditabile={() => {}} setModifica={() => {}} />
-                </td>
-              </tr>
+              {ponteggi.map((p, index) => {
+                return(
+                    <tr className="link link-hover hover:text-sky-500">
+                      <th>{index+1}</th>
+                      <td>{p.attr.filter(po => po.nome === 'cantiere')[0].value}</td>
+                      <td>{p.attr.filter(po => po.nome === 'tipologia')[0].value}</td>
+                      <td>
+                        <EditButtonPonteggio ponteggioTarget={p} setEditabile={setEditabile} setModifica={setModifica} />
+                      </td>
+                    </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>
         <div>
-          <button className="mt-8 btn btn-circle px-6 border-0 hover:bg-zinc-500 w-full text-white bg-zinc-300">
-            <span className="mr-2">+</span>Aggiungi Maestranza
-          </button>
+          <label htmlFor="my-modal-6"
+                 className="mt-8 btn btn-circle px-6 border-0 hover:bg-zinc-500 w-full text-white bg-zinc-300"
+                 onClick={() => {
+                   dispatch(setPonteggioSelezionato(undefined))
+                   dispatch(setPonteggioDaCreare(ponteggioDefault))
+                   setModifica(false)
+                   setEditabile(true)
+                 }}
+          >
+            <span className="mr-2">+</span>Aggiungi Ponteggio
+          </label>
         </div>
       </div>
+      <CreazionePonteggio editabile={editabile} modifica={modifica} setModifica={setModifica}/>
     </>
   );
 };
