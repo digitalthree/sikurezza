@@ -126,7 +126,7 @@ const Home: React.FC<HomeProps> = ({}) => {
               </div>
             </div>
           </div>
-          <div className="flex flex-row gap-8 text-white font-semibold text-2xl">
+          <div className="flex flex-row gap-8 text-white font-semibold text-2xl xl:px-11">
             <div className=" flex w-6/12 sm:w-7/12 md:w-8/12 p-4 bg-gray-300 shadow-md rounded-3xl min-h-[180px] justify-center items-center hover:cursor-pointer hover:opacity-60">
               Total Control
             </div>
