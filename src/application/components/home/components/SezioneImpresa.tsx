@@ -29,7 +29,7 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = ({}) => {
         <div className="text-center">
           <div className="grid sm:grid-cols-3 grid-cols-1 place-items-center gap-4 pt-6 text-white lg:text-3xl text-2xl">
             <div
-              className="bg-auto bg-center bg-no-repeat w-full lg:h-[220px] h-[180px] flex justify-center items-center rounded-xl shadow-xl hover:underline hover:cursor-pointer hover:opacity-80 "
+              className="bg-auto bg-center bg-no-repeat w-full lg:h-[200px] h-[160px] flex justify-center items-center rounded-xl shadow-xl hover:underline hover:cursor-pointer hover:opacity-80 "
               style={{
                 backgroundColor: "#FFC650",
                 backgroundImage:
@@ -44,7 +44,7 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = ({}) => {
               <span>Anagrafica e Doc.</span>
             </div>
             <div
-              className="bg auto bg-center bg-no-repeat w-full lg:h-[220px] h-[180px] flex justify-center items-center  rounded-xl shadow-xl hover:underline hover:cursor-pointer hover:opacity-80"
+              className="bg-contain md:bg-auto bg-center bg-no-repeat w-full lg:h-[200px] h-[160px] flex justify-center items-center  rounded-xl shadow-xl hover:underline hover:cursor-pointer hover:opacity-80"
               style={{
                 backgroundColor: "#FFC650",
                 backgroundImage:
@@ -59,7 +59,7 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = ({}) => {
               <span>Maestranze</span>
             </div>
             <div
-              className="bg-auto bg-center bg-no-repeat w-full lg:h-[220px] h-[180px] flex justify-center items-center rounded-xl shadow-xl hover:underline hover:cursor-pointer hover:opacity-90"
+              className="bg-contain md:bg-auto bg-center bg-no-repeat w-full lg:h-[200px] h-[160px] flex justify-center items-center rounded-xl shadow-xl hover:underline hover:cursor-pointer hover:opacity-90"
               style={{
                 backgroundColor: "#FFC650",
                 backgroundImage:
@@ -77,7 +77,16 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = ({}) => {
               <span>Macchine e Attrezzature</span>
             </div>
             <div
-              className="sm:col-span-3 col-span-1 bg-auto py-12 bg-center bg-no-repeat w-full lg:h-[220px] h-[180px] flex justify-center items-center rounded-xl shadow-xl hover:underline hover:cursor-pointer hover:opacity-80"
+              className="sm:col-span-3 col-span-1 bg-contain md:bg-auto py-12 bg-center bg-no-repeat w-full lg:h-[200px] h-[160px] flex justify-center items-center rounded-xl shadow-xl hover:underline hover:cursor-pointer hover:opacity-80"
+              onClick={() => {
+                setObjectToCreate("Cantieri");
+                setBreadcrumbsItems([
+                  ...breadcrumbsItems,
+                  "Cantieri",
+                ]);
+                navigate("cantieri");
+              }}
+              
               style={{
                 backgroundColor: "#FFC650",
                 backgroundImage:
@@ -87,7 +96,7 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = ({}) => {
               Cantieri
             </div>
             <div
-              className="bg-auto bg-center bg-no-repeat w-full lg:h-[220px] h-[180px] flex justify-center items-center rounded-xl shadow-xl hover:underline hover:cursor-pointer hover:opacity-80"
+              className=" bg-auto bg-center bg-no-repeat w-full lg:h-[200px] h-[160px] flex justify-center items-center rounded-xl shadow-xl hover:underline hover:cursor-pointer hover:opacity-80"
               style={{
                 backgroundColor: "#FFC650",
                 backgroundImage:
@@ -102,7 +111,7 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = ({}) => {
               <span>Gru</span>
             </div>
             <div
-              className="bg-auto bg-center bg-no-repeat w-full lg:h-[220px] h-[180px] flex justify-center items-center  rounded-xl shadow-xl hover:underline hover:cursor-pointer hover:opacity-80"
+              className="bg-auto bg-center bg-no-repeat w-full lg:h-[200px] h-[160px] flex justify-center items-center  rounded-xl shadow-xl hover:underline hover:cursor-pointer hover:opacity-80"
               style={{
                 backgroundColor: "#FFC650",
                 backgroundImage:' url("../img/loghi_cruscotto/Ponteggio.png") ',
@@ -116,7 +125,7 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = ({}) => {
               <span>Ponteggi</span>
             </div>
             <div
-              className="bg-auto bg-center bg-no-repeat w-full lg:h-[220px] h-[180px] flex justify-center items-center rounded-xl shadow-xl hover:underline hover:cursor-pointer hover:opacity-80"
+              className="bg-auto bg-center bg-no-repeat w-full lg:h-[200px] h-[160px] flex justify-center items-center rounded-xl shadow-xl hover:underline hover:cursor-pointer hover:opacity-80"
               style={{
                 backgroundColor: "#FFC650",
                 backgroundImage: ' url("../img/loghi_cruscotto/Estintori.png") ',
