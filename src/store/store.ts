@@ -6,6 +6,7 @@ import {EstintoreSlice} from "./estintoreSlice";
 import {GruSlice} from "./gruSlice";
 import {PonteggioSlice} from "./ponteggioSlice";
 import {MacchinaEAttrezzaturaSlice} from "./macchinaEAttrezzaturaSlice";
+import {TotalControlSlice} from "./totalControlSlice";
 
 const rootReducer = combineReducers({
     cantiereSlice: CantiereSlice.reducer,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
     estintoreSlice: EstintoreSlice.reducer,
     gruSlice: GruSlice.reducer,
     ponteggioSlice: PonteggioSlice.reducer,
-    macchinaEAttrezzaturaSlice: MacchinaEAttrezzaturaSlice.reducer
+    macchinaEAttrezzaturaSlice: MacchinaEAttrezzaturaSlice.reducer,
+    totalControlSlice: TotalControlSlice.reducer
 });
 
 export const store = configureStore({

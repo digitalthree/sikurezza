@@ -3,7 +3,7 @@ export interface Ponteggio {
     allegatiPonteggio: AllegatoPonteggio[],
     controlli: ControlloPonteggio[]
     faunaDocumentId?: string,
-    creatoDa: string
+    creatoDa: { id: string, nome: string }
 }
 
 export interface AllegatoPonteggio {
@@ -71,6 +71,6 @@ export const ponteggioDefault: Ponteggio = {
         {nome: "Controlli periodici", effettuato: false, data: "", file: {nome: "", value: undefined}},
         {nome: "Controllo straordinario", effettuato: false, data: "", file: {nome: "", value: undefined}}
     ],
-    creatoDa: ""
+    creatoDa: {id: "", nome: ""}
 
 }

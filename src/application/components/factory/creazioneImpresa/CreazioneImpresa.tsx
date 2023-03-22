@@ -22,17 +22,17 @@ export const CreazioneImpresa: React.FC<CreazioneImpresaProps> = ({setObjectToCr
             <div className="w-full flex flex-col items-center">
                 <div className="tabs">
                     <a className={`tab tab-bordered p-[50px] text-xl ${tabActive === "Anagrafica" ? 'tab-active' : ''}`}
-                       onClick={() => setTabActive("Anagrafica")}
+                       //onClick={() => setTabActive("Anagrafica")}
                     >
                         Anagrafica
                     </a>
                     <a className={`tab tab-bordered p-[50px] text-xl ${tabActive === "Documenti" ? 'tab-active' : ''}`}
-                       onClick={() => setTabActive("Documenti")}
+                       //onClick={() => setTabActive("Documenti")}
                     >
                         Documenti
                     </a>
                     <a className={`tab tab-bordered p-[50px] text-xl ${tabActive === "Comunicazioni" ? 'tab-active' : ''}`}
-                       onClick={() => setTabActive("Comunicazioni")}
+                       //onClick={() => setTabActive("Comunicazioni")}
                     >
                         Comunicazioni
                     </a>

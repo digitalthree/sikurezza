@@ -2,7 +2,7 @@ export interface Maestranza {
     anagrafica: AnagraficaMaestranza,
     documenti: Documento[],
     comunicazioni: ComunicazioniMaestranza,
-    creatoDa: string
+    creatoDa: { id: string, nome: string }
     faunaDocumentId?: string
 }
 
@@ -193,5 +193,5 @@ export const maestranzaDefault: Maestranza = {
         cellulareAziendale: undefined,
         email: ""
     },
-    creatoDa: ""
+    creatoDa: {id: "", nome: ""}
 }
