@@ -1,22 +1,46 @@
-import React , { useRef } from "react";
+import React, {useEffect, useRef} from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { TfiClip, TfiSave } from "react-icons/tfi";
 import userEvent from "@testing-library/user-event";
+import {getMaestranzaById} from "../../../../../faunadb/api/maestranzaAPIs";
+import {addMaestranzaToMaestranzaSlice, resetMaestranzeInMaestranzaSlice} from "../../../../../store/maestranzaSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {ImpresaSelezionataSelector} from "../../../../../store/impresaSlice";
+import {addGru, GruSelector, resetGru} from "../../../../../store/gruSlice";
+import {getAllGruByCreatoDa} from "../../../../../faunadb/api/gruAPIs";
+import {Gru} from "../../../../../model/Gru";
+import {useFaunaQuery} from "../../../../../faunadb/hooks/useFaunaQuery";
 
 export interface GruCantieriProps {}
 
 const GruCantieriTab: React.FC<GruCantieriProps> = ({}) => {
   const animatedComponents = makeAnimated();
+  const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
+  const gruFromStore = useSelector(GruSelector)
+  const dispatch = useDispatch()
+  const {execQuery} = useFaunaQuery()
+
+  useEffect(() => {
+    dispatch(resetGru())
+
+    execQuery(getAllGruByCreatoDa, impresaSelezionata?.faunaDocumentId).then((res) => {
+      res.forEach((g: { id: string; gru: Gru }) => {
+        dispatch(
+            addGru({
+              ...g.gru,
+              faunaDocumentId: g.id,
+            } as Gru)
+        );
+      });
+    });
+
+  }, [impresaSelezionata])
 
   /* MULTI SELECT PER SCEGLIERE LE GRU */
-  const gru = [
-    { label: "Gru 1", value: "Gru 1" },
-    { label: "Gru 2", value: "Gru 2" },
-    { label: "Gru 3", value: "Gru 3" },
-    { label: "Gru 4", value: "Gru 4" },
-    { label: "Gru 5", value: "Gru 5" },
-  ];
+  const gru = gruFromStore.map(g => {
+    return {label: g.attr.filter(a => a.nome === "tipologia")[0].value, value: g}
+  })
    
 
   return (

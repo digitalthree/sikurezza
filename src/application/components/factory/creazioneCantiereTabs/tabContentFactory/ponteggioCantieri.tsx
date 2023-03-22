@@ -1,21 +1,45 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { TfiClip, TfiSave } from "react-icons/tfi";
+import {addPonteggio, PonteggioSelector, resetPonteggio} from "../../../../../store/ponteggioSlice";
+import {getAllPonteggiByCreatoDa} from "../../../../../faunadb/api/ponteggioAPIs";
+import {Ponteggio} from "../../../../../model/Ponteggio";
+import {useDispatch, useSelector} from "react-redux";
+import {ImpresaSelezionataSelector} from "../../../../../store/impresaSlice";
+import {GruSelector} from "../../../../../store/gruSlice";
+import {useFaunaQuery} from "../../../../../faunadb/hooks/useFaunaQuery";
 
 export interface PonteggioCantieriProps {}
 
 const PonteggioCantieriTab: React.FC<PonteggioCantieriProps> = ({}) => {
   const animatedComponents = makeAnimated();
 
+  const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
+  const ponteggiFromStore = useSelector(PonteggioSelector)
+  const dispatch = useDispatch()
+  const {execQuery} = useFaunaQuery()
+
+  useEffect(() => {
+    dispatch(resetPonteggio())
+
+    execQuery(getAllPonteggiByCreatoDa, impresaSelezionata?.faunaDocumentId).then((res) => {
+      res.forEach((p: { id: string; ponteggio: Ponteggio }) => {
+        dispatch(
+            addPonteggio({
+              ...p.ponteggio,
+              faunaDocumentId: p.id,
+            } as Ponteggio)
+        );
+      });
+    });
+
+  }, [impresaSelezionata])
+
   /* MULTI SELECT PER SCEGLIERE I PONTEGGI */
-  const ponteggio = [
-    { label: "Ponteggio 1", value: "Ponteggio 1" },
-    { label: "Ponteggio 2", value: "Ponteggio 2" },
-    { label: "Ponteggio 3", value: "Ponteggio 3" },
-    { label: "Ponteggio 4", value: "Ponteggio 4" },
-    { label: "Ponteggio 5", value: "Ponteggio 5" },
-  ];
+  const ponteggio = ponteggiFromStore.map(p => {
+    return {label: p.attr.filter(a => a.nome === "tipologia")[0].value, value: p}
+  })
 
   return (
     <>

@@ -1,7 +1,16 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { TfiSave } from "react-icons/tfi";
+import {getMaestranzaById} from "../../../../../faunadb/api/maestranzaAPIs";
+import {
+    addMaestranzaToMaestranzaSlice,
+    MaestranzeSelector,
+    resetMaestranzeInMaestranzaSlice
+} from "../../../../../store/maestranzaSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {ImpresaSelezionataSelector, ImpreseSelector} from "../../../../../store/impresaSlice";
+import {useFaunaQuery} from "../../../../../faunadb/hooks/useFaunaQuery";
 
 export interface SquadraOperativaCantieriProps {}
 
@@ -10,24 +19,34 @@ const SquadraOperativaCantieriTab: React.FC<
 > = ({}) => {
 
   const animatedComponents = makeAnimated();
+  const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
+  const maestranze = useSelector(MaestranzeSelector)
+  const imprese = useSelector(ImpreseSelector)
+
+  const {execQuery} = useFaunaQuery()
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+      if(impresaSelezionata?.maestranze.length !== 0){
+          impresaSelezionata?.maestranze.forEach(m => {
+              execQuery(getMaestranzaById, m).then(res => {
+                  dispatch(addMaestranzaToMaestranzaSlice(res))
+              })
+          })
+      }else{
+          dispatch(resetMaestranzeInMaestranzaSlice())
+      }
+  }, [])
 
   /* MULTI SELECT PER SCEGLIERE GLI OPERAI NELLA SCHEDA SQUADRA OPERATIVA */
-  const operai = [
-    { label: "Gino Pasticcio", value: "Gino Pasticcio" },
-    { label: "Gino Torta", value: "Gino Torta" },
-    { label: "Gino Porchetta", value: "Gino Porchetta" },
-    { label: "Gino Pasta", value: "Gino Pasta" },
-    { label: "Gino Pastafrolla", value: "Gino Pastafrolla" },
-  ];
+  const operai = maestranze.map(m => {
+      return {label: `${m.anagrafica.nome} ${m.anagrafica.cognome}`, value: m}
+  })
 
    /* MULTI SELECT PER IMPRESE SUBALPALT. E OPERAI AUTONOMI SCHEDA SQUADRA OPERATIVA */
-   const impreseSubAutonomi = [
-    { label: "Impresa1", value: "Impresa1" },
-    { label: "Impresa2", value: "Impresa2" },
-    { label: "Impresa3", value: "Impresa3" },
-    { label: "Impresa4", value: "Impresa4" },
-    { label: "Impresa5", value: "Impresa5" },
-  ];
+   const impreseSubAutonomi = imprese.filter(i => i.tipo === "Subappaltatrice").map(im => {
+       return {label: im.anagrafica.denominazione, value: im}
+   })
 
 
   return (

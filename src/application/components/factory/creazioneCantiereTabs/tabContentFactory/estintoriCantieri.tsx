@@ -1,21 +1,45 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { TfiClip, TfiSave } from "react-icons/tfi";
+import {addEstintore, EstintoriSelector, resetEstintori} from "../../../../../store/estintoreSlice";
+import {getAllEstintoreByCreatoDa} from "../../../../../faunadb/api/estintoreAPIs";
+import {Estintore} from "../../../../../model/Estintore";
+import {useDispatch, useSelector} from "react-redux";
+import {ImpresaSelezionataSelector} from "../../../../../store/impresaSlice";
+import {PonteggioSelector} from "../../../../../store/ponteggioSlice";
+import {useFaunaQuery} from "../../../../../faunadb/hooks/useFaunaQuery";
 
 export interface EstintoriCantieriProps {}
 
 const EstintoriCantieriTab: React.FC<EstintoriCantieriProps> = ({}) => {
   const animatedComponents = makeAnimated();
 
+  const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
+  const estintoriFromStore = useSelector(EstintoriSelector)
+  const dispatch = useDispatch()
+  const {execQuery} = useFaunaQuery()
+
+  useEffect(() => {
+    dispatch(resetEstintori())
+
+    execQuery(getAllEstintoreByCreatoDa, impresaSelezionata?.faunaDocumentId).then((res) => {
+      res.forEach((r: { id: string; estintore: Estintore }) => {
+        dispatch(
+            addEstintore({
+              ...r.estintore,
+              faunaDocumentId: r.id,
+            } as Estintore)
+        );
+      });
+    });
+
+  }, [impresaSelezionata])
+
   /* MULTI SELECT PER SCEGLIERE GLI ESTINTORI */
-  const estintori = [
-    { label: "Estintore 1", value: "Estintore 1" },
-    { label: "Estintore 2", value: "Estintore 2" },
-    { label: "Estintore 3", value: "Estintore 3" },
-    { label: "Estintore 4", value: "Estintore 4" },
-    { label: "Estintore 5", value: "Estintore 5" },
-  ];
+  const estintori = estintoriFromStore.map(e => {
+    return {label: e.nome, value: e}
+  })
 
   return (
     <>

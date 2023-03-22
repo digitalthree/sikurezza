@@ -34,13 +34,22 @@ export const MaestranzaSlice = createSlice({
             state.maestranzaSelezionata = action.payload
         },
         setAnagraficaMaestranza(state: MaestranzaState, action: PayloadAction<AnagraficaMaestranza>){
-            state.maestranzaDaCreare.anagrafica = action.payload
+            state.maestranzaDaCreare.anagrafica = action.payload;
+            if(state.maestranzaSelezionata){
+                state.maestranzaSelezionata.anagrafica = action.payload
+            }
         },
         setDocumentiMaestranza(state: MaestranzaState, action: PayloadAction<Documento[]>){
             state.maestranzaDaCreare.documenti = action.payload
+            if(state.maestranzaSelezionata){
+                state.maestranzaSelezionata.documenti = action.payload
+            }
         },
         setMaestranzaDaCreare(state: MaestranzaState, action: PayloadAction<Maestranza>){
             state.maestranzaDaCreare = action.payload
+            if(state.maestranzaSelezionata){
+                state.maestranzaSelezionata = action.payload
+            }
         },
         setFileInDocumentiMaestranza(state: MaestranzaState, action: PayloadAction<{nome: string, file: string|File|undefined}>){
             state.maestranzaDaCreare.documenti.forEach((d) => {
