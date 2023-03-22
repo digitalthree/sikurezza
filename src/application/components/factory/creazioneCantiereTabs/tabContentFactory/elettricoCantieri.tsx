@@ -3,20 +3,19 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { TfiClip, TfiSave } from "react-icons/tfi";
 import { useState } from "react";
+import {useSelector} from "react-redux";
+import {ImpresaSelezionataSelector, ImpreseSelector} from "../../../../../store/impresaSlice";
 
 export interface ElettricoCantieriProps {}
 
 const ElettricoCantieriTab: React.FC<ElettricoCantieriProps> = ({}) => {
   const animatedComponents = makeAnimated();
+    const impreseFromStore = useSelector(ImpreseSelector)
 
   /* MULTI SELECT PER SCEGLIERE LE IMPRESE ESECUTRICI */
-  const impresa = [
-    { label: "Impresa 1", value: "Impresa 1" },
-    { label: "Impresa 2", value: "Impresa 2" },
-    { label: "Impresa 3", value: "Impresa 3" },
-    { label: "Impresa 4", value: "Impresa 4" },
-    { label: "Impresa 5", value: "Impresa 5" },
-  ];
+  const impresa = impreseFromStore.map(i => {
+      return {label: i.anagrafica.denominazione, value: i}
+  })
 
   return (
     <>

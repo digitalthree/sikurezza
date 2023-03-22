@@ -27,7 +27,7 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
 
 
 
-    const {register, handleSubmit, formState: {errors}} = useForm();
+    const {register, handleSubmit, formState: {errors}, setValue} = useForm();
     const onSubmit = (data: any) => {
         dispatch(setAnagraficaMaestranza(data))
         setTabActive("Documenti")
