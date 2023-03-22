@@ -7,7 +7,7 @@ import PonteggioCantieriTab from "./tabContentFactory/ponteggioCantieri";
 import SquadraOperativaCantieriTab from "./tabContentFactory/squadraOperativaCantiere";
 export interface CreazioneCantieriTabsProps {}
 
-const CreazioneCantieriTabs: React.FC<CreazioneCantieriTabsProps> = ({}) => {
+const CreazioneCantiereTabs: React.FC<CreazioneCantieriTabsProps> = ({}) => {
   const [index, setIndex] = useState(0);
   
   return (
@@ -126,4 +126,4 @@ const CreazioneCantieriTabs: React.FC<CreazioneCantieriTabsProps> = ({}) => {
   );
 };
 
-export default CreazioneCantieriTabs;
+export default CreazioneCantiereTabs;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {
     ImpresaSelezionataSelector,
@@ -8,20 +8,36 @@ import {
 } from "../../../../../../store/impresaSlice";
 import {useForm} from "react-hook-form";
 import {TfiSave} from "react-icons/tfi";
-import {Impresa} from "../../../../../../model/Impresa";
-import {s3} from "../../../../../../aws/s3Config";
+import {Impresa, impresaTemporanea} from "../../../../../../model/Impresa";
+import VisualizzaEliminaFile from "../../../../../../shared/Files/VisualizzaEliminaFile";
+import InputFile from "../../../../../../shared/Files/InputFile";
 
 interface DocumentiProps {
-    setTabActive: (s: string) => void
+    setTabActive: (s: string) => void,
+    editabile: boolean,
+    modifica: boolean,
+    setModifica: (v: boolean) => void
 }
 
-export const DocumentiImpresa: React.FC<DocumentiProps> = ({setTabActive}) => {
+export const DocumentiImpresa: React.FC<DocumentiProps> = (
+    {
+        setTabActive, editabile, modifica, setModifica
+    }
+) => {
 
     const dispatch = useDispatch()
     const impresaDaCreare = useSelector(ImpreseDaCreareSelector)
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
+    const [impresa, setImpresa] = useState(impresaTemporanea)
 
-    let impresa: Impresa = (impresaSelezionata) ? impresaSelezionata : impresaDaCreare
+    useEffect(() => {
+        if(impresaSelezionata){
+            setImpresa(impresaSelezionata)
+        }else{
+            setImpresa(impresaDaCreare)
+        }
+    }, [impresaSelezionata, impresaDaCreare])
+
 
     const {handleSubmit} = useForm();
     const onSubmit = () => {
@@ -51,7 +67,21 @@ export const DocumentiImpresa: React.FC<DocumentiProps> = ({setTabActive}) => {
                             </div>
                             <div className="col-span-2" key={`div${index}`}>
                                 <div className="flex justify-center">
-                                    <input type="file" key={`getFile${index}`}
+                                    {d.file.value ?
+                                        <VisualizzaEliminaFile file={d.file.value} modifica={editabile} nome="" eliminaFunction={() => {
+                                            dispatch(setFileInDocumenti({
+                                                nome: d.nome,
+                                                file: {nome: "", value: undefined}
+                                            }))
+                                        }}/> :
+                                        <InputFile editabile={editabile} onChangeFunction={(e) => {
+                                            dispatch(setFileInDocumenti({
+                                                nome: d.nome,
+                                                file: {nome: d.nome, value: (e.target.files) ? e.target.files[0] : undefined}
+                                            }))
+                                        }}/>
+                                    }
+                                    {/*<input type="file" key={`getFile${index}`}
                                            className={`file-input file-input-secondary file-input-sm max-w-xs ${d.file.value ? 'w-1/4' : 'w-full'}`}
                                            onChange={(e) => {
                                                if (e.target.files && e.target.files[0]) {
@@ -92,7 +122,7 @@ export const DocumentiImpresa: React.FC<DocumentiProps> = ({setTabActive}) => {
                                             {d.file.nome.length < 20 ? d.file.nome : d.file.nome.substring(0, 20) + "..."}
                                     </span>
                                         : <span className="w-3/5">Nessun file selezionato</span>
-                                    }
+                                    }*/}
                                 </div>
 
                             </div>

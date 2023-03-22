@@ -88,12 +88,12 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
         if (save && uploadToFauna && !modifica) {
             execQuery(createPonteggioInFauna, {
                 ...ponteggio,
-                creatoDa: impresaSelezionata?.faunaDocumentId
+                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
             }).then((res) => {
                 dispatch(addPonteggio({
                     ...ponteggio,
                     faunaDocumentId: res.ref.value.id,
-                    creatoDa: impresaSelezionata?.faunaDocumentId as string
+                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
                 }))
                 dispatch(setPonteggioSelezionato(undefined))
                 dispatch(setPonteggioDaCreare(ponteggioDefault))
@@ -103,12 +103,12 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
         if(save && uploadToFauna && modifica){
             execQuery(updatePonteggioInFauna, {
                 ...ponteggio,
-                creatoDa: impresaSelezionata?.faunaDocumentId
+                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
             }).then(() => {
                 dispatch(removePonteggio(ponteggioSelezionato?.faunaDocumentId as string))
                 dispatch(addPonteggio({
                     ...ponteggio,
-                    creatoDa: impresaSelezionata?.faunaDocumentId as string
+                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
                 }))
                 setModifica(false)
                 dispatch(setPonteggioSelezionato(undefined))

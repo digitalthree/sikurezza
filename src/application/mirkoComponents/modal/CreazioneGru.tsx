@@ -75,12 +75,12 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
         if (save && uploadToFauna && !modifica) {
             execQuery(createGruInFauna, {
                 ...gru,
-                creataDa: impresaSelezionata?.faunaDocumentId
+                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
             }).then((res) => {
                 dispatch(addGru({
                     ...gru,
                     faunaDocumentId: res.ref.value.id,
-                    creataDa: impresaSelezionata?.faunaDocumentId as string
+                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
                 }))
                 dispatch(setGruSelezionata(undefined))
                 dispatch(setGruDaCreare(gruDefault))
@@ -90,12 +90,12 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
         if(save && uploadToFauna && modifica){
             execQuery(updateGruInFauna, {
                 ...gru,
-                creataDa: impresaSelezionata?.faunaDocumentId
+                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
             }).then(() => {
                 dispatch(removeGru(gruSelezionata?.faunaDocumentId as string))
                 dispatch(addGru({
                     ...gru,
-                    creataDa: impresaSelezionata?.faunaDocumentId as string
+                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
                 }))
                 setModifica(false)
                 dispatch(setGruSelezionata(undefined))

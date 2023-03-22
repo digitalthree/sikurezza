@@ -76,12 +76,12 @@ const CreazioneMacchinaEAttrezzatura: React.FC<CreazioneMacchinaEAttrezzaturaPro
         if (save && uploadToFauna && !modifica) {
             execQuery(createMacchinaEAttrezzaturaInFauna, {
                 ...macchinaEAttrezzatura,
-                creatoDa: impresaSelezionata?.faunaDocumentId
+                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
             }).then((res) => {
                 dispatch(addMacchinaEAttrezzatura({
                     ...macchinaEAttrezzatura,
                     faunaDocumentId: res.ref.value.id,
-                    creatoDa: impresaSelezionata?.faunaDocumentId as string
+                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
                 }))
                 dispatch(setMacchinaEAttrezzaturaSelezionato(undefined))
                 dispatch(setMacchinaEAttrezzaturaDaCreare(macchinaEAttrezzaturaDefault))
@@ -91,12 +91,12 @@ const CreazioneMacchinaEAttrezzatura: React.FC<CreazioneMacchinaEAttrezzaturaPro
         if(save && uploadToFauna && modifica){
             execQuery(updateMacchinaEAttrezzaturaInFauna, {
                 ...macchinaEAttrezzatura,
-                creatoDa: impresaSelezionata?.faunaDocumentId
+                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
             }).then(() => {
                 dispatch(removeMacchinaEAttrezzatura(macchinaEAttrezzaturaSelezionato?.faunaDocumentId as string))
                 dispatch(addMacchinaEAttrezzatura({
                     ...macchinaEAttrezzatura,
-                    creatoDa: impresaSelezionata?.faunaDocumentId as string
+                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
                 }))
                 setModifica(false)
                 dispatch(setMacchinaEAttrezzaturaSelezionato(undefined))

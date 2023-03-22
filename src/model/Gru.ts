@@ -3,7 +3,7 @@ export interface Gru {
     attr: {nome: string, value: string|boolean, label: string}[],
     verifiche: Verifica[],
     documenti: DocumentoFondazioneGru[]
-    creataDa: string,
+    creatoDa: {id: string, nome: string},
     faunaDocumentId?: string
 }
 
@@ -79,5 +79,5 @@ export const gruDefault: Gru = {
             file: {nome: "", value: undefined}
         },
     ],
-    creataDa: ""
+    creatoDa: {id: "", nome: ""}
 }

@@ -4,7 +4,7 @@ export interface MacchinaEAttrezzatura {
     documenti: DocumentoMacchinaEAttrezzatura[],
     ultimaRevisione: {nome: string, effettuataIl: string, scadenza: string, label: string},
     faunaDocumentId?: string,
-    creatoDa: string
+    creatoDa: {id: string, nome: string},
 }
 
 export interface DocumentoMacchinaEAttrezzatura {
@@ -38,5 +38,5 @@ export const macchinaEAttrezzaturaDefault: MacchinaEAttrezzatura = {
         }
     ],
     ultimaRevisione: {nome: 'ultimaRevisione', effettuataIl: '', scadenza: '', label: "Ultima Revisione del"},
-    creatoDa: ""
+    creatoDa: {id: "", nome: ""}
 }
