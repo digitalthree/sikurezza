@@ -27,6 +27,7 @@ import GruTab from "./application/mirkoComponents/GruTab";
 import CreazioneMaestranza from "./application/components/factory/creazioneMaestranza/CreazioneMaestranza";
 import TotalControl from "./application/totalControl/TotalControl";
 import CreazioneCantiereTabs from "./application/components/factory/creazioneCantiereTabs/CreazioneCantiereTabs";
+import Assistenza from './application/mirkoComponents/Assistenza';
 
 function App() {
 
@@ -66,6 +67,7 @@ function App() {
                   <Route path="anagrafica" element={<CreazioneImpresa setObjectToCreate={setObjectToCreate} primoAccesso={false}/>}/>
                   <Route path="cantieri" element={<CreazioneCantiereTabs/>}/>
                 </Route>
+                <Route path="assistenza" element={<Assistenza/>}/>
                 <Route path="creazione/impresa" element={<CreazioneImpresa setObjectToCreate={setObjectToCreate} primoAccesso={true}/>}/>
                 <Route path="totalControl" element={<TotalControl/>}/>
               </Route>
