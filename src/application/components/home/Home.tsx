@@ -132,7 +132,8 @@ const Home: React.FC<HomeProps> = ({}) => {
                 >
                   Total Control
                 </div>
-                <div className=" flex w-6/12 sm:w-5/12 md:w-4/12 p-4 bg-gray-300 shadow-md rounded-3xl min-h-[180px] justify-center items-center hover:cursor-pointer hover:opacity-60">
+                <div className=" flex w-6/12 sm:w-5/12 md:w-4/12 p-4 bg-gray-300 shadow-md rounded-3xl min-h-[180px] justify-center items-center hover:cursor-pointer hover:opacity-60"
+                     onClick={() => navigate('assistenza')}>
                   Assistenza
                 </div>
               </div>
