@@ -3,7 +3,6 @@ import {Maestranza} from "./Maestranza";
 
 export interface Impresa {
     tipo: 'Affidataria' | 'Subappaltatrice',
-    cantiere: Cantiere,
     anagrafica: {
         denominazione: string,
         sedeLegale: string,
@@ -27,7 +26,6 @@ export interface Impresa {
             scadenza: string
         }
     },
-    macchine: string[], //TODO:inserire array di macchine
     maestranze: string[],
     impreseSubappaltatrici: Impresa[],
     documentiIdoneitaImpresa: Autodichiarazione[],
@@ -51,7 +49,6 @@ export interface ItemComunicazione {
 
 export const impresaTemporanea: Impresa = {
     tipo: "Affidataria",
-    cantiere: {} as Cantiere,
     anagrafica: {
         denominazione: "",
         sedeLegale: "",
@@ -75,7 +72,6 @@ export const impresaTemporanea: Impresa = {
             scadenza: ""
         }
     },
-    macchine: [],
     maestranze: [],
     impreseSubappaltatrici: [],
     documentiIdoneitaImpresa: [
