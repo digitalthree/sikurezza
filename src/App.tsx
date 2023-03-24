@@ -29,6 +29,7 @@ import TotalControl from "./application/totalControl/TotalControl";
 import CreazioneCantiereTabs from "./application/components/factory/creazioneCantiereTabs/CreazioneCantiereTabs";
 import Assistenza from './application/mirkoComponents/Assistenza';
 import {PersistGate} from 'redux-persist/integration/react';
+import CantieriTab from "./application/mirkoComponents/CantieriTab";
 
 function App() {
 
@@ -66,7 +67,8 @@ function App() {
                                     <Route path="maestranze" element={<MaestranzeTab/>}/>
                                     <Route path="maestranza" element={<CreazioneMaestranza/>}/>
                                     <Route path="anagrafica" element={<CreazioneImpresa primoAccesso={false}/>}/>
-                                    <Route path="cantieri" element={<CreazioneCantiereTabs/>}/>
+                                    <Route path="cantieri" element={<CantieriTab/>}/>
+                                    <Route path="cantiere" element={<CreazioneCantiereTabs/>}/>
                                 </Route>
                                 <Route path="assistenza" element={<Assistenza/>}/>
                                 <Route path="creazione/impresa" element={<CreazioneImpresa primoAccesso={true}/>}/>

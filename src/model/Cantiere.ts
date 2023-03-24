@@ -16,31 +16,20 @@ export interface Cantiere {
         controlliPeriodici: ControlloCantiere[]
     }
     estintori: Estintore[]
-    impiantoElettrico: ImpiantoElettrico
+    impiantoElettrico: ImpiantoElettrico,
+    faunaDocumentId?: string,
+    creatoDa: string
 }
 
 export interface AnagraficaCantiere {
-    tipologiaIntervento: string,
-    denomiazione: string
-    indirizzo: string
-    responsabileLavori: string
-    committente: string
-    CSP: string
-    telefonoCSP: string
-    emailCSP: string
-    CSE: string
-    telefonoCSE: string
-    emailCSE: string
-    DirettoreLavoro: string
-    telefonoDirettoreLavoro: string
-    emailDirettoreLavoro: string
+    attr: {label: string, nome: string, value: string}[]
 }
 
 export interface SquadraOperativa {
     responsabileTecnico: Maestranza[]
     preposti: Maestranza[]
     addettiPrimoSoccorso: Maestranza[]
-    addettiAntiincendio: Maestranza[]
+    addettiAntiIncendio: Maestranza[]
     RLS: Maestranza
     medicoCompetente: Maestranza
     RSPP: Maestranza
@@ -74,4 +63,61 @@ export interface ControlloCantiere {
     data: string,
     nota: string,
     file: {nome: string, value: File|string|undefined}
+}
+
+export const cantiereDefault: Cantiere = {
+    anagrafica: {
+        attr: [
+            {label: "Tipologia d'intervento", nome: "tipologiaIntervento", value: ""},
+            {label: "Denominazione", nome: "denominazione", value: ""},
+            {label: "Indirizzo", nome: "indirizzo", value: ""},
+            {label: "Responsabile Lavori", nome: "responsabileLavori", value: ""},
+            {label: "Committente", nome: "committente", value: ""},
+            {label: "CSP", nome: "CSP", value: ""},
+            {label: "Telefono CSP", nome: "telefonoCSP", value: ""},
+            {label: "Mail CSP", nome: "emailCSP", value: ""},
+            {label: "CSE", nome: "CSE", value: ""},
+            {label: "Telefono CSE", nome: "telefonoCSE", value: ""},
+            {label: "Mail CSE", nome: "emailCSE", value: ""},
+            {label: "Direttore Lavori", nome: "DirettoreLavori", value: ""},
+            {label: "Telefono Direttore Lavori", nome: "telefonoDirettoreLavori", value: ""},
+            {label: "Mail Direttore Lavori", nome: "emailDirettoreLavori", value: ""},
+        ]
+    },
+    squadraOperativa: {
+        responsabileTecnico:[],
+        preposti: [],
+        addettiPrimoSoccorso: [],
+        addettiAntiIncendio: [],
+        RLS: {} as Maestranza,
+        medicoCompetente: {} as Maestranza,
+        RSPP: {} as Maestranza,
+        delegatiSicurezza: [],
+        squadraOperai: [],
+        impreseSubappaltatrici: [],
+    },
+    gruMezziDiSollevamento: {
+        listaGru: [],
+        controlliPeriodici: []
+    },
+    ponteggi: {
+        listaPonteggi: [],
+        controlliPeriodici: []
+    },
+    estintori: [],
+    impiantoElettrico: {
+        impresaEsecutriceDelleOpereElettriche: {} as Impresa,
+        prepostoImpresaEsecutrice: "",
+        telefonoPrepostoImpresaEsecutrice: "",
+        documentiImpiantoElettrico: [],
+        denunciaImpianto: false,
+        esito: {
+            nome: "",
+            esito: "Non Protetto",
+            file: {nome: "", value: undefined}
+        },
+        registroControllo: [],
+        verifichePeriodicheAUSL: [],
+    },
+    creatoDa: ""
 }

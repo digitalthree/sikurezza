@@ -1,22 +1,19 @@
 import React, {useEffect, useState} from "react";
-import EditButtonEstintore from "../../shared/tableComponents/EditButtonEstintore";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {ImpresaSelezionataSelector} from "../../store/impresaSlice";
-import {Maestranza} from "../../model/Maestranza";
 import {useFaunaQuery} from "../../faunadb/hooks/useFaunaQuery";
 import {getMaestranzaById} from "../../faunadb/api/maestranzaAPIs";
 import EditButtonMaestranza from "../../shared/tableComponents/EditButtonMaestranza";
 import {
     addMaestranzaToMaestranzaSlice,
     MaestranzeSelector, resetMaestranzeInMaestranzaSlice,
-    setMaestranzaSelezionata
 } from "../../store/maestranzaSlice";
 
 export interface MaestranzeTabProps {
 }
 
-const MaestranzeTab: React.FC<MaestranzeTabProps> = ({}) => {
+const MaestranzeTab: React.FC<MaestranzeTabProps> = () => {
 
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
     const navigate = useNavigate()

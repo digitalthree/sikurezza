@@ -92,7 +92,7 @@ const CreazioneCantiereTabs: React.FC<CreazioneCantieriTabsProps> = ({}) => {
 
             {/* ANAGRAFE CANTIERE */}
             <div hidden={index !== 0} className="w-full">
-              <AnagrafeCantieriTab/>
+              <AnagrafeCantieriTab setIndex={setIndex}/>
             </div>
 
             {/* SQUADRA OPERATIVA */}

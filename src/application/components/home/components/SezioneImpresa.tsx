@@ -21,10 +21,12 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = () => {
         if(
             !window.location.href.includes('anagrafica') &&
             !window.location.href.includes('maestranze') &&
+            !window.location.href.includes('maestranza') &&
             !window.location.href.includes('macchineEAttrezzature')&&
             !window.location.href.includes('gru')&&
             !window.location.href.includes('ponteggi')&&
             !window.location.href.includes('cantieri')&&
+            !window.location.href.includes('cantiere')&&
             !window.location.href.includes('estintori')
         ){
             dispatch(setObjectToCreate(undefined))
@@ -32,6 +34,12 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = () => {
             if(impresaSelezionata){
                 dispatch(addBreadcrumbItem(impresaSelezionata))
             }
+        }
+        if(window.location.href.includes('cantieri')){
+            dispatch(setObjectToCreate("Cantieri"))
+        }
+        if(window.location.href.includes('maestranze')){
+            dispatch(setObjectToCreate("Maestranze"))
         }
     }, [window.location.href])
 
@@ -47,7 +55,7 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = () => {
                             style={{
                                 backgroundColor: "#FFC650",
                                 backgroundImage:
-                                    ' url("../img/loghi_cruscotto/Anagrafica.png") ',
+                                    ' url("/img/loghi_cruscotto/Anagrafica.png") ',
                             }}
                             onClick={() => {
                                 dispatch(setObjectToCreate("Impresa"));
@@ -62,7 +70,7 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = () => {
                             style={{
                                 backgroundColor: "#FFC650",
                                 backgroundImage:
-                                    ' url("../img/loghi_cruscotto/Maestranze.png") ',
+                                    ' url("/img/loghi_cruscotto/Maestranze.png") ',
                             }}
                             onClick={() => {
                                 dispatch(setObjectToCreate("Maestranza"));
@@ -77,7 +85,7 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = () => {
                             style={{
                                 backgroundColor: "#FFC650",
                                 backgroundImage:
-                                    ' url("../img/loghi_cruscotto/Macchine.png") ',
+                                    ' url("/img/loghi_cruscotto/Macchine.png") ',
                             }}
                             onClick={() => {
                                 dispatch(setObjectToCreate("Macchina"));
@@ -98,7 +106,7 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = () => {
                             style={{
                                 backgroundColor: "#FFC650",
                                 backgroundImage:
-                                    ' url("../img/loghi_cruscotto/Cantieri.png") ',
+                                    ' url("/img/loghi_cruscotto/Cantieri.png") ',
                             }}
                         >
                             Cantieri
@@ -108,7 +116,7 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = () => {
                             style={{
                                 backgroundColor: "#FFC650",
                                 backgroundImage:
-                                    ' url("../img/loghi_cruscotto/Gru.png") ',
+                                    ' url("/img/loghi_cruscotto/Gru.png") ',
                             }}
                             onClick={() => {
                                 dispatch(setObjectToCreate("Gru"));
@@ -122,7 +130,7 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = () => {
                             className="bg-auto bg-center bg-no-repeat w-full lg:h-[200px] h-[160px] flex justify-center items-center  rounded-xl shadow-xl hover:underline hover:cursor-pointer hover:opacity-80"
                             style={{
                                 backgroundColor: "#FFC650",
-                                backgroundImage: ' url("../img/loghi_cruscotto/Ponteggio.png") ',
+                                backgroundImage: ' url("/img/loghi_cruscotto/Ponteggio.png") ',
                             }}
                             onClick={() => {
                                 dispatch(setObjectToCreate("Ponteggio"));
@@ -136,7 +144,7 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = () => {
                             className="bg-auto bg-center bg-no-repeat w-full lg:h-[200px] h-[160px] flex justify-center items-center rounded-xl shadow-xl hover:underline hover:cursor-pointer hover:opacity-80"
                             style={{
                                 backgroundColor: "#FFC650",
-                                backgroundImage: ' url("../img/loghi_cruscotto/Estintori.png") ',
+                                backgroundImage: ' url("/img/loghi_cruscotto/Estintori.png") ',
                             }}
                             onClick={() => {
                                 dispatch(setObjectToCreate("Estintore"));

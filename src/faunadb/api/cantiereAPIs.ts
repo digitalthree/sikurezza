@@ -51,3 +51,24 @@ export const getAllCantieriByCreatoDa = async (faunaClient: faunadb.Client, faun
         ));
     return response as Cantiere[]
 }
+
+export const updateCantiereInFauna = async (faunaClient: faunadb.Client, faunaQuery: typeof faunadb.query, cantiereToUpdate: Cantiere) => {
+    return await faunaClient.query(
+        faunaQuery.Update(faunaQuery.Ref(faunaQuery.Collection('Cantieri'), cantiereToUpdate.faunaDocumentId), {
+            data: {
+                ...cantiereToUpdate
+            } as Cantiere
+        })
+    )
+        .catch((err) => console.error(
+            'Error: [%s] %s: %s',
+            err.name,
+            err.message,
+            err.errors()[0].description,
+        ))
+
+}
+
+export const deleteCantiereFromFauna = async (faunaClient: faunadb.Client, faunaQuery: typeof faunadb.query, cantiereToDelete: string) => {
+    await faunaClient.query(faunaQuery.Delete(faunaQuery.Ref(faunaQuery.Collection('Cantieri'), cantiereToDelete)))
+}
