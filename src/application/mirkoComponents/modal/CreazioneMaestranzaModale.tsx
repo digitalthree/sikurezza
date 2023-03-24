@@ -11,7 +11,7 @@ const CreazioneMaestranzaModale: React.FC<CreazioneMaestranzaModaleProps> = ({})
             <input type="checkbox" id="my-modal-8" className="modal-toggle"/>
             <label htmlFor="my-modal-8" className="modal cursor-pointer">
                 <label className="modal-box relative max-w-5xl">
-                    <CreazioneMaestranza setObjectToCreate={() => {}}/>
+                    <CreazioneMaestranza/>
                 </label>
             </label>
         </>

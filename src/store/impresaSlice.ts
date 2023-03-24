@@ -4,14 +4,17 @@ import {Impresa, impresaTemporanea, ItemComunicazione} from "../model/Impresa";
 export type ImpresaState = {
     imprese: Impresa[],
     impresaDaCreare: Impresa,
-    impresaSelezionata?: Impresa
+    impresaSelezionata?: Impresa,
+    objectToCreate?: string,
+    breadcrumbItems: (string|Impresa)[]
 }
 
 export const ImpresaSlice = createSlice({
     name: 'impresaSlice',
     initialState: {
         imprese: [],
-        impresaDaCreare: impresaTemporanea
+        impresaDaCreare: impresaTemporanea,
+        breadcrumbItems: ['Home']
     } as ImpresaState,
     reducers: {
         addImpresa(state: ImpresaState, action: PayloadAction<Impresa>){
@@ -25,6 +28,18 @@ export const ImpresaSlice = createSlice({
         },
         setImpresaDaCreare(state: ImpresaState, action: PayloadAction<Impresa>){
             state.impresaDaCreare = action.payload
+        },
+        setObjectToCreate(state: ImpresaState, action: PayloadAction<string|undefined>){
+            state.objectToCreate = action.payload
+        },
+        addBreadcrumbItem(state: ImpresaState, action: PayloadAction<string|Impresa>){
+          state.breadcrumbItems.push(action.payload)
+        },
+        removeBreadcrumbItem(state: ImpresaState){
+            state.breadcrumbItems.pop()
+        },
+        resetBreadcrumbItems(state: ImpresaState){
+            state.breadcrumbItems = ["Home"]
         },
         setTipologiaImpresa(state: ImpresaState, action: PayloadAction<"Subappaltatrice" | "Affidataria">){
             state.impresaDaCreare.tipo = action.payload
@@ -97,10 +112,13 @@ export const ImpresaSlice = createSlice({
 
 export const {
     addImpresa, removeImpresa, setImpresaDaCreare, setPresenzaInDocumenti, setFileInDocumenti, setComunicazioneInComunicazioni,
-    setImpresaSelezionata, addComunicazioneInComunicazioni, addMaestranza, removeMaestranza
+    setImpresaSelezionata, addComunicazioneInComunicazioni, addMaestranza, removeMaestranza, setObjectToCreate, addBreadcrumbItem,
+    removeBreadcrumbItem, resetBreadcrumbItems
 } = ImpresaSlice.actions
 
 export const ImpreseSelector = (state: { impresaSlice: ImpresaState }) => state.impresaSlice.imprese;
 export const ImpresaSelezionataSelector = (state: { impresaSlice: ImpresaState }) => state.impresaSlice.impresaSelezionata;
 export const ImpreseDaCreareSelector = (state: { impresaSlice: ImpresaState }) => state.impresaSlice.impresaDaCreare;
+export const ObjectToCreateSelector = (state: { impresaSlice: ImpresaState }) => state.impresaSlice.objectToCreate;
+export const BreadcrumbItemsSelector = (state: { impresaSlice: ImpresaState }) => state.impresaSlice.breadcrumbItems;
 

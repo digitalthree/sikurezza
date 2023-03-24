@@ -9,14 +9,13 @@ import {Impresa} from "../../../../../model/Impresa";
 export interface TabContentMaestranzaFactoryProps{
     selectedTab: string
     setTabActive: (s:string) => void
-    setObjectToCreate: (s:string|undefined) => void
     editabile: boolean
     modifica: boolean
 }
 
 const TabContentMaestranzaFactory: React.FC<TabContentMaestranzaFactoryProps> = (
     {
-        selectedTab, setTabActive, setObjectToCreate, editabile, modifica
+        selectedTab, setTabActive, editabile, modifica
     }
 ) => {
 
@@ -27,7 +26,7 @@ const TabContentMaestranzaFactory: React.FC<TabContentMaestranzaFactoryProps> = 
         case "Documenti":
             return <DocumentiMaestranza setTabActive={setTabActive} editabile={editabile} modifica={modifica}/>
         case "Comunicazioni":
-            return <ComunicazioniMaestranza setObjectToCreate={setObjectToCreate} editabile={editabile} modifica={modifica}/>
+            return <ComunicazioniMaestranza  editabile={editabile} modifica={modifica}/>
         default: return <AnagraficaMaestranza setTabActive={setTabActive} editabile={editabile}/>
     }
 }

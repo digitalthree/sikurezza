@@ -43,7 +43,6 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                         <select placeholder="Tipologia Impresa" {...register("tipologiaImpresa", {required: true})}
                                 className="rounded border border-gray-400 shadow p-1"
                                 defaultValue={(impresaSelezionata) ? impresaSelezionata.tipo : "Subappaltatrice"}
-                                value={(impresaSelezionata) ? impresaSelezionata.tipo : "Subappaltatrice"}
                         >
                             <option disabled={!primoAccesso}>Affidataria</option>
                             <option disabled={primoAccesso}>Subappaltatrice</option>
