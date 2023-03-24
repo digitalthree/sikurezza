@@ -7,6 +7,9 @@ import {GruSlice} from "./gruSlice";
 import {PonteggioSlice} from "./ponteggioSlice";
 import {MacchinaEAttrezzaturaSlice} from "./macchinaEAttrezzaturaSlice";
 import {TotalControlSlice} from "./totalControlSlice";
+import * as localforage from "localforage";
+import { persistReducer } from 'redux-persist'
+import persistStore from "redux-persist/es/persistStore";
 
 const rootReducer = combineReducers({
     cantiereSlice: CantiereSlice.reducer,
@@ -19,9 +22,24 @@ const rootReducer = combineReducers({
     totalControlSlice: TotalControlSlice.reducer
 });
 
+const persistConfig = {
+    key: 'root',
+    storage: localforage,
+    whitelist: ['impresaSlice']
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
 export const store = configureStore({
-    reducer: rootReducer
+    reducer: persistedReducer,
+    middleware: getDefaultMiddleware =>
+        getDefaultMiddleware({
+            serializableCheck: false,
+            immutableCheck: false,
+        }),
 });
+
+export const persistor = persistStore(store)
 
 export type RootState = ReturnType<typeof rootReducer>
 export type AppThunk = ThunkAction<void, RootState, null, Action<string>>

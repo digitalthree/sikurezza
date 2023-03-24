@@ -11,7 +11,7 @@ export const Footer: React.FC<FooterProps> = ({}) => {
             realizzato da
           </div>
           <div className=" border-l-2 border-white w-36 py-3 pl-6 ">
-            <img src="img/logo_ccdstudio.png" alt="logo ccd studio"></img>
+            <img src="/img/logo_ccdstudio.png" alt="logo ccd studio"></img>
           </div>
         </div>
       </footer>

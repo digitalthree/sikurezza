@@ -15,18 +15,22 @@ import {uploadFileS3} from "../../../../../../aws/s3APIs";
 import {createMaestranzaInFauna, updateMaestranzaInFauna} from "../../../../../../faunadb/api/maestranzaAPIs";
 import {maestranzaDefault} from "../../../../../../model/Maestranza";
 import {useAuth0} from "@auth0/auth0-react";
-import {addMaestranza, ImpresaSelezionataSelector, removeImpresa} from "../../../../../../store/impresaSlice";
+import {
+    addMaestranza,
+    ImpresaSelezionataSelector,
+    removeImpresa,
+    setObjectToCreate
+} from "../../../../../../store/impresaSlice";
 import {useNavigate} from "react-router-dom";
 import {updateImpresaInFauna} from "../../../../../../faunadb/api/impresaAPIs";
 
 export interface ComunicazioniMaestranzaProps {
-    setObjectToCreate: (s: string | undefined) => void,
     editabile: boolean,
     modifica: boolean
 }
 
 const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
-    {setObjectToCreate, editabile, modifica}
+    {editabile, modifica}
 ) => {
 
     const dispatch = useDispatch()
@@ -85,7 +89,7 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
                 })
                 dispatch(setMaestranzaDaCreare(maestranzaDefault))
                 setSpinner(false)
-                setObjectToCreate(undefined)
+                dispatch(setObjectToCreate(undefined))
                 navigate(`/impresa/${impresaSelezionata?.faunaDocumentId}/maestranze`)
             })
         }
@@ -104,7 +108,7 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
                 }))
                 dispatch(setMaestranzaDaCreare(maestranzaDefault))
                 setSpinner(false)
-                setObjectToCreate(undefined)
+                dispatch(setObjectToCreate(undefined))
                 navigate(`/impresa/${impresaSelezionata?.faunaDocumentId}/maestranze`)
             })
         }

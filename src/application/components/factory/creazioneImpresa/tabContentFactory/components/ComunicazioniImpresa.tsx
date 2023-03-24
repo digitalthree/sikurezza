@@ -7,7 +7,7 @@ import {
     addImpresa, ImpresaSelezionataSelector,
     ImpreseDaCreareSelector, removeImpresa, setComunicazioneInComunicazioni,
     setFileInDocumenti,
-    setImpresaDaCreare
+    setImpresaDaCreare, setObjectToCreate
 } from "../../../../../../store/impresaSlice";
 import {Impresa, impresaTemporanea, ItemComunicazione} from "../../../../../../model/Impresa";
 import {useFaunaQuery} from "../../../../../../faunadb/hooks/useFaunaQuery";
@@ -17,10 +17,9 @@ import {useAuth0} from "@auth0/auth0-react";
 import {useNavigate} from "react-router-dom";
 
 interface ComunicazioniProps {
-    setObjectToCreate: (s: string | undefined) => void
 }
 
-export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToCreate}) => {
+export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
 
     const dispatch = useDispatch()
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
@@ -68,11 +67,11 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                     creataDa: user?.email as string
                 }))
                 dispatch(setImpresaDaCreare(impresaTemporanea))
-                setObjectToCreate(undefined)
+                dispatch(setObjectToCreate(undefined))
                 navigate('/')
             }).catch(err => {
                 dispatch(setImpresaDaCreare(impresaTemporanea))
-                setObjectToCreate(undefined)
+                dispatch(setObjectToCreate(undefined))
                 console.log(err)
                 navigate('/')
             })
@@ -88,11 +87,11 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({setObjectToC
                     creataDa: user?.email as string
                 }))
                 dispatch(setImpresaDaCreare(impresaTemporanea))
-                setObjectToCreate(undefined)
+                dispatch(setObjectToCreate(undefined))
                 navigate('/')
             }).catch(err => {
                 dispatch(setImpresaDaCreare(impresaTemporanea))
-                setObjectToCreate(undefined)
+                dispatch(setObjectToCreate(undefined))
                 console.log(err)
                 navigate('/')
             })

@@ -1,9 +1,11 @@
-import React, { useRef } from "react";
+import React, {LegacyRef, useEffect, useRef} from "react";
 import emailjs from "@emailjs/browser";
 
 export interface AssistenzaProps {}
 
 const Assistenza: React.FC<AssistenzaProps> = ({}) => {
+
+
   return (
     <>
       <form className="w-full flex flex-col pt-5 md:pt-24 items-end">

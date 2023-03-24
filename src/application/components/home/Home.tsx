@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useFaunaQuery } from "../../../faunadb/hooks/useFaunaQuery";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,30 +7,28 @@ import { getAllImpreseByCreataDa } from "../../../faunadb/api/impresaAPIs";
 import {Impresa, impresaTemporanea} from "../../../model/Impresa";
 import {
   addImpresa,
-  ImpreseSelector, setImpresaDaCreare,
-  setImpresaSelezionata,
+  ImpreseSelector, resetBreadcrumbItems, setImpresaDaCreare,
+  setImpresaSelezionata, setObjectToCreate,
 } from "../../../store/impresaSlice";
 import { AiOutlinePlus } from "react-icons/ai";
 import { CreazioneImpresa } from "../factory/creazioneImpresa/CreazioneImpresa";
 import { useNavigate } from "react-router-dom";
-import { addEstintore, EstintoriSelector } from "../../../store/estintoreSlice";
-import { getAllEstintoreByCreatoDa } from "../../../faunadb/api/estintoreAPIs";
-import { Estintore } from "../../../model/Estintore";
 
 interface HomeProps {}
 
-const Home: React.FC<HomeProps> = ({}) => {
+const Home: React.FC<HomeProps> = () => {
   const { logout, user } = useAuth0();
   const { execQuery } = useFaunaQuery();
 
   const imprese = useSelector(ImpreseSelector);
-  const estintori = useSelector(EstintoriSelector);
 
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(resetBreadcrumbItems())
+    dispatch(setObjectToCreate(undefined))
     dispatch(setImpresaDaCreare(impresaTemporanea))
     if (imprese.length === 0) {
       execQuery(getAllImpreseByCreataDa, user?.email).then((res) => {
@@ -46,18 +44,12 @@ const Home: React.FC<HomeProps> = ({}) => {
     }
   }, []);
 
-  const [objectToCreate, setObjectToCreate] = useState<string | undefined>(
-      undefined
-  );
 
   return (
       <>
         {imprese.length === 0 ? (
             <>
-              <CreazioneImpresa
-                  setObjectToCreate={setObjectToCreate}
-                  primoAccesso={true}
-              />
+              <CreazioneImpresa primoAccesso={true}/>
             </>
         ) : (
             <>
@@ -114,7 +106,7 @@ const Home: React.FC<HomeProps> = ({}) => {
                     <div
                         className="bg-gray-300 shadow-md rounded-3xl min-h-[180px] flex justify-center flex-col items-center hover:cursor-pointer hover:opacity-60"
                         onClick={() => {
-                          setObjectToCreate("Impresa");
+                          dispatch(setObjectToCreate("Impresa"));
                           navigate("/creazione/impresa");
                         }}
                     >

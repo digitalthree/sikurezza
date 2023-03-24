@@ -5,20 +5,17 @@ import {useSelector} from "react-redux";
 import {ImpresaSelezionataSelector} from "../../../../store/impresaSlice";
 
 interface CreazioneImpresaProps {
-    setObjectToCreate: (s: string | undefined) => void,
     primoAccesso: boolean
 }
 
-export const CreazioneImpresa: React.FC<CreazioneImpresaProps> = ({setObjectToCreate, primoAccesso}) => {
+export const CreazioneImpresa: React.FC<CreazioneImpresaProps> = ({primoAccesso}) => {
 
     const [tabActive, setTabActive] = useState("Anagrafica");
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
 
     return (
         <>
-            {!impresaSelezionata && <Breadcrumb breadcrumbsItems={["Home", 'Creazione Impresa']}
-                                                setBreadcrumbsItems={() => {}}
-                                                setObjectToCreate={setObjectToCreate}/>}
+            {!impresaSelezionata && <Breadcrumb />}
             <div className="w-full flex flex-col items-center">
                 <div className="tabs">
                     <a className={`tab tab-bordered p-[50px] text-xl ${tabActive === "Anagrafica" ? 'tab-active' : ''}`}
@@ -37,8 +34,7 @@ export const CreazioneImpresa: React.FC<CreazioneImpresaProps> = ({setObjectToCr
                         Comunicazioni
                     </a>
                 </div>
-                <TabContentImpresaFactory selectedTab={tabActive} setTabActive={setTabActive}
-                                          setObjectToCreate={setObjectToCreate} primoAccesso={primoAccesso}/>
+                <TabContentImpresaFactory selectedTab={tabActive} setTabActive={setTabActive} primoAccesso={primoAccesso}/>
             </div>
         </>
 
