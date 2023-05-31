@@ -35,7 +35,7 @@ export interface SquadraOperativa {
     RSPP: Maestranza
     delegatiSicurezza: Maestranza[]
     squadraOperai: Maestranza[]
-    impreseSubappaltatrici: Maestranza[]
+    impreseSubappaltatrici: Impresa[]
 }
 
 export interface ImpiantoElettrico {
@@ -44,11 +44,6 @@ export interface ImpiantoElettrico {
     telefonoPrepostoImpresaEsecutrice: string
     documentiImpiantoElettrico: DocumentoImpiantoElettrico[]
     denunciaImpianto: boolean
-    esito: {
-        nome: string,
-        esito: "Protetto"|"Non Protetto",
-        file: {nome: string, value: File|string|undefined}
-    }
     registroControllo: ControlloCantiere[]
     verifichePeriodicheAUSL: ControlloCantiere[]
 }
@@ -111,11 +106,6 @@ export const cantiereDefault: Cantiere = {
         telefonoPrepostoImpresaEsecutrice: "",
         documentiImpiantoElettrico: [],
         denunciaImpianto: false,
-        esito: {
-            nome: "",
-            esito: "Non Protetto",
-            file: {nome: "", value: undefined}
-        },
         registroControllo: [],
         verifichePeriodicheAUSL: [],
     },

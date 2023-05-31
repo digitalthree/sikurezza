@@ -27,8 +27,6 @@ export const CreazioneCantiere: React.FC<CreazioneCantiereProps> = ({setObjectTo
         execQuery(createCantiereInFauna, {
             ...data,
             creatoDa: user?.email,
-            impresaAffidataria: data.impresaAffidataria,
-            impreseSubappaltatrici: []
         } as Cantiere).then(() => {
             dispatch(addCantiere({
                 ...data,

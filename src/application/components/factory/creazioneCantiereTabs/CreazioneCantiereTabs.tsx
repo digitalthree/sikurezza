@@ -5,6 +5,7 @@ import EstintoriCantieriTab from "./tabContentFactory/estintoriCantieri";
 import GruCantieriTab from "./tabContentFactory/gruCantieri";
 import PonteggioCantieriTab from "./tabContentFactory/ponteggioCantieri";
 import SquadraOperativaCantieriTab from "./tabContentFactory/squadraOperativaCantiere";
+import {useLocation} from "react-router-dom";
 export interface CreazioneCantieriTabsProps {}
 
 const CreazioneCantiereTabs: React.FC<CreazioneCantieriTabsProps> = ({}) => {
@@ -97,27 +98,27 @@ const CreazioneCantiereTabs: React.FC<CreazioneCantieriTabsProps> = ({}) => {
 
             {/* SQUADRA OPERATIVA */}
             <div hidden={index !== 1} className="w-full">
-              <SquadraOperativaCantieriTab/>
+              <SquadraOperativaCantieriTab setIndex={setIndex}/>
             </div>
 
             {/* GRU / MEZZI DI SOLL. */}
             <div hidden={index !== 2} className="w-full">
-              <GruCantieriTab/>
+              <GruCantieriTab setIndex={setIndex}/>
             </div>
 
             {/* PONTEGGIO */}
             <div hidden={index !== 3} className="w-full">
-              <PonteggioCantieriTab/>
+              <PonteggioCantieriTab setIndex={setIndex}/>
             </div>
 
             {/* ESTINTORI */}
             <div hidden={index !== 4} className="w-full">
-              <EstintoriCantieriTab/>
+              <EstintoriCantieriTab setIndex={setIndex}/>
             </div>
 
             {/* IMPIANTO ELETTRICO */}
-            <div hidden={index !== 5} className="w-full">
-              <ElettricoCantieriTab/>
+            <div hidden={index !== 5} className="w-full overflow-y-auto max-h-[500px]">
+              <ElettricoCantieriTab setIndex={setIndex}/>
             </div>
           </div>
         </div>

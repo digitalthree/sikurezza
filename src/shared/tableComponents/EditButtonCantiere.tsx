@@ -99,7 +99,6 @@ const EditButtonCantiere: React.FC<EditButtonCantiereProps> = ({cantiereTarget, 
                                         cantiereTarget.impiantoElettrico.documentiImpiantoElettrico.forEach(d => deleteFileS3(d.file.value as string))
                                         cantiereTarget.impiantoElettrico.verifichePeriodicheAUSL.forEach(v => deleteFileS3(v.file.value as string))
                                         cantiereTarget.impiantoElettrico.registroControllo.forEach(rc => deleteFileS3(rc.file.value as string))
-                                        deleteFileS3(cantiereTarget.impiantoElettrico.esito.file.value as string).then()
                                         dispatch(removeCantiere(cantiereTarget.faunaDocumentId as string))
                                     })
                                 }
