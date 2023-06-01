@@ -54,7 +54,7 @@ function App() {
             onRedirectCallback={() => setAuthorisedOrganizationFromTemporaryStorage()}
         >
             <Provider store={store}>
-                <PersistGate persistor={persistor}>
+                {/*<PersistGate persistor={persistor}>*/}
                     <BrowserRouter>
                         <Routes>
                             <Route path="/" element={<SharedLayout/>}>
@@ -76,7 +76,7 @@ function App() {
                             </Route>
                         </Routes>
                     </BrowserRouter>
-                </PersistGate>
+                {/*</PersistGate>*/}
             </Provider>
         </Auth0Provider>
     )
