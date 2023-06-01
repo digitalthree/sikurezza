@@ -31,7 +31,7 @@ const AnagrafeCantieriTab: React.FC<AnagrafeCantieriTabProps> = ({setIndex}) => 
                     <input
                         className="ml-5 input input-bordered input-sm w-8/12 sm:w-8/12"
                         disabled={!location.state.editabile}
-                        value={(cantiereSelezionato) ? cantiereSelezionato.anagrafica.attr.filter(at => at.nome === a.nome)[0].value : a.value}
+                        value={cantiereSelezionato ? cantiereSelezionato.anagrafica.attr.filter(at => at.nome === a.nome)[0].value : a.value}
                         onChange={(e) => dispatch(setAttributoAnagrafica({nome: a.nome, value: e.target.value}))}
                     />
                 </div>

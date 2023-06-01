@@ -14,8 +14,6 @@ import {
     setGruInCantiere
 } from "../../../../../store/cantiereSlice";
 import {ControlloCantiere} from "../../../../../model/Cantiere";
-import VisualizzaEliminaFile from "../../../../../shared/Files/VisualizzaEliminaFile";
-import InputFile from "../../../../../shared/Files/InputFile";
 import Nota from "./components/Nota";
 import {useLocation} from "react-router-dom";
 
@@ -53,7 +51,7 @@ const GruCantieriTab: React.FC<GruCantieriProps> = ({setIndex}) => {
         return {label: g.attr.filter(a => a.nome === "tipologia")[0].value, value: g}
     })
 
-    const [controlliPeriodici, setControlliPeriodici] = useState<ControlloCantiere[]>(cantiereSelezionato?.gruMezziDiSollevamento.controlliPeriodici as ControlloCantiere[])
+    const [controlliPeriodici, setControlliPeriodici] = useState<ControlloCantiere[]>(cantiereSelezionato ? cantiereSelezionato?.gruMezziDiSollevamento.controlliPeriodici : [])
 
 
     return (

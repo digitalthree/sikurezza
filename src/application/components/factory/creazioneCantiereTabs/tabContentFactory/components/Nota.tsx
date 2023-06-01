@@ -18,7 +18,6 @@ const Nota: React.FC<NotaProps> = ({controlliPeriodici,setControlliPeriodici, la
     const [nota, setNota] = useState("")
     const [fileNota, setFileNota] = useState<File|undefined>(undefined)
 
-    console.log(controlliPeriodici)
 
     const location = useLocation()
 

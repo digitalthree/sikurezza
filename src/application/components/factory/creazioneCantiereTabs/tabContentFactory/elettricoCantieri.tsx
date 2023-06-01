@@ -49,8 +49,8 @@ const ElettricoCantieriTab: React.FC<ElettricoCantieriProps> = ({setIndex}) => {
     const [preposto, setPreposto] = useState(cantiereSelezionato ? cantiereSelezionato.impiantoElettrico.prepostoImpresaEsecutrice : "")
     const [telefonoPreposto, setTelefonoPreposto] = useState(cantiereSelezionato ? cantiereSelezionato.impiantoElettrico.telefonoPrepostoImpresaEsecutrice : "")
 
-    const [registroDiControllo, setRegistroDiControllo] = useState<ControlloCantiere[]>(cantiereSelezionato?.impiantoElettrico.registroControllo as ControlloCantiere[])
-    const [verifichePeriodiche, setVerifichePeriodiche] = useState<ControlloCantiere[]>(cantiereSelezionato?.impiantoElettrico.verifichePeriodicheAUSL as ControlloCantiere[])
+    const [registroDiControllo, setRegistroDiControllo] = useState<ControlloCantiere[]>(cantiereSelezionato ? cantiereSelezionato?.impiantoElettrico.registroControllo : [])
+    const [verifichePeriodiche, setVerifichePeriodiche] = useState<ControlloCantiere[]>(cantiereSelezionato ? cantiereSelezionato?.impiantoElettrico.verifichePeriodicheAUSL as ControlloCantiere[] : [])
 
     const [uploadToS3, setUploadToS3] = useState(false)
     const [savedToS3, setSavedToS3] = useState(false)

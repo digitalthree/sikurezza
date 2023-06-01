@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {AnagraficaImpresa} from "./components/AnagraficaImpresa";
 import {ComunicazioniImpresa} from "./components/ComunicazioniImpresa";
 import {DocumentiImpresa} from "./components/DocumentiImpresa";
+import {useLocation} from "react-router-dom";
 
 interface TabContentImpresaFactoryProps {
     selectedTab: string
@@ -15,17 +16,13 @@ export const TabContentImpresaFactory: React.FC<TabContentImpresaFactoryProps> =
     }
 ) => {
 
-    const [modifica, setModifica] = useState<boolean>(false)
-
     switch (selectedTab) {
         case "Anagrafica":
             return <AnagraficaImpresa setTabActive={setTabActive} primoAccesso={primoAccesso}/>
         case "Documenti":
-            return <DocumentiImpresa setTabActive={setTabActive} editabile={!primoAccesso} modifica={modifica} setModifica={setModifica}/>
+            return <DocumentiImpresa setTabActive={setTabActive} editabile={true}/>
         case "Comunicazioni":
             return <ComunicazioniImpresa />
-        /*case "Checklist":
-            return <>Tab Checklist</>*/
         default: return <>Tab Anagrafica</>
     }
 

@@ -56,7 +56,7 @@ const PonteggioCantieriTab: React.FC<PonteggioCantieriProps> = ({setIndex}) => {
         return {label: p.attr.filter(a => a.nome === "tipologia")[0].value, value: p}
     })
 
-    const [controlliPeriodici, setControlliPeriodici] = useState<ControlloCantiere[]>(cantiereSelezionato?.ponteggi.controlliPeriodici as ControlloCantiere[])
+    const [controlliPeriodici, setControlliPeriodici] = useState<ControlloCantiere[]>(cantiereSelezionato ? cantiereSelezionato?.ponteggi.controlliPeriodici : [])
 
     return (
         <>

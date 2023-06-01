@@ -61,10 +61,12 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
             execQuery(createImpresaInFauna, {
                 ...impresaDaCreare,
                 creataDa: user?.email
-            }).then(() => {
+            }).then((res) => {
+                console.log(res)
                 dispatch(addImpresa({
                     ...impresaDaCreare,
-                    creataDa: user?.email as string
+                    creataDa: user?.email as string,
+                    faunaDocumentId: res.ref.value.id
                 }))
                 dispatch(setImpresaDaCreare(impresaTemporanea))
                 dispatch(setObjectToCreate(undefined))
@@ -80,11 +82,12 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
             execQuery(updateImpresaInFauna, {
                 ...impresaDaCreare,
                 creataDa: user?.email
-            }).then(() => {
+            }).then((res) => {
                 dispatch(removeImpresa(impresaSelezionata as Impresa))
                 dispatch(addImpresa({
                     ...impresaDaCreare,
-                    creataDa: user?.email as string
+                    creataDa: user?.email as string,
+                    faunaDocumentId: res.ref.value.id
                 }))
                 dispatch(setImpresaDaCreare(impresaTemporanea))
                 dispatch(setObjectToCreate(undefined))
