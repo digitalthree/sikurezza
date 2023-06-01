@@ -47,6 +47,11 @@ const CreazioneEstintore: React.FC<CreazioneEstintoreProps> = (
                     <div className="flex justify-between items-center">
                         <span className="font-bold">Nome Estintore: </span>
                         <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                disabled={!editabile}
                                value={estintoreDaCreare.nome}
                                onChange={e => {
@@ -60,6 +65,11 @@ const CreazioneEstintore: React.FC<CreazioneEstintoreProps> = (
                     <div className="flex justify-between items-center mt-1">
                         <span className="font-bold">Attualmente in uso nel cantiere: </span>
                         <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                disabled={!editabile}
                                value={estintoreDaCreare.cantiere}
                                onChange={e => {
@@ -73,6 +83,11 @@ const CreazioneEstintore: React.FC<CreazioneEstintoreProps> = (
                     <div className="flex justify-between items-center mt-1">
                         <span className="font-bold">Matricola: </span>
                         <input type="number" className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                disabled={!editabile}
                                value={estintoreDaCreare.matricola}
                                onChange={e => {
@@ -86,6 +101,11 @@ const CreazioneEstintore: React.FC<CreazioneEstintoreProps> = (
                     <div className="flex justify-between items-center mt-1">
                         <span className="font-bold">nr.: </span>
                         <input type="number" className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                disabled={!editabile}
                                value={estintoreDaCreare.numero}
                                onChange={e => {
@@ -99,6 +119,11 @@ const CreazioneEstintore: React.FC<CreazioneEstintoreProps> = (
                     <div className="flex justify-between items-center mt-1">
                         <span className="font-bold">Data di ultima revisione: </span>
                         <input type="date" className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                disabled={!editabile}
                                value={estintoreDaCreare.dataUltimaRevisione}
                                onChange={e => {
@@ -112,6 +137,11 @@ const CreazioneEstintore: React.FC<CreazioneEstintoreProps> = (
                     <div className="flex justify-between items-center mt-1">
                         <span className="font-bold">Scadenza: </span>
                         <input type="date" className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                disabled={!editabile}
                                value={estintoreDaCreare.scadenza}
                                onChange={e => {

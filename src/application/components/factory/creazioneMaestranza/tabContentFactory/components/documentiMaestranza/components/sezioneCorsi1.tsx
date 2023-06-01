@@ -46,6 +46,11 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                 <div className="flex flex-col col-span-2">
                     <input type="date" {...register("corsoMacchineMovTerraEffettuatoIl")}
                            className="rounded border border-gray-400 shadow p-1"
+                           onKeyDown={(e) => {
+                               if(e.key === "Enter"){
+                                   e.preventDefault()
+                               }
+                           }}
                            disabled={!editabile}
                            onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'corsoMacchineMovTerra', value: e.target.value}))}
                            defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoMacchineMovTerra')[0].effettuatoIl}
@@ -54,6 +59,11 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("corsoMacchineMovTerraScadenza")}
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        disabled={!editabile}
                        onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'corsoMacchineMovTerra', value: e.target.value}))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoMacchineMovTerra')[0].scadenza}
@@ -73,6 +83,11 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                 <div className="flex flex-col col-span-2">
                     <input type="date" {...register("corsoPonteggiEffettuatoIl")}
                            className="rounded border border-gray-400 shadow p-1"
+                           onKeyDown={(e) => {
+                               if(e.key === "Enter"){
+                                   e.preventDefault()
+                               }
+                           }}
                            disabled={!editabile}
                            onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'corsoPonteggi', value: e.target.value}))}
                            defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoPonteggi')[0].effettuatoIl}
@@ -81,6 +96,11 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("corsoPonteggiScadenza")}
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        disabled={!editabile}
                        onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'corsoPonteggi', value: e.target.value}))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoPonteggi')[0].scadenza}
@@ -100,6 +120,11 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                 <div className="flex flex-col col-span-2">
                     <input type="date" {...register("corsoPLEEffettuatoIl")}
                            className="rounded border border-gray-400 shadow p-1"
+                           onKeyDown={(e) => {
+                               if(e.key === "Enter"){
+                                   e.preventDefault()
+                               }
+                           }}
                            disabled={!editabile}
                            onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'corsoPLE', value: e.target.value}))}
                            defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoPLE')[0].effettuatoIl}
@@ -108,6 +133,11 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("corsoPLEScadenza")}
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        disabled={!editabile}
                        onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'corsoPLE', value: e.target.value}))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoPLE')[0].scadenza}
@@ -127,6 +157,11 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                 <div className="flex flex-col col-span-2">
                     <input type="date" {...register("corsoConduzioneGRUEffettuatoIl")}
                            className="rounded border border-gray-400 shadow p-1"
+                           onKeyDown={(e) => {
+                               if(e.key === "Enter"){
+                                   e.preventDefault()
+                               }
+                           }}
                            disabled={!editabile}
                            onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'corsoConduzioneGRU', value: e.target.value}))}
                            defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoConduzioneGRU')[0].effettuatoIl}
@@ -135,6 +170,11 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("corsoConduzioneGRUScadenza")}
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        disabled={!editabile}
                        onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'corsoConduzioneGRU', value: e.target.value}))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoConduzioneGRU')[0].scadenza}
@@ -154,6 +194,11 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                 <div className="flex flex-col col-span-2">
                     <input type="date" {...register("corsoGRUSuAutocarroEffettuatoIl")}
                            className="rounded border border-gray-400 shadow p-1"
+                           onKeyDown={(e) => {
+                               if(e.key === "Enter"){
+                                   e.preventDefault()
+                               }
+                           }}
                            disabled={!editabile}
                            onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'corsoGRUSuAutocarro', value: e.target.value}))}
                            defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoGRUSuAutocarro')[0].effettuatoIl}
@@ -162,6 +207,11 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("corsoGRUSuAutocarroScadenza")}
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        disabled={!editabile}
                        onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'corsoGRUSuAutocarro', value: e.target.value}))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoGRUSuAutocarro')[0].scadenza}
@@ -181,6 +231,11 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                 <div className="flex flex-col col-span-2">
                     <input type="date" {...register("corsoEscavatoriIdrauliciEffettuatoIl")}
                            className="rounded border border-gray-400 shadow p-1"
+                           onKeyDown={(e) => {
+                               if(e.key === "Enter"){
+                                   e.preventDefault()
+                               }
+                           }}
                            disabled={!editabile}
                            onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'corsoEscavatoriIdraulici', value: e.target.value}))}
                            defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoEscavatoriIdraulici')[0].effettuatoIl}
@@ -189,6 +244,11 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("corsoEscavatoriIdrauliciScadenza")}
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        disabled={!editabile}
                        onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'corsoEscavatoriIdraulici', value: e.target.value}))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoEscavatoriIdraulici')[0].scadenza}

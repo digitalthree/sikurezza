@@ -41,6 +41,11 @@ const SezioneCorsoFormazione: React.FC<SezioneCorsoFormazioneProps> = (
                 <div className="flex flex-col col-span-2">
                     <input type="date" {...register("corsoFormazioneArt3637EffettuatoIl")}
                            className="rounded border border-gray-400 shadow p-1"
+                           onKeyDown={(e) => {
+                               if(e.key === "Enter"){
+                                   e.preventDefault()
+                               }
+                           }}
                            disabled={!editabile}
                            onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'corsoFormazioneArt37', value: e.target.value}))}
                            defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoFormazioneArt37')[0].effettuatoIl}
@@ -50,6 +55,11 @@ const SezioneCorsoFormazione: React.FC<SezioneCorsoFormazioneProps> = (
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("corsoFormazioneArt3637Scadenza")}
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        disabled={!editabile}
                        onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'corsoFormazioneArt37', value: e.target.value}))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoFormazioneArt37')[0].scadenza}

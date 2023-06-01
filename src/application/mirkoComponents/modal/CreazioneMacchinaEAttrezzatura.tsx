@@ -117,6 +117,11 @@ const CreazioneMacchinaEAttrezzatura: React.FC<CreazioneMacchinaEAttrezzaturaPro
                                 <span className="font-bold">{a.label}</span>
                                 {a.nome !== "categoria" ?
                                     <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                           onKeyDown={(e) => {
+                                               if(e.key === "Enter"){
+                                                   e.preventDefault()
+                                               }
+                                           }}
                                            disabled={!editabile}
                                            value={a.value as string}
                                            onChange={e => {
@@ -143,6 +148,11 @@ const CreazioneMacchinaEAttrezzatura: React.FC<CreazioneMacchinaEAttrezzaturaPro
                             <div className="grid grid-cols-7 mb-3">
                                 <span className="font-bold col-span-3">{d.nome}: </span>
                                 <input type="checkbox" className="toggle col-span-1 m-auto"
+                                       onKeyDown={(e) => {
+                                           if(e.key === "Enter"){
+                                               e.preventDefault()
+                                           }
+                                       }}
                                        disabled={!editabile}
                                        checked={d.presenza as boolean}
                                        onChange={(e) => {
@@ -187,6 +197,11 @@ const CreazioneMacchinaEAttrezzatura: React.FC<CreazioneMacchinaEAttrezzaturaPro
                         <div className="flex flex-col">
                             <input type="date"
                                    className="rounded border border-gray-400 shadow p-1"
+                                   onKeyDown={(e) => {
+                                       if(e.key === "Enter"){
+                                           e.preventDefault()
+                                       }
+                                   }}
                                    disabled={!editabile}
                                    value={macchinaEAttrezzatura.ultimaRevisione.effettuataIl}
                                    onChange={(e) => {

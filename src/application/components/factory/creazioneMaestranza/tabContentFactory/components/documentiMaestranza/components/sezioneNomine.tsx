@@ -43,6 +43,11 @@ const SezioneNomine: React.FC<SezioneNomineProps> = (
                 <span className="font-bold col-span-3">Nomina da Preposto: </span>
                 <input type="checkbox" className="toggle" {...register('nominaDaPreposto')}
                        disabled={!editabile}
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        onChange={(e) => dispatch(setNominaInMaestranza({
                            nome: 'nominaDaPreposto',
                            value: e.target.checked
@@ -67,6 +72,11 @@ const SezioneNomine: React.FC<SezioneNomineProps> = (
                 <span className="font-bold col-span-3">Nomina da RSPP: </span>
                 <input type="checkbox" className="toggle" {...register('nominaDaRSPP')}
                        disabled={!editabile}
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        onChange={(e) => dispatch(setNominaInMaestranza({
                            nome: 'nominaDaRSPP',
                            value: e.target.checked
@@ -90,6 +100,11 @@ const SezioneNomine: React.FC<SezioneNomineProps> = (
                 <span className="font-bold col-span-3">Nomina da RLS: </span>
                 <input type="checkbox" className="toggle" {...register('nominaDaRLS')}
                        disabled={!editabile}
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        onChange={(e) => dispatch(setNominaInMaestranza({nome: 'nominaDaRLS', value: e.target.checked}))}
                        defaultChecked={maestranza.documenti?.filter(d => d.nome === 'nominaDaRLS')[0].nomina}/>
                 <span className="col-span-4"></span>
@@ -110,6 +125,11 @@ const SezioneNomine: React.FC<SezioneNomineProps> = (
                 <span className="font-bold col-span-3">Nomina da AddettoPSoccorso: </span>
                 <input type="checkbox" className="toggle" {...register('nominaDaAddettoPSoccorso')}
                        disabled={!editabile}
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        onChange={(e) => dispatch(setNominaInMaestranza({
                            nome: 'nominaDaAddettoPSoccorso',
                            value: e.target.checked
@@ -134,6 +154,11 @@ const SezioneNomine: React.FC<SezioneNomineProps> = (
                 <span className="font-bold col-span-3">Nomina da AddettoPrevIncendi: </span>
                 <input type="checkbox" className="toggle" {...register('nominaDaAddettoPrevIncendi')}
                        disabled={!editabile}
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        onChange={(e) => dispatch(setNominaInMaestranza({
                            nome: 'nominaDaAddettoPrevIncendi',
                            value: e.target.checked

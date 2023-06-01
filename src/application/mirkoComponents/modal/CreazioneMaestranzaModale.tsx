@@ -8,7 +8,15 @@ export interface CreazioneMaestranzaModaleProps{
 const CreazioneMaestranzaModale: React.FC<CreazioneMaestranzaModaleProps> = ({}) => {
     return(
         <>
-            <input type="checkbox" id="my-modal-8" className="modal-toggle"/>
+            <input type="checkbox"
+                   onKeyDown={(e) => {
+                       if(e.key === "Enter"){
+                           e.preventDefault()
+                       }
+                   }}
+                   id="my-modal-8"
+                   className="modal-toggle"
+            />
             <label htmlFor="my-modal-8" className="modal cursor-pointer">
                 <label className="modal-box relative max-w-5xl">
                     <CreazioneMaestranza/>

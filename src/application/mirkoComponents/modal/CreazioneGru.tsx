@@ -117,6 +117,11 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
                                 <span className="font-bold">{a.label}</span>
                                 {typeof a.value === 'string' && a.nome !== 'note' &&
                                     <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                           onKeyDown={(e) => {
+                                               if(e.key === "Enter"){
+                                                   e.preventDefault()
+                                               }
+                                           }}
                                            disabled={!editabile}
                                            value={a.value as string}
                                            onChange={e => {
@@ -126,6 +131,11 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
                                 }
                                 {typeof a.value === 'boolean' &&
                                     <input type="checkbox" className="toggle"
+                                           onKeyDown={(e) => {
+                                               if(e.key === "Enter"){
+                                                   e.preventDefault()
+                                               }
+                                           }}
                                            disabled={!editabile}
                                            checked={a.value as boolean}
                                            onChange={(e) => {
@@ -135,6 +145,11 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
                                 }
                                 {a.nome === 'note' &&
                                     <textarea className="rounded border border-gray-400 shadow p-1 col-span-9 w-1/2"
+                                              onKeyDown={(e) => {
+                                                  if(e.key === "Enter"){
+                                                      e.preventDefault()
+                                                  }
+                                              }}
                                               disabled={!editabile}
                                               value={a.value as string}
                                               onChange={(e) => {
@@ -153,6 +168,11 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
                                 <div className="flex flex-col">
                                     <input type="date"
                                            className="rounded border border-gray-400 shadow p-1"
+                                           onKeyDown={(e) => {
+                                               if(e.key === "Enter"){
+                                                   e.preventDefault()
+                                               }
+                                           }}
                                            disabled={!editabile}
                                            value={v.effettuataIl}
                                            onChange={(e) => {
@@ -166,6 +186,11 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
                                 <span className="font-bold">scadenza: </span>
                                 <input type="date"
                                        className="rounded border border-gray-400 shadow p-1"
+                                       onKeyDown={(e) => {
+                                           if(e.key === "Enter"){
+                                               e.preventDefault()
+                                           }
+                                       }}
                                        disabled={!editabile}
                                        value={v.scadenza}
                                        onChange={(e) => {
@@ -185,6 +210,11 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
                                 <span className="font-bold col-span-3">{d.nome}: </span>
                                 {typeof gru.documenti.filter(doc => doc.nome === d.nome)[0].presenza === 'boolean' ?
                                     <input type="checkbox" className="toggle col-span-1 m-auto"
+                                           onKeyDown={(e) => {
+                                               if(e.key === "Enter"){
+                                                   e.preventDefault()
+                                               }
+                                           }}
                                            disabled={!editabile}
                                            checked={d.presenza as boolean}
                                            onChange={(e) => {

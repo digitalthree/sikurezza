@@ -31,6 +31,11 @@ const AnagrafeCantieriTab: React.FC<AnagrafeCantieriTabProps> = ({setIndex}) => 
                     <input
                         className="ml-5 input input-bordered input-sm w-8/12 sm:w-8/12"
                         disabled={!location.state.editabile}
+                        onKeyDown={(e) => {
+                            if(e.key === "Enter"){
+                                e.preventDefault()
+                            }
+                        }}
                         value={cantiereSelezionato ? cantiereSelezionato.anagrafica.attr.filter(at => at.nome === a.nome)[0].value : a.value}
                         onChange={(e) => dispatch(setAttributoAnagrafica({nome: a.nome, value: e.target.value}))}
                     />

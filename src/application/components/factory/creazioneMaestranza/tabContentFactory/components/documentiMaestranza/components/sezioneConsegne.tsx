@@ -42,6 +42,11 @@ const SezioneConsegne: React.FC<SezioneConsegneProps> = (
             <div className="grid grid-cols-12 gap-4">
                 <span className="font-bold col-span-3">Consegna DPI: </span>
                 <input type="checkbox" className="toggle" {...register('consegnaDPI')}
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        disabled={!editabile}
                        onChange={(e) => dispatch(setConsegnatoInMaestranza({nome: 'consegnaDPI', value: e.target.checked}))}
                        defaultChecked={maestranza.documenti?.filter(d => d.nome === 'consegnaDPI')[0].consegnato}
@@ -49,6 +54,11 @@ const SezioneConsegne: React.FC<SezioneConsegneProps> = (
                 <span className="font-bold col-span-2">consegnato il: </span>
                 <input type="date" {...register("consegnaDPIConsegnatoIl")}
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        disabled={!editabile}
                        onChange={(e) => dispatch(setConsegnatoIlInMaestranza({nome: 'consegnaDPI', value: e.target.value}))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'consegnaDPI')[0].consegnatoIl}
@@ -66,6 +76,11 @@ const SezioneConsegne: React.FC<SezioneConsegneProps> = (
             <div className="grid grid-cols-12 gap-4 mt-2">
                 <span className="font-bold col-span-3">Consegna Tesserino: </span>
                 <input type="checkbox" className="toggle" {...register('consegnaTesserino')}
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        disabled={!editabile}
                        onChange={(e) => dispatch(setConsegnatoInMaestranza({nome: 'consegnaTesserino', value: e.target.checked}))}
                        defaultChecked={maestranza.documenti?.filter(d => d.nome === 'consegnaTesserino')[0].consegnato}
@@ -73,6 +88,11 @@ const SezioneConsegne: React.FC<SezioneConsegneProps> = (
                 <span className="font-bold col-span-2">consegnato il: </span>
                 <input type="date" {...register("consegnaTesserinoConsegnatoIl")}
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        disabled={!editabile}
                        onChange={(e) => dispatch(setConsegnatoIlInMaestranza({nome: 'consegnaTesserino', value: e.target.value}))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'consegnaTesserino')[0].consegnatoIl}

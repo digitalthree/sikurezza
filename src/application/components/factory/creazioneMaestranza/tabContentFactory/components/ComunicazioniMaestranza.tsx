@@ -125,6 +125,11 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
                     <div className="flex flex-col">
                         <input placeholder="Telefono" {...register("telefono")}
                                className="rounded border border-gray-400 shadow p-1"
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                disabled={!editabile}
                                onChange={(e) => dispatch(setComunicazioniInMaestranza({nome: 'telefono', value: e.target.value}))}
                                defaultValue={maestranza.comunicazioni.telefono}
@@ -137,6 +142,11 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
                     <div className="flex flex-col">
                         <input placeholder="Cellulare privato" {...register("cellularePrivato")}
                                className="rounded border border-gray-400 shadow p-1"
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                disabled={!editabile}
                                onChange={(e) => dispatch(setComunicazioniInMaestranza({nome: 'cellularePrivato', value: e.target.value}))}
                                defaultValue={maestranza.comunicazioni.cellularePrivato}
@@ -149,6 +159,11 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
                     <div className="flex flex-col">
                         <input placeholder="Cellulare aziendale" {...register("cellulareAziendale")}
                                className="rounded border border-gray-400 shadow p-1"
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                disabled={!editabile}
                                onChange={(e) => dispatch(setComunicazioniInMaestranza({nome: 'cellulareAziendale', value: e.target.value}))}
                                defaultValue={maestranza.comunicazioni.cellulareAziendale}
@@ -161,6 +176,11 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
                     <div className="flex flex-col">
                         <input placeholder="Indirizzo mail" {...register("email", {required: true})}
                                className="rounded border border-gray-400 shadow p-1"
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                disabled={!editabile}
                                onChange={(e) => dispatch(setComunicazioniInMaestranza({nome: 'email', value: e.target.value}))}
                                defaultValue={maestranza.comunicazioni.email}

@@ -5,7 +5,7 @@ import {BsSearch} from "react-icons/bs";
 
 interface SelectWithSearchProps {
     placeholder: string
-    onChangeFunction: (ev:  React.ChangeEvent<HTMLInputElement>) => void
+    onChangeFunction: (ev: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export const SearchComponent: React.FC<SelectWithSearchProps> = (
@@ -19,7 +19,12 @@ export const SearchComponent: React.FC<SelectWithSearchProps> = (
             <label className="input-group input-group-md">
                 <span><BsSearch/></span>
                 <input type="text" placeholder={placeholder} className="input input-bordered input-md"
-                    onChange={(e) => onChangeFunction(e)}
+                       onChange={(e) => onChangeFunction(e)}
+                       onKeyDown={(e) => {
+                           if (e.key === "Enter") {
+                               e.preventDefault()
+                           }
+                       }}
                 />
             </label>
         </div>

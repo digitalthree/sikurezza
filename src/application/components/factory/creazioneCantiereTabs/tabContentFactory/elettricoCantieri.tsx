@@ -190,6 +190,11 @@ const ElettricoCantieriTab: React.FC<ElettricoCantieriProps> = ({setIndex}) => {
                 <input
                     type="text"
                     disabled={!location.state.editabile}
+                    onKeyDown={(e) => {
+                        if(e.key === "Enter"){
+                            e.preventDefault()
+                        }
+                    }}
                     className="ml-5 input input-bordered input-sm w-8/12 sm:w-8/12"
                     value={preposto}
                     onChange={(e) => {
@@ -207,6 +212,11 @@ const ElettricoCantieriTab: React.FC<ElettricoCantieriProps> = ({setIndex}) => {
                 <input
                     type="number"
                     disabled={!location.state.editabile}
+                    onKeyDown={(e) => {
+                        if(e.key === "Enter"){
+                            e.preventDefault()
+                        }
+                    }}
                     className="ml-5 input input-bordered input-sm w-8/12 sm:w-8/12"
                     value={telefonoPreposto}
                     onChange={(e) => {
@@ -233,6 +243,11 @@ const ElettricoCantieriTab: React.FC<ElettricoCantieriProps> = ({setIndex}) => {
                             <div className="w-4/12  md:w-5/12 flex flex-row justify-center items-center">
                                 NO
                                 <input type="checkbox" name="conformita" className="toggle mx-2"
+                                       onKeyDown={(e) => {
+                                           if(e.key === "Enter"){
+                                               e.preventDefault()
+                                           }
+                                       }}
                                        checked={cantiereDaCreare.impiantoElettrico.denunciaImpianto}
                                        onChange={(e) => dispatch(setDenunciaImpiantoElettricoInCantiere(e.target.checked))}
                                 />

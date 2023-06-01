@@ -129,6 +129,11 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
                                 <span className="font-bold">{a.label}</span>
                                 {typeof a.value === 'string' && a.nome !== "altezzaPonteggio" &&
                                     <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                           onKeyDown={(e) => {
+                                               if(e.key === "Enter"){
+                                                   e.preventDefault()
+                                               }
+                                           }}
                                            disabled={!editabile}
                                            value={a.value as string}
                                            onChange={e => {
@@ -138,6 +143,11 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
                                 }
                                 {typeof a.value === 'boolean' &&
                                     <input type="checkbox" className="toggle"
+                                           onKeyDown={(e) => {
+                                               if(e.key === "Enter"){
+                                                   e.preventDefault()
+                                               }
+                                           }}
                                            disabled={!editabile}
                                            checked={a.value as boolean}
                                            onChange={(e) => {
@@ -166,6 +176,11 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
                                 <span className="font-bold col-span-3">{ap.nome}: </span>
                                 {typeof ponteggio.allegatiPonteggio.filter(al => al.nome === ap.nome)[0].presenza === 'boolean' ?
                                     <input type="checkbox" className="toggle col-span-1 m-auto"
+                                           onKeyDown={(e) => {
+                                               if(e.key === "Enter"){
+                                                   e.preventDefault()
+                                               }
+                                           }}
                                            disabled={!editabile}
                                            checked={ap.presenza as boolean}
                                            onChange={(e) => {
@@ -230,6 +245,11 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
                                 <span className="font-bold">{c.nome}: </span>
                                 <div className="flex flex-col">
                                     <input type="checkbox" className="toggle col-span-1 m-auto"
+                                           onKeyDown={(e) => {
+                                               if(e.key === "Enter"){
+                                                   e.preventDefault()
+                                               }
+                                           }}
                                            disabled={!editabile}
                                            checked={c.effettuato}
                                            onChange={(e) => {
@@ -245,6 +265,11 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
                                 <span className="font-bold col-span-3">{`Data ultimo ${c.nome}:`}</span>
                                 <input type="date"
                                        className="rounded border border-gray-400 shadow p-1 col-span-2"
+                                       onKeyDown={(e) => {
+                                           if(e.key === "Enter"){
+                                               e.preventDefault()
+                                           }
+                                       }}
                                        disabled={!editabile}
                                        value={c.data}
                                        onChange={(e) => {

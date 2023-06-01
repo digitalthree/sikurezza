@@ -35,10 +35,20 @@ const Nota: React.FC<NotaProps> = ({controlliPeriodici,setControlliPeriodici, la
                     <div className="flex flex-col w-6/12 text-center mt-2">
                         <input type="date" className="border-slate-300 border-b font-normal py-2"
                                disabled={!location.state.editabile}
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                placeholder="Data" value={dataNota}
                                onChange={(e) => setDataNota(e.currentTarget.value)}/>
                         <input type="text" className="font-normal text-left p-2 leading-5"
                                disabled={!location.state.editabile}
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                placeholder="Inserisci Nota" value={nota}
                                onChange={(e) => setNota(e.currentTarget.value)}/>
                     </div>
@@ -99,10 +109,20 @@ const Nota: React.FC<NotaProps> = ({controlliPeriodici,setControlliPeriodici, la
                         <div className="flex flex-col w-7/12 text-center mt-2">
                             <input type="date" className="border-slate-300 border-b font-normal py-2"
                                    disabled={!location.state.editabile}
+                                   onKeyDown={(e) => {
+                                       if(e.key === "Enter"){
+                                           e.preventDefault()
+                                       }
+                                   }}
                                    placeholder="Data" value={dataNota}
                                    onChange={(e) => setDataNota(e.currentTarget.value)}/>
                             <input type="text" className="font-normal text-left p-2 leading-5"
                                    disabled={!location.state.editabile}
+                                   onKeyDown={(e) => {
+                                       if(e.key === "Enter"){
+                                           e.preventDefault()
+                                       }
+                                   }}
                                    placeholder="Inserisci Nota" value={nota}
                                    onChange={(e) => setNota(e.currentTarget.value)}/>
                         </div>

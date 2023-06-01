@@ -42,6 +42,11 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                     <span className="font-bold">Nome*: </span>
                     <div className="flex flex-col">
                         <input placeholder="Nome" {...register("nome", {required: true})}
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
                                defaultValue={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.nome : maestranzaDaCreare.anagrafica.nome}
@@ -54,6 +59,11 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                     <span className="font-bold">Cognome*: </span>
                     <div className="flex flex-col">
                         <input placeholder="Cognome" {...register("cognome", {required: true})}
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
                                defaultValue={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.cognome : maestranzaDaCreare.anagrafica.cognome}
@@ -66,6 +76,11 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                     <span className="font-bold">Data Di Nascita*: </span>
                     <div className="flex flex-col">
                         <input type="date" {...register("dataNascita")}
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
                                defaultValue={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.dataNascita : maestranzaDaCreare.anagrafica.dataNascita}
@@ -78,6 +93,11 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                     <span className="font-bold">Luogo di Nascita*: </span>
                     <div className="flex flex-col">
                         <input placeholder="Luogo di Nascita" {...register("luogoNascita", {required: true})}
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
                                defaultValue={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.luogoNascita : maestranzaDaCreare.anagrafica.luogoNascita}
@@ -90,6 +110,11 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                     <span className="font-bold">Codice Fiscale*: </span>
                     <div className="flex flex-col">
                         <input placeholder="Codice Fiscale" {...register("codiceFiscale", {required: true})}
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
                                defaultValue={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.codiceFiscale : maestranzaDaCreare.anagrafica.codiceFiscale}
@@ -102,6 +127,11 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                     <span className="font-bold">Impresa di appartenenza*: </span>
                     <div className="flex flex-col">
                         <input placeholder="Impresa di appartenenza" {...register("impresaAppartenenza", {required: true})}
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
                                defaultValue={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.impresaAppartenenza : maestranzaDaCreare.anagrafica.impresaAppartenenza}
@@ -114,6 +144,11 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                     <span className="font-bold">Datore di lavoro: </span>
                     <div className="flex flex-col">
                         <input type="checkbox" className="toggle toggle-sm" {...register("datoreLavoro")}
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
                                disabled={!editabile}
                                defaultChecked={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.datoreLavoro : maestranzaDaCreare.anagrafica.datoreLavoro}
                         />

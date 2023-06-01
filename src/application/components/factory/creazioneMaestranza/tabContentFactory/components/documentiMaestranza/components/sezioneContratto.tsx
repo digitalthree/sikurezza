@@ -67,6 +67,11 @@ const SezioneContratto: React.FC<SezioneContrattoProps> = (
             <div className="grid grid-cols-12 gap-4 mt-2">
                 <span className="font-bold col-span-3">Data Assunzione: </span>
                 <input type="date" {...register("dataAssunzione")}
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        className="rounded border border-gray-400 shadow p-1 col-span-5"
                        disabled={!editabile}
                        onChange={(e) => dispatch(setDataAssunzioneIlInMaestranza(e.target.value))}
@@ -76,6 +81,11 @@ const SezioneContratto: React.FC<SezioneContrattoProps> = (
             <div className="grid grid-cols-12 gap-4 mt-2">
                 <span className="font-bold col-span-3">Data di fine contartto: </span>
                 <input type="date" {...register("dataFineContratto")}
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        className="rounded border border-gray-400 shadow p-1 col-span-5"
                        disabled={!editabile}
                        onChange={(e) => dispatch(setDataFineContrattoIlInMaestranza(e.target.value))}
@@ -85,6 +95,11 @@ const SezioneContratto: React.FC<SezioneContrattoProps> = (
             <div className="grid grid-cols-12 gap-4 mt-2">
                 <span className="font-bold col-span-3">Mansione: </span>
                 <input placeholder="Mansione" {...register("mansione")}
+                       onKeyDown={(e) => {
+                           if(e.key === "Enter"){
+                               e.preventDefault()
+                           }
+                       }}
                        className="rounded border border-gray-400 shadow p-1 col-span-5"
                        disabled={!editabile}
                        onChange={(e) => dispatch(setMansioneInMaestranza(e.target.value))}
