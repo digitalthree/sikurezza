@@ -75,12 +75,12 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
         if (save && uploadToFauna && !modifica) {
             execQuery(createGruInFauna, {
                 ...gru,
-                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
+                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string}
             }).then((res) => {
                 dispatch(addGru({
                     ...gru,
                     faunaDocumentId: res.ref.value.id,
-                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
+                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string}
                 }))
                 dispatch(setGruSelezionata(undefined))
                 dispatch(setGruDaCreare(gruDefault))
@@ -90,12 +90,12 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
         if(save && uploadToFauna && modifica){
             execQuery(updateGruInFauna, {
                 ...gru,
-                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
+                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string}
             }).then(() => {
                 dispatch(removeGru(gruSelezionata?.faunaDocumentId as string))
                 dispatch(addGru({
                     ...gru,
-                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
+                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string}
                 }))
                 setModifica(false)
                 dispatch(setGruSelezionata(undefined))

@@ -106,43 +106,75 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
         <>
             <form onSubmit={handleSubmit(onSubmit)} className="mt-20 w-[50%] p-10 shadow-2xl flex flex-col">
                 {impresaDaCreare.comunicazioni.map(c => {
-                        return (
-                            <div key={c.mansione}>
-                                <div className="flex justify-between items-center">
-                                    <span className="font-bold">{c.mansione}: </span>
-                                    <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
-                                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.filter(cs => cs.mansione === c.mansione)[0].nome : c.nome}
-                                           onChange={e => dispatch(setComunicazioneInComunicazioni({mansione: c.mansione, attributo: 'nome', valore: e.target.value}))}
-                                    />
-                                </div>
-                                <div className="flex justify-between items-center mt-2">
-                                    <span className="font-bold">Telefono: </span>
-                                    <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
-                                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.filter(cs => cs.mansione === c.mansione)[0].telefono : c.telefono}
-                                           onChange={e => dispatch(setComunicazioneInComunicazioni({mansione: c.mansione, attributo: 'telefono', valore: e.target.value}))}
-                                    />
-                                </div>
-                                <div className="flex justify-between items-center mt-2">
-                                    <span className="font-bold">Email: </span>
-                                    <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
-                                           defaultValue={(impresaSelezionata) ? impresaSelezionata.comunicazioni.filter(cs => cs.mansione === c.mansione)[0].email : c.email}
-                                           onChange={e => dispatch(setComunicazioneInComunicazioni({mansione: c.mansione, attributo: 'email', valore: e.target.value}))}
-                                    />
-                                </div>
-                                <hr className="mt-5 mb-5"/>
+                    return (
+                        <div key={c.mansione}>
+                            <div className="flex justify-between items-center">
+                                <span className="font-bold">{c.mansione}: </span>
+                                <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                       onKeyDown={(e) => {
+                                           if (e.key === "Enter") {
+                                               e.preventDefault()
+                                           }
+                                       }}
+                                       value={(impresaSelezionata) ? impresaSelezionata.comunicazioni.filter(cs => cs.mansione === c.mansione)[0].nome : c.nome}
+                                       onChange={e => dispatch(setComunicazioneInComunicazioni({
+                                           mansione: c.mansione,
+                                           attributo: 'nome',
+                                           valore: e.target.value
+                                       }))}
+                                />
                             </div>
-                        )
-                    })}
+                            <div className="flex justify-between items-center mt-2">
+                                <span className="font-bold">Telefono: </span>
+                                <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                       onKeyDown={(e) => {
+                                           if (e.key === "Enter") {
+                                               e.preventDefault()
+                                           }
+                                       }}
+                                       value={(impresaSelezionata) ? impresaSelezionata.comunicazioni.filter(cs => cs.mansione === c.mansione)[0].telefono : c.telefono}
+                                       onChange={e => dispatch(setComunicazioneInComunicazioni({
+                                           mansione: c.mansione,
+                                           attributo: 'telefono',
+                                           valore: e.target.value
+                                       }))}
+                                />
+                            </div>
+                            <div className="flex justify-between items-center mt-2">
+                                <span className="font-bold">Email: </span>
+                                <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                       onKeyDown={(e) => {
+                                           if (e.key === "Enter") {
+                                               e.preventDefault()
+                                           }
+                                       }}
+                                       value={(impresaSelezionata) ? impresaSelezionata.comunicazioni.filter(cs => cs.mansione === c.mansione)[0].email : c.email}
+                                       onChange={e => dispatch(setComunicazioneInComunicazioni({
+                                           mansione: c.mansione,
+                                           attributo: 'email',
+                                           valore: e.target.value
+                                       }))}
+                                />
+                            </div>
+                            <hr className="mt-5 mb-5"/>
+                        </div>
+                    )
+                })}
                 {/* The button to open modal */}
                 <label htmlFor="my-modal-4" className="btn btn-warning w-1/2 m-auto">Aggiungi Mansione</label>
 
                 {/* Put this part before </body> tag */}
-                <input type="checkbox" id="my-modal-4" className="modal-toggle" />
+                <input type="checkbox" id="my-modal-4" className="modal-toggle"/>
                 <label htmlFor="my-modal-4" className="modal cursor-pointer">
                     <label className="modal-box relative">
                         <div className="flex justify-between items-center">
                             <span className="font-bold">Mansione: </span>
                             <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                   onKeyDown={(e) => {
+                                       if (e.key === "Enter") {
+                                           e.preventDefault()
+                                       }
+                                   }}
                                    onChange={e => {
                                        setNuovaMansione({
                                            ...nuovaMansione,
@@ -154,6 +186,11 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
                         <div className="flex justify-between items-center mt-1">
                             <span className="font-bold">Nome: </span>
                             <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                   onKeyDown={(e) => {
+                                       if (e.key === "Enter") {
+                                           e.preventDefault()
+                                       }
+                                   }}
                                    onChange={e => {
                                        setNuovaMansione({
                                            ...nuovaMansione,
@@ -165,6 +202,11 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
                         <div className="flex justify-between items-center mt-1">
                             <span className="font-bold">Telefono: </span>
                             <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                   onKeyDown={(e) => {
+                                       if (e.key === "Enter") {
+                                           e.preventDefault()
+                                       }
+                                   }}
                                    onChange={e => {
                                        setNuovaMansione({
                                            ...nuovaMansione,
@@ -176,6 +218,11 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
                         <div className="flex justify-between items-center mt-1">
                             <span className="font-bold">Email: </span>
                             <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                   onKeyDown={(e) => {
+                                       if (e.key === "Enter") {
+                                           e.preventDefault()
+                                       }
+                                   }}
                                    onChange={e => {
                                        setNuovaMansione({
                                            ...nuovaMansione,
@@ -185,7 +232,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
                             />
                         </div>
                         <div className="modal-action"
-                            onClick={() => dispatch(addComunicazioneInComunicazioni(nuovaMansione))}
+                             onClick={() => dispatch(addComunicazioneInComunicazioni(nuovaMansione))}
                         >
                             <label htmlFor="my-modal-4" className="btn btn-warning">Crea Mansione</label>
                         </div>

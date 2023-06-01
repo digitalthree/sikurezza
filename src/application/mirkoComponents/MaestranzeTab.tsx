@@ -49,7 +49,7 @@ const MaestranzeTab: React.FC<MaestranzeTabProps> = () => {
                 </div>
                 <div
                     className="flex-col text-xl sm:text-2xl md:text-3xl text-center py-5 text-zinc-400 font-semibold underline">
-                    MENU' MAESTRANZE {'>'} {impresaSelezionata?.anagrafica.denominazione}
+                    MENU' MAESTRANZE {'>'} {impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value}
                 </div>
                 <div className="flex flex-row w-full justify-center items-center mt-2 mb-5">
                     <input

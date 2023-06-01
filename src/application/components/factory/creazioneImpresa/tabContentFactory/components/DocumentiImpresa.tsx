@@ -37,15 +37,10 @@ export const DocumentiImpresa: React.FC<DocumentiProps> = (
     }, [impresaSelezionata, impresaDaCreare])
 
 
-    const {handleSubmit} = useForm();
-    const onSubmit = () => {
-        setTabActive("Comunicazioni")
-    }
-
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)} className="w-[80%] p-10 shadow-2xl">
+            <form onSubmit={(e) => e.preventDefault()} className="w-[80%] p-10 shadow-2xl">
                 {impresa.documentiIdoneitaImpresa.map((d, index) => {
                     return (
                         <div className="grid grid-cols-5 text-center py-3" key={d.nome}>
@@ -56,7 +51,7 @@ export const DocumentiImpresa: React.FC<DocumentiProps> = (
                             <div>
                                 <input type="checkbox"
                                        className="toggle"
-                                       defaultChecked={d.presenza}
+                                       checked={d.presenza}
                                        onChange={() => dispatch(setPresenzaInDocumenti({
                                            id: index,
                                            value: !d.presenza
@@ -90,7 +85,7 @@ export const DocumentiImpresa: React.FC<DocumentiProps> = (
                     <div className="rounded-bl rounded-tl bg-amber-600 p-2">
                         <TfiSave size="30px" className="text-white"/>
                     </div>
-                    <button type="submit"
+                    <button onClick={() => setTabActive("Comunicazioni")}
                             className="rounded-br rounded-tr bg-amber-400 p-2 w-full text-white hover:cursor-pointer font-bold">
                         Salva e Prosegui
                     </button>

@@ -47,6 +47,20 @@ export const ImpresaSlice = createSlice({
                 state.impresaSelezionata.tipo = action.payload
             }
         },
+        setAttributoAnagraficaImpresa(state: ImpresaState, action: PayloadAction<{ label:string, value: string }>){
+            state.impresaDaCreare.anagrafica.attr.forEach(a => {
+                if(a.label === action.payload.label){
+                    a.value = action.payload.value
+                }
+            })
+            if(state.impresaSelezionata){
+                state.impresaSelezionata.anagrafica.attr.forEach(a => {
+                    if(a.label === action.payload.label){
+                        a.value = action.payload.value
+                    }
+                })
+            }
+        },
         setPresenzaInDocumenti(state: ImpresaState, action: PayloadAction<{ id: number, value: boolean }>){
             state.impresaDaCreare.documentiIdoneitaImpresa.forEach((d, index) => {
                 if(index === action.payload.id) d.presenza = action.payload.value
@@ -113,7 +127,7 @@ export const ImpresaSlice = createSlice({
 export const {
     addImpresa, removeImpresa, setImpresaDaCreare, setPresenzaInDocumenti, setFileInDocumenti, setComunicazioneInComunicazioni,
     setImpresaSelezionata, addComunicazioneInComunicazioni, addMaestranza, removeMaestranza, setObjectToCreate, addBreadcrumbItem,
-    removeBreadcrumbItem, resetBreadcrumbItems
+    removeBreadcrumbItem, resetBreadcrumbItems, setTipologiaImpresa, setAttributoAnagraficaImpresa
 } = ImpresaSlice.actions
 
 export const ImpreseSelector = (state: { impresaSlice: ImpresaState }) => state.impresaSlice.imprese;

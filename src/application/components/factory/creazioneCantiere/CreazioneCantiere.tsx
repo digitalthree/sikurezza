@@ -114,7 +114,7 @@ export const CreazioneCantiere: React.FC<CreazioneCantiereProps> = ({setObjectTo
                                 defaultChecked={true}
                         >
                             {imprese.map(i => {
-                                return <option value={i.faunaDocumentId}>{i.anagrafica.denominazione}</option>
+                                return <option value={i.faunaDocumentId}>{i.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value}</option>
                             })}
                         </select>
                         {errors.impresaAffidataria &&

@@ -32,6 +32,7 @@ const Home: React.FC<HomeProps> = () => {
     dispatch(setImpresaDaCreare(impresaTemporanea))
     if (imprese.length === 0) {
       execQuery(getAllImpreseByCreataDa, user?.email).then((res) => {
+        console.log(res)
         res.forEach((r: { id: string; impresa: Impresa }) => {
           dispatch(
               addImpresa({
@@ -74,7 +75,7 @@ const Home: React.FC<HomeProps> = () => {
                 <span className="font-semibold text-3xl uppercase text-center">
                   {
                     imprese.filter((i) => i.tipo === "Affidataria")[0]
-                        .anagrafica.denominazione
+                        .anagrafica.attr.filter(a => a.label === 'denominazione')[0].value
                   }
                 </span>
                   </div>
@@ -94,7 +95,7 @@ const Home: React.FC<HomeProps> = () => {
                               >
                         <span className="text-white font-semibold text-xl uppercase text-center">
                           {(is as Impresa).anagrafica &&
-                              (is as Impresa).anagrafica.denominazione}
+                              (is as Impresa).anagrafica.attr.filter(a => a.label === 'denominazione')[0].value}
                         </span>
                                 <span className="text-white font-semibold text-sm uppercase text-center mt-5">
                           Impresa Subappaltatrice

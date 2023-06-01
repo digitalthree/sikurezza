@@ -42,10 +42,10 @@ const ElettricoCantieriTab: React.FC<ElettricoCantieriProps> = ({setIndex}) => {
 
     /* MULTI SELECT PER SCEGLIERE LE IMPRESE ESECUTRICI */
     const impresa = impreseFromStore.map(i => {
-        return {label: i.anagrafica.denominazione, value: i}
+        return {label: i.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value, value: i}
     })
 
-    const [impresaEsecutrice, setImpresaEsecutrice] = useState(cantiereSelezionato ? [{label: cantiereSelezionato.impiantoElettrico.impresaEsecutriceDelleOpereElettriche.anagrafica.denominazione, value: cantiereSelezionato.impiantoElettrico.impresaEsecutriceDelleOpereElettriche}] : [{label: "", value: {} as Impresa}])
+    const [impresaEsecutrice, setImpresaEsecutrice] = useState(cantiereSelezionato ? [{label: cantiereSelezionato.impiantoElettrico.impresaEsecutriceDelleOpereElettriche.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value, value: cantiereSelezionato.impiantoElettrico.impresaEsecutriceDelleOpereElettriche}] : [{label: "", value: {} as Impresa}])
     const [preposto, setPreposto] = useState(cantiereSelezionato ? cantiereSelezionato.impiantoElettrico.prepostoImpresaEsecutrice : "")
     const [telefonoPreposto, setTelefonoPreposto] = useState(cantiereSelezionato ? cantiereSelezionato.impiantoElettrico.telefonoPrepostoImpresaEsecutrice : "")
 

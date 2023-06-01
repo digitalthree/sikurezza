@@ -4,8 +4,8 @@ import {TfiSave} from "react-icons/tfi";
 import {useDispatch, useSelector} from "react-redux";
 import {
     ImpresaSelezionataSelector,
-    ImpreseDaCreareSelector,
-    setImpresaDaCreare
+    ImpreseDaCreareSelector, setAttributoAnagraficaImpresa,
+    setImpresaDaCreare, setTipologiaImpresa
 } from "../../../../../../store/impresaSlice";
 
 interface AnagraficaProps {
@@ -22,30 +22,36 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
     useEffect(() => {
         if(impresaSelezionata){
             dispatch(setImpresaDaCreare(impresaSelezionata))
+        }else{
+            dispatch(setTipologiaImpresa("Subappaltatrice"))
         }
     }, [impresaSelezionata])
 
-    const {register, handleSubmit, formState: {errors}} = useForm();
-    const onSubmit = (data: any) => {
-        console.log(data)
-        dispatch(setImpresaDaCreare({...impresaDaCreare, anagrafica: data, tipo: data.tipologiaImpresa}))
-        setTabActive("Documenti")
-    }
+    const {register, formState: {errors}} = useForm();
+
 
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)} className="mt-20 w-[40%] p-10 shadow-2xl">
+            <form onSubmit={(e) => e.preventDefault()} className="mt-20 w-[40%] p-10 shadow-2xl">
 
                 <div className="flex justify-between items-center">
                     <span className="font-bold">Tipologia Impresa*: </span>
                     <div className="flex flex-col">
                         <select placeholder="Tipologia Impresa" {...register("tipologiaImpresa", {required: true})}
                                 className="rounded border border-gray-400 shadow p-1"
-                                defaultValue={(impresaSelezionata) ? impresaSelezionata.tipo : "Subappaltatrice"}
+                                disabled={!primoAccesso}
+                                value={(impresaSelezionata) ? impresaSelezionata.tipo : "Subappaltatrice"}
+                                onChange={(e) => {
+                                    if(e.target.value === "Affidataria"){
+                                        dispatch(setTipologiaImpresa(e.target.value as "Affidataria"))
+                                    }else{
+                                        dispatch(setTipologiaImpresa(e.target.value as "Subappaltatrice"))
+                                    }
+                                }}
                         >
-                            <option disabled={!primoAccesso}>Affidataria</option>
-                            <option disabled={primoAccesso}>Subappaltatrice</option>
+                            <option value="Affidataria">Affidataria</option>
+                            <option value="Subappaltatrice">Subappaltatrice</option>
                         </select>
                         {errors.denominazione && <span className="font-bold text-red-600">Campo obbligatorio</span>}
                     </div>
@@ -56,7 +62,13 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                     <div className="flex flex-col">
                         <input placeholder="Denominazione" {...register("denominazione", {required: true})}
                                className="rounded border border-gray-400 shadow p-1"
-                               defaultValue={(impresaSelezionata) ? impresaSelezionata.anagrafica.denominazione :impresaDaCreare.anagrafica.denominazione}
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
+                               value={(impresaSelezionata) ? impresaSelezionata.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value}
+                               onChange={(e) => dispatch(setAttributoAnagraficaImpresa({label: 'denominazione', value: e.target.value}))}
                         />
                         {errors.denominazione && <span className="font-bold text-red-600">Campo obbligatorio</span>}
                     </div>
@@ -68,7 +80,13 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                     <div className="flex flex-col">
                         <input placeholder="Sede Legale" {...register("sedeLegale", {required: true})}
                                className="rounded border border-gray-400 shadow p-1"
-                               defaultValue={(impresaSelezionata) ? impresaSelezionata.anagrafica.sedeLegale :impresaDaCreare.anagrafica.sedeLegale}
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
+                               value={(impresaSelezionata) ? impresaSelezionata.anagrafica.attr.filter(a => a.label === 'sedeLegale')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'sedeLegale')[0].value}
+                               onChange={(e) => dispatch(setAttributoAnagraficaImpresa({label: 'sedeLegale', value: e.target.value}))}
                         />
                         {errors.sedeLegale && <span className="font-bold text-red-600">Campo obbligatorio</span>}
                     </div>
@@ -78,7 +96,13 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                     <span className="font-bold">Codice Fiscale: </span>
                     <input {...register("codiceFiscale")}
                            className="rounded border border-gray-400 shadow p-1 w-[262px]"
-                           defaultValue={(impresaSelezionata) ? impresaSelezionata.anagrafica.codiceFiscale :impresaDaCreare.anagrafica.codiceFiscale}
+                           onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
+                           value={(impresaSelezionata) ? impresaSelezionata.anagrafica.attr.filter(a => a.label === 'codiceFiscale')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'codiceFiscale')[0].value}
+                           onChange={(e) => dispatch(setAttributoAnagraficaImpresa({label: 'codiceFiscale', value: e.target.value}))}
                     />
                 </div>
 
@@ -86,7 +110,13 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                     <span className="font-bold">P. Iva </span>
                     <input {...register("partitaIva")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={(impresaSelezionata) ? impresaSelezionata.anagrafica.partitaIva :impresaDaCreare.anagrafica.partitaIva}
+                           onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
+                           value={(impresaSelezionata) ? impresaSelezionata.anagrafica.attr.filter(a => a.label === 'partitaIva')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'partitaIva')[0].value}
+                           onChange={(e) => dispatch(setAttributoAnagraficaImpresa({label: 'partitaIva', value: e.target.value}))}
                     />
                 </div>
 
@@ -94,7 +124,13 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                     <span className="font-bold">Forma Giuridica: </span>
                     <input {...register("formaGiuridica")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={(impresaSelezionata) ? impresaSelezionata.anagrafica.formaGiuridica :impresaDaCreare.anagrafica.formaGiuridica}
+                           onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
+                           value={(impresaSelezionata) ? impresaSelezionata.anagrafica.attr.filter(a => a.label === 'formaGiuridica')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'formaGiuridica')[0].value}
+                           onChange={(e) => dispatch(setAttributoAnagraficaImpresa({label: 'formaGiuridica', value: e.target.value}))}
                     />
                 </div>
 
@@ -102,7 +138,13 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                     <span className="font-bold">Amministratore: </span>
                     <input {...register("amministratore")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={(impresaSelezionata) ? impresaSelezionata.anagrafica.amministratore :impresaDaCreare.anagrafica.amministratore}
+                           onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
+                           value={(impresaSelezionata) ? impresaSelezionata.anagrafica.attr.filter(a => a.label === 'amministratore')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'amministratore')[0].value}
+                           onChange={(e) => dispatch(setAttributoAnagraficaImpresa({label: 'amministratore', value: e.target.value}))}
                     />
                 </div>
 
@@ -110,7 +152,13 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                     <span className="font-bold">Codice fiscale Amministratore: </span>
                     <input {...register("codiceFiscaleAmministratore")}
                            className="rounded border border-gray-400 shadow p-1"
-                           defaultValue={(impresaSelezionata) ? impresaSelezionata.anagrafica.codiceFiscaleAmministratore :impresaDaCreare.anagrafica.codiceFiscaleAmministratore}
+                           onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
+                           value={(impresaSelezionata) ? impresaSelezionata.anagrafica.attr.filter(a => a.label === 'codiceFiscaleAmministratore')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'codiceFiscaleAmministratore')[0].value}
+                           onChange={(e) => dispatch(setAttributoAnagraficaImpresa({label: 'codiceFiscaleAmministratore', value: e.target.value}))}
                     />
                 </div>
 
@@ -119,14 +167,26 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                         <span className="font-bold">DURC: </span>
                         <input type="date" {...register("durc")}
                                className="rounded border border-gray-400 shadow p-1"
-                               defaultValue={(impresaSelezionata) ? impresaSelezionata.anagrafica.durc :impresaDaCreare.anagrafica.durc}
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
+                               value={(impresaSelezionata) ? impresaSelezionata.anagrafica.attr.filter(a => a.label === 'durc')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'durc')[0].value}
+                               onChange={(e) => dispatch(setAttributoAnagraficaImpresa({label: 'durc', value: e.target.value}))}
                         />
                     </div>
                     <div className="flex justify-between items-center mt-2">
                         <span className="font-bold">scadenza: </span>
                         <input type="date" {...register("scadenza")}
                                className="rounded border border-gray-400 shadow p-1"
-                               defaultValue={(impresaSelezionata) ? impresaSelezionata.anagrafica.scadenza :impresaDaCreare.anagrafica.scadenza}
+                               onKeyDown={(e) => {
+                                   if(e.key === "Enter"){
+                                       e.preventDefault()
+                                   }
+                               }}
+                               value={(impresaSelezionata) ? impresaSelezionata.anagrafica.attr.filter(a => a.label === 'scadenza')[0].value : impresaDaCreare.anagrafica.attr.filter(a => a.label === 'scadenza')[0].value}
+                               onChange={(e) => dispatch(setAttributoAnagraficaImpresa({label: 'scadenza', value: e.target.value}))}
                         />
                     </div>
                 </div>
@@ -135,7 +195,13 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                     <div className="rounded-bl rounded-tl bg-amber-600 p-2">
                         <TfiSave size="30px" className="text-white"/>
                     </div>
-                    <button type="submit" className="rounded-br rounded-tr bg-amber-400 p-2 w-full text-white hover:cursor-pointer font-bold">
+                    <button className="rounded-br rounded-tr bg-amber-400 p-2 w-full text-white hover:cursor-pointer font-bold"
+                            onClick={(e) => {
+                                e.preventDefault()
+                                console.log('qui')
+                                setTabActive("Documenti")
+                            }}
+                    >
                         Salva e Prosegui
                     </button>
                 </div>

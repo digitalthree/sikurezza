@@ -78,7 +78,7 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
     useEffect(() => {
         if(uploadToFauna && save && !modifica){
             setSpinner(true)
-            execQuery(createMaestranzaInFauna, {...maestranza, creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}}).then((res) => {
+            execQuery(createMaestranzaInFauna, {...maestranza, creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string}}).then((res) => {
                 dispatch(addMaestranza({
                     impresa: impresaSelezionata?.faunaDocumentId as string,
                     maestranza: res.ref.value.id
@@ -97,14 +97,14 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
             setSpinner(true)
             execQuery(updateMaestranzaInFauna, {
                 ...maestranza,
-                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string},
+                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string},
                 faunaDocumentId: maestranzaSelezionata?.faunaDocumentId
             }).then((res) => {
                 dispatch(removeMaestranzaToMaestranzaSlice(maestranzaSelezionata?.faunaDocumentId as string))
                 dispatch(addMaestranzaToMaestranzaSlice({
                     ...res.data,
                     faunaDocumentId: maestranzaSelezionata?.faunaDocumentId,
-                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
+                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string}
                 }))
                 dispatch(setMaestranzaDaCreare(maestranzaDefault))
                 setSpinner(false)

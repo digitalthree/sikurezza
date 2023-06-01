@@ -105,7 +105,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                         return i
                     }
                 }else{
-                    if ((i.item as Impresa).anagrafica.denominazione.toLowerCase()
+                    if ((i.item as Impresa).anagrafica.attr.filter(a => a.label === 'denominazione')[0].value.toLowerCase()
                         .replace(/\s+/g, '')
                         .includes(ricercaByImpresa.toLowerCase().replace(/\s+/g, ''))) {
                         return i

@@ -4,15 +4,7 @@ import {Maestranza} from "./Maestranza";
 export interface Impresa {
     tipo: 'Affidataria' | 'Subappaltatrice',
     anagrafica: {
-        denominazione: string,
-        sedeLegale: string,
-        codiceFiscale: string,
-        partitaIva: string,
-        formaGiuridica: string,
-        amministratore: string,
-        codiceFiscaleAmministratore: string,
-        durc: string,
-        scadenza: string,
+        attr: {label: string, value: string}[]
         dvr: {
             nome: string,
             presenza: boolean,
@@ -50,15 +42,17 @@ export interface ItemComunicazione {
 export const impresaTemporanea: Impresa = {
     tipo: "Affidataria",
     anagrafica: {
-        denominazione: "",
-        sedeLegale: "",
-        codiceFiscale: "",
-        partitaIva: "",
-        formaGiuridica: "",
-        amministratore: "",
-        codiceFiscaleAmministratore: "",
-        durc: "",
-        scadenza: "",
+        attr: [
+            {label: 'denominazione', value: ''},
+            {label: 'sedeLegale', value: ''},
+            {label: 'codiceFiscale', value: ''},
+            {label: 'partitaIva', value: ''},
+            {label: 'formaGiuridica', value: ''},
+            {label: 'amministratore', value: ''},
+            {label: 'codiceFiscaleAmministratore', value: ''},
+            {label: 'durc', value: ''},
+            {label: 'scadenza', value: ''},
+        ],
         dvr: {
             nome: "dvr",
             presenza: false,

@@ -56,7 +56,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
 
     /* MULTI SELECT PER IMPRESE SUBALPALT. E OPERAI AUTONOMI SCHEDA SQUADRA OPERATIVA */
     const impreseSubAutonomi = imprese.filter(i => i.tipo === "Subappaltatrice").map(im => {
-        return {label: im.anagrafica.denominazione, value: im}
+        return {label: im.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value, value: im}
     })
 
     const onSelectionChange = (e: OnChangeValue<any, any>, label: string) => {
@@ -373,7 +373,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             {cantiereSelezionato.squadraOperativa.impreseSubappaltatrici.map(i => {
                                 return(
                                     <>
-                                        <li className="rounded bg-gray-200 p-1 ml-1">{i.anagrafica.denominazione}</li>
+                                        <li className="rounded bg-gray-200 p-1 ml-1">{i.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value}</li>
                                     </>
                                 )
                             })}

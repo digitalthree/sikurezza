@@ -52,7 +52,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = () => {
                                     navigate(-1);
                                 }}
                             >
-                                {bi.anagrafica.denominazione}
+                                {bi.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value}
                             </li>
                         );
                     } else {

@@ -88,12 +88,12 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
         if (save && uploadToFauna && !modifica) {
             execQuery(createPonteggioInFauna, {
                 ...ponteggio,
-                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
+                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value}
             }).then((res) => {
                 dispatch(addPonteggio({
                     ...ponteggio,
                     faunaDocumentId: res.ref.value.id,
-                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
+                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string}
                 }))
                 dispatch(setPonteggioSelezionato(undefined))
                 dispatch(setPonteggioDaCreare(ponteggioDefault))
@@ -103,12 +103,12 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
         if(save && uploadToFauna && modifica){
             execQuery(updatePonteggioInFauna, {
                 ...ponteggio,
-                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
+                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value}
             }).then(() => {
                 dispatch(removePonteggio(ponteggioSelezionato?.faunaDocumentId as string))
                 dispatch(addPonteggio({
                     ...ponteggio,
-                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.denominazione as string}
+                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string}
                 }))
                 setModifica(false)
                 dispatch(setPonteggioSelezionato(undefined))
