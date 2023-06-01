@@ -142,8 +142,9 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
 
                 <div className="flex justify-between items-center mt-2">
                     <span className="font-bold">Datore di lavoro: </span>
-                    <div className="flex flex-col">
-                        <input type="checkbox" className="toggle toggle-sm" {...register("datoreLavoro")}
+                    <div className="flex flex-row items-center">
+                        NO
+                        <input type="checkbox" className="toggle ml-2 mr-2" {...register("datoreLavoro")}
                                onKeyDown={(e) => {
                                    if(e.key === "Enter"){
                                        e.preventDefault()
@@ -152,6 +153,7 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                                disabled={!editabile}
                                defaultChecked={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.datoreLavoro : maestranzaDaCreare.anagrafica.datoreLavoro}
                         />
+                        SI
                     </div>
                 </div>
 

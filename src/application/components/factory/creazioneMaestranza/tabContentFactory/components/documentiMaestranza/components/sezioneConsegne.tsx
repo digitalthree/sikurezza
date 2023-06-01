@@ -21,7 +21,7 @@ export interface SezioneConsegneProps {
 
 const SezioneConsegne: React.FC<SezioneConsegneProps> = (
     {
-        register,  errors, editabile, modifica
+        register, errors, editabile, modifica
     }
 ) => {
 
@@ -29,7 +29,7 @@ const SezioneConsegne: React.FC<SezioneConsegneProps> = (
     const maestranzaDaCreare = useSelector(MaestranzaDaCreareSelector)
     const [maestranza, setMaestranza] = useState(maestranzaDaCreare)
     useEffect(() => {
-        if(maestranzaSelezionata){
+        if (maestranzaSelezionata) {
             setMaestranza(maestranzaSelezionata)
         }
     }, [])
@@ -40,33 +40,46 @@ const SezioneConsegne: React.FC<SezioneConsegneProps> = (
     return (
         <>
             <div className="grid grid-cols-12 gap-4">
-                <span className="font-bold col-span-3">Consegna DPI: </span>
-                <input type="checkbox" className="toggle" {...register('consegnaDPI')}
-                       onKeyDown={(e) => {
-                           if(e.key === "Enter"){
-                               e.preventDefault()
-                           }
-                       }}
-                       disabled={!editabile}
-                       onChange={(e) => dispatch(setConsegnatoInMaestranza({nome: 'consegnaDPI', value: e.target.checked}))}
-                       defaultChecked={maestranza.documenti?.filter(d => d.nome === 'consegnaDPI')[0].consegnato}
-                />
+                <span className="font-bold col-span-2">Consegna DPI: </span>
+                <div className="col-span-2 flex flex-row">
+                    NO
+                    <input type="checkbox" className="toggle ml-2 mr-2" {...register('consegnaDPI')}
+                           onKeyDown={(e) => {
+                               if (e.key === "Enter") {
+                                   e.preventDefault()
+                               }
+                           }}
+                           disabled={!editabile}
+                           onChange={(e) => dispatch(setConsegnatoInMaestranza({
+                               nome: 'consegnaDPI',
+                               value: e.target.checked
+                           }))}
+                           defaultChecked={maestranza.documenti?.filter(d => d.nome === 'consegnaDPI')[0].consegnato}
+                    />
+                    SI
+                </div>
                 <span className="font-bold col-span-2">consegnato il: </span>
                 <input type="date" {...register("consegnaDPIConsegnatoIl")}
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
                        onKeyDown={(e) => {
-                           if(e.key === "Enter"){
+                           if (e.key === "Enter") {
                                e.preventDefault()
                            }
                        }}
                        disabled={!editabile}
-                       onChange={(e) => dispatch(setConsegnatoIlInMaestranza({nome: 'consegnaDPI', value: e.target.value}))}
+                       onChange={(e) => dispatch(setConsegnatoIlInMaestranza({
+                           nome: 'consegnaDPI',
+                           value: e.target.value
+                       }))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'consegnaDPI')[0].consegnatoIl}
                 />
                 {(consegnaDPI || maestranzaDaCreare.documenti.filter(d => d.nome === 'consegnaDPI')[0].file) ?
                     <VisualizzaEliminaFile file={consegnaDPI as string} modifica={editabile} nome="consegnaDPI"
-                                           eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "consegnaDPI", file: undefined}))}
-                    />:
+                                           eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({
+                                               nome: "consegnaDPI",
+                                               file: undefined
+                                           }))}
+                    /> :
                     <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({
                         nome: 'consegnaDPI',
                         file: (e.target.files) ? e.target.files[0] : undefined
@@ -74,33 +87,47 @@ const SezioneConsegne: React.FC<SezioneConsegneProps> = (
                 }
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
-                <span className="font-bold col-span-3">Consegna Tesserino: </span>
-                <input type="checkbox" className="toggle" {...register('consegnaTesserino')}
-                       onKeyDown={(e) => {
-                           if(e.key === "Enter"){
-                               e.preventDefault()
-                           }
-                       }}
-                       disabled={!editabile}
-                       onChange={(e) => dispatch(setConsegnatoInMaestranza({nome: 'consegnaTesserino', value: e.target.checked}))}
-                       defaultChecked={maestranza.documenti?.filter(d => d.nome === 'consegnaTesserino')[0].consegnato}
-                />
+                <span className="font-bold col-span-2">Consegna Tesserino: </span>
+                <div className="col-span-2 flex flex-row">
+                    NO
+                    <input type="checkbox" className="toggle ml-2 mr-2" {...register('consegnaTesserino')}
+                           onKeyDown={(e) => {
+                               if (e.key === "Enter") {
+                                   e.preventDefault()
+                               }
+                           }}
+                           disabled={!editabile}
+                           onChange={(e) => dispatch(setConsegnatoInMaestranza({
+                               nome: 'consegnaTesserino',
+                               value: e.target.checked
+                           }))}
+                           defaultChecked={maestranza.documenti?.filter(d => d.nome === 'consegnaTesserino')[0].consegnato}
+                    />
+                    SI
+                </div>
                 <span className="font-bold col-span-2">consegnato il: </span>
                 <input type="date" {...register("consegnaTesserinoConsegnatoIl")}
                        className="rounded border border-gray-400 shadow p-1 col-span-2"
                        onKeyDown={(e) => {
-                           if(e.key === "Enter"){
+                           if (e.key === "Enter") {
                                e.preventDefault()
                            }
                        }}
                        disabled={!editabile}
-                       onChange={(e) => dispatch(setConsegnatoIlInMaestranza({nome: 'consegnaTesserino', value: e.target.value}))}
+                       onChange={(e) => dispatch(setConsegnatoIlInMaestranza({
+                           nome: 'consegnaTesserino',
+                           value: e.target.value
+                       }))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'consegnaTesserino')[0].consegnatoIl}
                 />
                 {(consegnaTesserino || maestranzaDaCreare.documenti.filter(d => d.nome === 'consegnaTesserino')[0].file) ?
-                    <VisualizzaEliminaFile file={consegnaTesserino as string} modifica={editabile} nome="consegnaTesserino"
-                                           eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "consegnaTesserino", file: undefined}))}
-                    />:
+                    <VisualizzaEliminaFile file={consegnaTesserino as string} modifica={editabile}
+                                           nome="consegnaTesserino"
+                                           eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({
+                                               nome: "consegnaTesserino",
+                                               file: undefined
+                                           }))}
+                    /> :
                     <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({
                         nome: 'consegnaTesserino',
                         file: (e.target.files) ? e.target.files[0] : undefined

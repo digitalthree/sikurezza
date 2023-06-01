@@ -37,7 +37,7 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
     const [uploadToFauna, setUploadToFauna] = useState(false)
     const [gru, setGru] = useState<Gru>(gruDefault)
 
-    const onSubmit =  (gru: Gru) => {
+    const onSubmit = (gru: Gru) => {
         gru.documenti.forEach(e => {
             if (e.file.value && typeof e.file.value !== 'string') {
                 uploadFileS3(e.file.value).then((res) => {
@@ -65,7 +65,7 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
     useEffect(() => {
         if (gru.documenti.filter(d => !d.file.value || typeof d.file.value === 'string').length === gru.documenti.length) {
             setUploadToFauna(true)
-        }else{
+        } else {
             setUploadToFauna(false)
         }
     }, [gru])
@@ -75,27 +75,39 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
         if (save && uploadToFauna && !modifica) {
             execQuery(createGruInFauna, {
                 ...gru,
-                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string}
+                creatoDa: {
+                    id: impresaSelezionata?.faunaDocumentId as string,
+                    nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
+                }
             }).then((res) => {
                 dispatch(addGru({
                     ...gru,
                     faunaDocumentId: res.ref.value.id,
-                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string}
+                    creatoDa: {
+                        id: impresaSelezionata?.faunaDocumentId as string,
+                        nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
+                    }
                 }))
                 dispatch(setGruSelezionata(undefined))
                 dispatch(setGruDaCreare(gruDefault))
                 setSave(false)
             })
         }
-        if(save && uploadToFauna && modifica){
+        if (save && uploadToFauna && modifica) {
             execQuery(updateGruInFauna, {
                 ...gru,
-                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string}
+                creatoDa: {
+                    id: impresaSelezionata?.faunaDocumentId as string,
+                    nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
+                }
             }).then(() => {
                 dispatch(removeGru(gruSelezionata?.faunaDocumentId as string))
                 dispatch(addGru({
                     ...gru,
-                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string}
+                    creatoDa: {
+                        id: impresaSelezionata?.faunaDocumentId as string,
+                        nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
+                    }
                 }))
                 setModifica(false)
                 dispatch(setGruSelezionata(undefined))
@@ -118,7 +130,7 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
                                 {typeof a.value === 'string' && a.nome !== 'note' &&
                                     <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
                                            onKeyDown={(e) => {
-                                               if(e.key === "Enter"){
+                                               if (e.key === "Enter") {
                                                    e.preventDefault()
                                                }
                                            }}
@@ -132,7 +144,7 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
                                 {typeof a.value === 'boolean' &&
                                     <input type="checkbox" className="toggle"
                                            onKeyDown={(e) => {
-                                               if(e.key === "Enter"){
+                                               if (e.key === "Enter") {
                                                    e.preventDefault()
                                                }
                                            }}
@@ -146,7 +158,7 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
                                 {a.nome === 'note' &&
                                     <textarea className="rounded border border-gray-400 shadow p-1 col-span-9 w-1/2"
                                               onKeyDown={(e) => {
-                                                  if(e.key === "Enter"){
+                                                  if (e.key === "Enter") {
                                                       e.preventDefault()
                                                   }
                                               }}
@@ -169,7 +181,7 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
                                     <input type="date"
                                            className="rounded border border-gray-400 shadow p-1"
                                            onKeyDown={(e) => {
-                                               if(e.key === "Enter"){
+                                               if (e.key === "Enter") {
                                                    e.preventDefault()
                                                }
                                            }}
@@ -187,7 +199,7 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
                                 <input type="date"
                                        className="rounded border border-gray-400 shadow p-1"
                                        onKeyDown={(e) => {
-                                           if(e.key === "Enter"){
+                                           if (e.key === "Enter") {
                                                e.preventDefault()
                                            }
                                        }}
@@ -209,21 +221,25 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
                             <div className="grid grid-cols-7 mb-3">
                                 <span className="font-bold col-span-3">{d.nome}: </span>
                                 {typeof gru.documenti.filter(doc => doc.nome === d.nome)[0].presenza === 'boolean' ?
-                                    <input type="checkbox" className="toggle col-span-1 m-auto"
-                                           onKeyDown={(e) => {
-                                               if(e.key === "Enter"){
-                                                   e.preventDefault()
-                                               }
-                                           }}
-                                           disabled={!editabile}
-                                           checked={d.presenza as boolean}
-                                           onChange={(e) => {
-                                               dispatch(setDocumentoInGru({
-                                                   nome: d.nome,
-                                                   value: {...d, presenza: e.target.checked}
-                                               }))
-                                           }}
-                                    />
+                                    <div className="col-span-1 flex flex-row">
+                                        NO
+                                        <input type="checkbox" className="toggle col-span-1 mr-2 ml-2"
+                                               onKeyDown={(e) => {
+                                                   if (e.key === "Enter") {
+                                                       e.preventDefault()
+                                                   }
+                                               }}
+                                               disabled={!editabile}
+                                               checked={d.presenza as boolean}
+                                               onChange={(e) => {
+                                                   dispatch(setDocumentoInGru({
+                                                       nome: d.nome,
+                                                       value: {...d, presenza: e.target.checked}
+                                                   }))
+                                               }}
+                                        />
+                                        SI
+                                    </div>
                                     :
                                     <select
                                         value={d.presenza as ("SI" | "NO" | "NR")}
@@ -276,7 +292,8 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
                         <div className="modal-action"
                              onClick={() => onSubmit(gru)}
                         >
-                            <label htmlFor="my-modal-5" className="btn btn-warning w-full">{editabile && !modifica ? 'Crea Gru' : 'Modifica Gru'}</label>
+                            <label htmlFor="my-modal-5"
+                                   className="btn btn-warning w-full">{editabile && !modifica ? 'Crea Gru' : 'Modifica Gru'}</label>
                         </div>
                     }
 

@@ -17,7 +17,7 @@ import {Ponteggio, ponteggioDefault} from "../../../model/Ponteggio";
 import {uploadFileS3} from "../../../aws/s3APIs";
 import {createPonteggioInFauna, updatePonteggioInFauna} from "../../../faunadb/api/ponteggioAPIs";
 
-export interface CreazionePonteggioProps{
+export interface CreazionePonteggioProps {
     editabile: boolean,
     modifica: boolean,
     setModifica: (v: boolean) => void
@@ -39,7 +39,7 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
     const [uploadToFauna, setUploadToFauna] = useState(false)
     const [ponteggio, setPonteggio] = useState<Ponteggio>(ponteggioDefault)
 
-    const onSubmit =  (ponteggio: Ponteggio) => {
+    const onSubmit = (ponteggio: Ponteggio) => {
         ponteggio.allegatiPonteggio.forEach(a => {
             if (a.file.value && typeof a.file.value !== 'string') {
                 uploadFileS3(a.file.value).then((res) => {
@@ -79,7 +79,7 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
     useEffect(() => {
         if (ponteggio.allegatiPonteggio.filter(a => !a.file.value || typeof a.file.value === 'string').length === ponteggio.allegatiPonteggio.length) {
             setUploadToFauna(true)
-        }else{
+        } else {
             setUploadToFauna(false)
         }
     }, [ponteggio])
@@ -88,27 +88,39 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
         if (save && uploadToFauna && !modifica) {
             execQuery(createPonteggioInFauna, {
                 ...ponteggio,
-                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value}
+                creatoDa: {
+                    id: impresaSelezionata?.faunaDocumentId as string,
+                    nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value
+                }
             }).then((res) => {
                 dispatch(addPonteggio({
                     ...ponteggio,
                     faunaDocumentId: res.ref.value.id,
-                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string}
+                    creatoDa: {
+                        id: impresaSelezionata?.faunaDocumentId as string,
+                        nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
+                    }
                 }))
                 dispatch(setPonteggioSelezionato(undefined))
                 dispatch(setPonteggioDaCreare(ponteggioDefault))
                 setSave(false)
             })
         }
-        if(save && uploadToFauna && modifica){
+        if (save && uploadToFauna && modifica) {
             execQuery(updatePonteggioInFauna, {
                 ...ponteggio,
-                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value}
+                creatoDa: {
+                    id: impresaSelezionata?.faunaDocumentId as string,
+                    nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value
+                }
             }).then(() => {
                 dispatch(removePonteggio(ponteggioSelezionato?.faunaDocumentId as string))
                 dispatch(addPonteggio({
                     ...ponteggio,
-                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string}
+                    creatoDa: {
+                        id: impresaSelezionata?.faunaDocumentId as string,
+                        nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
+                    }
                 }))
                 setModifica(false)
                 dispatch(setPonteggioSelezionato(undefined))
@@ -118,7 +130,7 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
         }
     }, [save, uploadToFauna, ponteggio])
 
-    return(
+    return (
         <>
             <input type="checkbox" id="my-modal-6" className="modal-toggle"/>
             <label htmlFor="my-modal-6" className="modal cursor-pointer">
@@ -130,7 +142,7 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
                                 {typeof a.value === 'string' && a.nome !== "altezzaPonteggio" &&
                                     <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
                                            onKeyDown={(e) => {
-                                               if(e.key === "Enter"){
+                                               if (e.key === "Enter") {
                                                    e.preventDefault()
                                                }
                                            }}
@@ -144,21 +156,27 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
                                 {typeof a.value === 'boolean' &&
                                     <input type="checkbox" className="toggle"
                                            onKeyDown={(e) => {
-                                               if(e.key === "Enter"){
+                                               if (e.key === "Enter") {
                                                    e.preventDefault()
                                                }
                                            }}
                                            disabled={!editabile}
                                            checked={a.value as boolean}
                                            onChange={(e) => {
-                                               dispatch(setAttributoInPonteggio({nome: a.nome, value: e.target.checked}))
+                                               dispatch(setAttributoInPonteggio({
+                                                   nome: a.nome,
+                                                   value: e.target.checked
+                                               }))
                                            }}
                                     />
                                 }
                                 {a.nome === 'altezzaPonteggio' &&
                                     <select
                                         value={a.value as "<20m" | ">20m"}
-                                        onChange={(e) => dispatch(setAttributoInPonteggio({nome: a.nome, value: e.target.value}))}
+                                        onChange={(e) => dispatch(setAttributoInPonteggio({
+                                            nome: a.nome,
+                                            value: e.target.value
+                                        }))}
                                         disabled={!editabile}
                                         className="rounded border border-gray-400 shadow p-1"
                                     >
@@ -175,21 +193,25 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
                             <div className="grid grid-cols-7 mb-3">
                                 <span className="font-bold col-span-3">{ap.nome}: </span>
                                 {typeof ponteggio.allegatiPonteggio.filter(al => al.nome === ap.nome)[0].presenza === 'boolean' ?
-                                    <input type="checkbox" className="toggle col-span-1 m-auto"
-                                           onKeyDown={(e) => {
-                                               if(e.key === "Enter"){
-                                                   e.preventDefault()
-                                               }
-                                           }}
-                                           disabled={!editabile}
-                                           checked={ap.presenza as boolean}
-                                           onChange={(e) => {
-                                               dispatch(setAllegatoInPonteggio({
-                                                   nome: ap.nome,
-                                                   value: {...ap, presenza: e.target.checked}
-                                               }))
-                                           }}
-                                    />
+                                    <div className="col-span-1 flex flex-row">
+                                        NO
+                                        <input type="checkbox" className="toggle col-span-1 ml-2 mr-2"
+                                               onKeyDown={(e) => {
+                                                   if (e.key === "Enter") {
+                                                       e.preventDefault()
+                                                   }
+                                               }}
+                                               disabled={!editabile}
+                                               checked={ap.presenza as boolean}
+                                               onChange={(e) => {
+                                                   dispatch(setAllegatoInPonteggio({
+                                                       nome: ap.nome,
+                                                       value: {...ap, presenza: e.target.checked}
+                                                   }))
+                                               }}
+                                        />
+                                        SI
+                                    </div>
                                     :
                                     <select
                                         value={ap.presenza as ("SI" | "NO" | "NR")}
@@ -214,7 +236,10 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
                                                                eliminaFunction={() => {
                                                                    dispatch(setAllegatoInPonteggio({
                                                                        nome: ap.nome,
-                                                                       value: {...ap, file: {nome: "", value: undefined}}
+                                                                       value: {
+                                                                           ...ap,
+                                                                           file: {nome: "", value: undefined}
+                                                                       }
                                                                    }))
                                                                }
                                                                }
@@ -241,71 +266,78 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
                     {ponteggio.controlli.map(c => {
                         return (
                             <>
-                            <div className="grid grid-cols-3 gap-10 items-center mb-3">
-                                <span className="font-bold">{c.nome}: </span>
-                                <div className="flex flex-col">
-                                    <input type="checkbox" className="toggle col-span-1 m-auto"
+                                <div className="grid grid-cols-12 gap-7 items-center mb-3">
+                                    <span className="font-bold col-span-5">{c.nome}: </span>
+                                    <div className="flex flex-col">
+                                        <div className="col-span-2 flex flex-row">
+                                            NO
+                                            <input type="checkbox" className="toggle mr-2 ml-2"
+                                                   onKeyDown={(e) => {
+                                                       if (e.key === "Enter") {
+                                                           e.preventDefault()
+                                                       }
+                                                   }}
+                                                   disabled={!editabile}
+                                                   checked={c.effettuato}
+                                                   onChange={(e) => {
+                                                       dispatch(setControlloInPonteggio({
+                                                           nome: c.nome,
+                                                           value: {...c, effettuato: e.target.checked}
+                                                       }))
+                                                   }}
+                                            />
+                                            SI
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-8 gap-10 items-center mb-3">
+                                    <span className="font-bold col-span-3">{`Data ultimo ${c.nome}:`}</span>
+                                    <input type="date"
+                                           className="rounded border border-gray-400 shadow p-1 col-span-2"
                                            onKeyDown={(e) => {
-                                               if(e.key === "Enter"){
+                                               if (e.key === "Enter") {
                                                    e.preventDefault()
                                                }
                                            }}
                                            disabled={!editabile}
-                                           checked={c.effettuato}
+                                           value={c.data}
                                            onChange={(e) => {
                                                dispatch(setControlloInPonteggio({
                                                    nome: c.nome,
-                                                   value: {...c, effettuato: e.target.checked}
+                                                   value: {...c, data: e.target.value}
                                                }))
                                            }}
                                     />
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-8 gap-10 items-center mb-3">
-                                <span className="font-bold col-span-3">{`Data ultimo ${c.nome}:`}</span>
-                                <input type="date"
-                                       className="rounded border border-gray-400 shadow p-1 col-span-2"
-                                       onKeyDown={(e) => {
-                                           if(e.key === "Enter"){
-                                               e.preventDefault()
-                                           }
-                                       }}
-                                       disabled={!editabile}
-                                       value={c.data}
-                                       onChange={(e) => {
-                                           dispatch(setControlloInPonteggio({
-                                               nome: c.nome,
-                                               value: {...c, data: e.target.value}
-                                           }))
-                                       }}
-                                />
-                                <div className="col-span-3 m-auto mr-0">
-                                {c.file.value ?
-                                    <VisualizzaEliminaFile file={c.file.value} modifica={editabile} nome=""
-                                                           eliminaFunction={() => {
-                                                               dispatch(setControlloInPonteggio({
-                                                                   nome: c.nome,
-                                                                   value: {...c, file: {nome: "", value: undefined}}
-                                                               }))
-                                                           }
-                                                           }
-                                    /> :
-                                    <InputFile editabile={editabile} onChangeFunction={(e) => {
-                                        dispatch(setControlloInPonteggio({
-                                            nome: c.nome,
-                                            value: {
-                                                ...c,
-                                                file: {
-                                                    nome: "",
-                                                    value: (e.target.files) ? e.target.files[0] : undefined
-                                                }
+                                    <div className="col-span-3 m-auto mr-0">
+                                        {c.file.value ?
+                                            <VisualizzaEliminaFile file={c.file.value} modifica={editabile} nome=""
+                                                                   eliminaFunction={() => {
+                                                                       dispatch(setControlloInPonteggio({
+                                                                           nome: c.nome,
+                                                                           value: {
+                                                                               ...c,
+                                                                               file: {nome: "", value: undefined}
+                                                                           }
+                                                                       }))
+                                                                   }
+                                                                   }
+                                            /> :
+                                            <InputFile editabile={editabile} onChangeFunction={(e) => {
+                                                dispatch(setControlloInPonteggio({
+                                                    nome: c.nome,
+                                                    value: {
+                                                        ...c,
+                                                        file: {
+                                                            nome: "",
+                                                            value: (e.target.files) ? e.target.files[0] : undefined
+                                                        }
+                                                    }
+                                                }))
                                             }
-                                        }))
-                                    }
-                                    }/>
-                                }
+                                            }/>
+                                        }
+                                    </div>
                                 </div>
-                            </div>
                             </>
                         )
                     })}
@@ -313,7 +345,8 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
                         <div className="modal-action"
                              onClick={() => onSubmit(ponteggio)}
                         >
-                            <label htmlFor="my-modal-6" className="btn btn-warning w-full">{editabile && !modifica ? 'Crea Ponteggio' : 'Modifica Ponteggio'}</label>
+                            <label htmlFor="my-modal-6"
+                                   className="btn btn-warning w-full">{editabile && !modifica ? 'Crea Ponteggio' : 'Modifica Ponteggio'}</label>
                         </div>
                     }
                 </label>

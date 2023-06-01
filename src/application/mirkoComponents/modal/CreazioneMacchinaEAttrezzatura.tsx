@@ -19,7 +19,7 @@ import {
     updateMacchinaEAttrezzaturaInFauna
 } from "../../../faunadb/api/macchinaEAttrezzaturaAPIs";
 
-export interface CreazioneMacchinaEAttrezzaturaProps{
+export interface CreazioneMacchinaEAttrezzaturaProps {
     editabile: boolean,
     modifica: boolean,
     setModifica: (v: boolean) => void
@@ -40,7 +40,7 @@ const CreazioneMacchinaEAttrezzatura: React.FC<CreazioneMacchinaEAttrezzaturaPro
     const [uploadToFauna, setUploadToFauna] = useState(false)
     const [macchinaEAttrezzatura, setMacchinaEAttrezzatura] = useState<MacchinaEAttrezzatura>(macchinaEAttrezzaturaDefault)
 
-    const onSubmit =  (macchinaEAttrezzatura: MacchinaEAttrezzatura) => {
+    const onSubmit = (macchinaEAttrezzatura: MacchinaEAttrezzatura) => {
         macchinaEAttrezzatura.documenti.forEach(d => {
             if (d.file.value && typeof d.file.value !== 'string') {
                 uploadFileS3(d.file.value).then((res) => {
@@ -67,7 +67,7 @@ const CreazioneMacchinaEAttrezzatura: React.FC<CreazioneMacchinaEAttrezzaturaPro
     useEffect(() => {
         if (macchinaEAttrezzatura.documenti.filter(d => !d.file.value || typeof d.file.value === 'string').length === macchinaEAttrezzatura.documenti.length) {
             setUploadToFauna(true)
-        }else{
+        } else {
             setUploadToFauna(false)
         }
     }, [macchinaEAttrezzatura])
@@ -76,27 +76,39 @@ const CreazioneMacchinaEAttrezzatura: React.FC<CreazioneMacchinaEAttrezzaturaPro
         if (save && uploadToFauna && !modifica) {
             execQuery(createMacchinaEAttrezzaturaInFauna, {
                 ...macchinaEAttrezzatura,
-                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string}
+                creatoDa: {
+                    id: impresaSelezionata?.faunaDocumentId as string,
+                    nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
+                }
             }).then((res) => {
                 dispatch(addMacchinaEAttrezzatura({
                     ...macchinaEAttrezzatura,
                     faunaDocumentId: res.ref.value.id,
-                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string}
+                    creatoDa: {
+                        id: impresaSelezionata?.faunaDocumentId as string,
+                        nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
+                    }
                 }))
                 dispatch(setMacchinaEAttrezzaturaSelezionato(undefined))
                 dispatch(setMacchinaEAttrezzaturaDaCreare(macchinaEAttrezzaturaDefault))
                 setSave(false)
             })
         }
-        if(save && uploadToFauna && modifica){
+        if (save && uploadToFauna && modifica) {
             execQuery(updateMacchinaEAttrezzaturaInFauna, {
                 ...macchinaEAttrezzatura,
-                creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string}
+                creatoDa: {
+                    id: impresaSelezionata?.faunaDocumentId as string,
+                    nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
+                }
             }).then(() => {
                 dispatch(removeMacchinaEAttrezzatura(macchinaEAttrezzaturaSelezionato?.faunaDocumentId as string))
                 dispatch(addMacchinaEAttrezzatura({
                     ...macchinaEAttrezzatura,
-                    creatoDa: {id: impresaSelezionata?.faunaDocumentId as string, nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string}
+                    creatoDa: {
+                        id: impresaSelezionata?.faunaDocumentId as string,
+                        nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
+                    }
                 }))
                 setModifica(false)
                 dispatch(setMacchinaEAttrezzaturaSelezionato(undefined))
@@ -106,7 +118,7 @@ const CreazioneMacchinaEAttrezzatura: React.FC<CreazioneMacchinaEAttrezzaturaPro
         }
     }, [save, uploadToFauna, macchinaEAttrezzatura])
 
-    return(
+    return (
         <>
             <input type="checkbox" id="my-modal-7" className="modal-toggle"/>
             <label htmlFor="my-modal-7" className="modal cursor-pointer">
@@ -118,19 +130,25 @@ const CreazioneMacchinaEAttrezzatura: React.FC<CreazioneMacchinaEAttrezzaturaPro
                                 {a.nome !== "categoria" ?
                                     <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
                                            onKeyDown={(e) => {
-                                               if(e.key === "Enter"){
+                                               if (e.key === "Enter") {
                                                    e.preventDefault()
                                                }
                                            }}
                                            disabled={!editabile}
                                            value={a.value as string}
                                            onChange={e => {
-                                               dispatch(setAttributoInMacchinaEAttrezzatura({nome: a.nome, value: e.target.value}))
+                                               dispatch(setAttributoInMacchinaEAttrezzatura({
+                                                   nome: a.nome,
+                                                   value: e.target.value
+                                               }))
                                            }}
                                     /> :
                                     <select
                                         value={a.value as "Macchina" | "Attrezzatura"}
-                                        onChange={(e) => dispatch(setAttributoInMacchinaEAttrezzatura({nome: a.nome, value: e.target.value}))}
+                                        onChange={(e) => dispatch(setAttributoInMacchinaEAttrezzatura({
+                                            nome: a.nome,
+                                            value: e.target.value
+                                        }))}
                                         disabled={!editabile}
                                         className="rounded border border-gray-400 shadow p-1"
                                     >
@@ -147,21 +165,25 @@ const CreazioneMacchinaEAttrezzatura: React.FC<CreazioneMacchinaEAttrezzaturaPro
                         return (
                             <div className="grid grid-cols-7 mb-3">
                                 <span className="font-bold col-span-3">{d.nome}: </span>
-                                <input type="checkbox" className="toggle col-span-1 m-auto"
-                                       onKeyDown={(e) => {
-                                           if(e.key === "Enter"){
-                                               e.preventDefault()
-                                           }
-                                       }}
-                                       disabled={!editabile}
-                                       checked={d.presenza as boolean}
-                                       onChange={(e) => {
-                                           dispatch(setDocumentoInMacchinaEAttrezzatura({
-                                               nome: d.nome,
-                                               value: {...d, presenza: e.target.checked}
-                                           }))
-                                       }}
-                                />
+                                <div className="col-span-1 flex flex-row">
+                                    NO
+                                    <input type="checkbox" className="toggle col-span-1 ml-2 mr-2"
+                                           onKeyDown={(e) => {
+                                               if (e.key === "Enter") {
+                                                   e.preventDefault()
+                                               }
+                                           }}
+                                           disabled={!editabile}
+                                           checked={d.presenza as boolean}
+                                           onChange={(e) => {
+                                               dispatch(setDocumentoInMacchinaEAttrezzatura({
+                                                   nome: d.nome,
+                                                   value: {...d, presenza: e.target.checked}
+                                               }))
+                                           }}
+                                    />
+                                    SI
+                                </div>
                                 <div className="col-span-3 m-auto mr-0">
                                     {d.file.value ?
                                         <VisualizzaEliminaFile file={d.file.value} modifica={editabile} nome=""
@@ -198,7 +220,7 @@ const CreazioneMacchinaEAttrezzatura: React.FC<CreazioneMacchinaEAttrezzaturaPro
                             <input type="date"
                                    className="rounded border border-gray-400 shadow p-1"
                                    onKeyDown={(e) => {
-                                       if(e.key === "Enter"){
+                                       if (e.key === "Enter") {
                                            e.preventDefault()
                                        }
                                    }}
@@ -207,7 +229,10 @@ const CreazioneMacchinaEAttrezzatura: React.FC<CreazioneMacchinaEAttrezzaturaPro
                                    onChange={(e) => {
                                        dispatch(setUltimaRevisioneInMacchinaEAttrezzatura({
                                            nome: macchinaEAttrezzatura.ultimaRevisione.nome,
-                                           value: {...macchinaEAttrezzatura.ultimaRevisione, effettuataIl: e.target.value}
+                                           value: {
+                                               ...macchinaEAttrezzatura.ultimaRevisione,
+                                               effettuataIl: e.target.value
+                                           }
                                        }))
                                    }}
                             />
@@ -229,7 +254,8 @@ const CreazioneMacchinaEAttrezzatura: React.FC<CreazioneMacchinaEAttrezzaturaPro
                         <div className="modal-action"
                              onClick={() => onSubmit(macchinaEAttrezzatura)}
                         >
-                            <label htmlFor="my-modal-7" className="btn btn-warning w-full">{editabile && !modifica ? 'Crea Macchina o Attrezzatura' : 'Modifica Macchina o Attrezzatura'}</label>
+                            <label htmlFor="my-modal-7"
+                                   className="btn btn-warning w-full">{editabile && !modifica ? 'Crea Macchina o Attrezzatura' : 'Modifica Macchina o Attrezzatura'}</label>
                         </div>
                     }
                 </label>

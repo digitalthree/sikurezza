@@ -48,15 +48,17 @@ export const DocumentiImpresa: React.FC<DocumentiProps> = (
                             <div className="col-span-2">
                                 <span className="font-bold">{d.nome}</span>
                             </div>
-                            <div>
+                            <div className="flex flex-row justify-center">
+                                NO
                                 <input type="checkbox"
-                                       className="toggle"
+                                       className="toggle ml-2 mr-2"
                                        checked={d.presenza}
                                        onChange={() => dispatch(setPresenzaInDocumenti({
                                            id: index,
                                            value: !d.presenza
                                        }))}
                                 />
+                                SI
                             </div>
                             <div className="col-span-2" key={`div${index}`}>
                                 <div className="flex justify-center">
