@@ -71,7 +71,7 @@ function App() {
                                     <Route path="cantiere" element={<CreazioneCantiereTabs/>}/>
                                 </Route>
                                 <Route path="assistenza" element={<Assistenza/>}/>
-                                <Route path="creazione/impresa" element={<CreazioneImpresa primoAccesso={false}/>}/>
+                                <Route path="creazione/impresa" element={<CreazioneImpresa primoAccesso={false }/>}/>
                                 <Route path="totalControl" element={<TotalControl/>}/>
                             </Route>
                         </Routes>

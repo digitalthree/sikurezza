@@ -32,6 +32,8 @@ import {setPonteggioSelezionato} from "../../store/ponteggioSlice";
 import CreazioneGru from "../mirkoComponents/modal/CreazioneGru";
 import {setGruSelezionata} from "../../store/gruSlice";
 import {setMaestranzaSelezionata} from "../../store/maestranzaSlice";
+import {useNavigate} from "react-router-dom";
+import CreazioneMaestranzaModale from "../mirkoComponents/modal/CreazioneMaestranzaModale";
 
 export interface TotalControlProps {
 
@@ -49,6 +51,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
     const ricercaByPonteggio = useSelector(TotalControlRicercaByPonteggioSelector)
     const ricercaByGru = useSelector(TotalControlRicercaByGruSelector)
     const {execQuery} = useFaunaQuery()
+    const navigate = useNavigate()
 
     const [modifica, setModifica] = useState(true)
 
@@ -119,7 +122,11 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                 if(i.tipo === "Maestranza"){
                     if (((i.item as Maestranza).anagrafica.filter(m => m.label === 'nome')[0].value as string).toLowerCase()
                         .replace(/\s+/g, '')
-                        .includes(ricercaByMaestranza.toLowerCase().replace(/\s+/g, ''))) {
+                        .includes(ricercaByMaestranza.toLowerCase().replace(/\s+/g, '')) ||
+                        ((i.item as Maestranza).anagrafica.filter(m => m.label === 'cognome')[0].value as string).toLowerCase()
+                            .replace(/\s+/g, '')
+                            .includes(ricercaByMaestranza.toLowerCase().replace(/\s+/g, ''))
+                    ) {
                         return i
                     }
                 }
@@ -222,7 +229,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                                         className="link link-hover hover:text-sky-500">
                                         <th>{index + 1}</th>
                                         <td>{(i.item as Maestranza).creatoDa.nome.toUpperCase()}</td>
-                                        <td>{(i.item as Maestranza).anagrafica.filter(m => m.label === 'nome')[0].value}</td>
+                                        <td>{(i.item as Maestranza).anagrafica.filter(m => m.label === 'nome')[0].value} {(i.item as Maestranza).anagrafica.filter(m => m.label === 'cognome')[0].value}</td>
                                         <td>
                                             <FiAlertTriangle size={30} color="red"/>
                                         </td>
@@ -291,6 +298,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
             <CreazioneMacchinaEAttrezzatura editabile={true} modifica={modifica} setModifica={setModifica}/>
             <CreazionePonteggio editabile={true} modifica={modifica} setModifica={setModifica}/>
             <CreazioneGru editabile={true} modifica={modifica} setModifica={setModifica}/>
+            <CreazioneMaestranzaModale editabile={true} modifica={modifica}/>
         </>
     )
 }

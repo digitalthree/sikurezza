@@ -3,9 +3,11 @@ import TabContentMaestranzaFactory from "./tabContentFactory/TabContentMaestranz
 import {useLocation} from "react-router-dom";
 
 export interface CreazioneMaestranzaProps {
+    editabile?: boolean
+    modifica?: boolean
 }
 
-const CreazioneMaestranza: React.FC<CreazioneMaestranzaProps> = ({}) => {
+const CreazioneMaestranza: React.FC<CreazioneMaestranzaProps> = ({editabile, modifica}) => {
 
     const [tabActive, setTabActive] = useState("Anagrafica");
     const location = useLocation()
@@ -37,8 +39,8 @@ const CreazioneMaestranza: React.FC<CreazioneMaestranzaProps> = ({}) => {
                 </a>
             </div>
             <TabContentMaestranzaFactory selectedTab={tabActive} setTabActive={setTabActive}
-                                         editabile={location.state.editabile as boolean}
-                                         modifica={location.state.modifica as boolean}/>
+                                         editabile={editabile ? editabile : location.state.editabile as boolean}
+                                         modifica={modifica ? modifica : location.state.modifica as boolean}/>
         </div>
     )
 }

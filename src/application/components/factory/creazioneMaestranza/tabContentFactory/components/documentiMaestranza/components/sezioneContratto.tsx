@@ -81,7 +81,7 @@ const SezioneContratto: React.FC<SezioneContrattoProps> = (
                 />
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
-                <span className="font-bold col-span-3">Data di fine contartto: </span>
+                <span className="font-bold col-span-3">Data di fine contratto: </span>
                 <input type="date" {...register("dataFineContratto")}
                        onKeyDown={(e) => {
                            if(e.key === "Enter"){

@@ -10,6 +10,7 @@ import {
 import {Impresa} from "../../../../../../model/Impresa";
 import {estintoreDefault} from "../../../../../../model/Estintore";
 import {maestranzaDefault} from "../../../../../../model/Maestranza";
+import {ImpresaSelezionataSelector} from "../../../../../../store/impresaSlice";
 
 export interface AnagraficaMaestranzaProps{
     setTabActive: (s:string) => void
@@ -24,15 +25,16 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
     const dispatch = useDispatch()
     const maestranzaDaCreare = useSelector(MaestranzaDaCreareSelector)
     const maestranzaSelezionata = useSelector(MaestranzaSelezionataSelector)
+    const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
+
+    useEffect(() => {
+        dispatch(setAnagraficaMaestranza({label: 'impresaAppartenenza', value: impresaSelezionata?.anagrafica.attr.filter(a => a.label === "denominazione")[0].value as string}))
+    }, [impresaSelezionata])
 
 
 
     const {register,  formState: {errors}} = useForm();
 
-    const onSubmit = (data: any) => {
-        dispatch(setAnagraficaMaestranza(data))
-        setTabActive("Documenti")
-    }
 
 
     return (
@@ -140,8 +142,7 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                                }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
-                               value={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.filter(m => m.label === 'impresaAppartenenza')[0].value as string : maestranzaDaCreare.anagrafica.filter(m => m.label === 'impresaAppartenenza')[0].value as string}
-                               onChange={(e) => dispatch(setAnagraficaMaestranza({label: 'impresaAppartenenza', value: e.target.value}))}
+                               value={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.filter(m => m.label === 'impresaAppartenenza')[0].value as string : impresaSelezionata?.anagrafica.attr.filter(a => a.label === "denominazione")[0].value}
                         />
                         {errors.impresaAppartenenza && <span className="font-bold text-red-600">Campo obbligatorio</span>}
                     </div>
