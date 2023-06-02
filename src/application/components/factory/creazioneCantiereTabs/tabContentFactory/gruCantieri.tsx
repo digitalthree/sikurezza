@@ -65,15 +65,24 @@ const GruCantieriTab: React.FC<GruCantieriProps> = ({setIndex}) => {
         </span>
                 {cantiereSelezionato ?
                     <>
-                        <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
-                            {cantiereSelezionato.gruMezziDiSollevamento.listaGru.map(i => {
-                                return(
-                                    <>
-                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.attr.filter(a => a.nome === "tipologia")[0].value} - ${i.attr.filter(a => a.nome === "noleggiatore")[0].value}`}</li>
-                                    </>
-                                )
+                        <Select
+                            className="ml-5 w-8/12 sm:w-8/12 rounded-md"
+                            isDisabled={!location.state.editabile}
+                            placeholder="Seleziona"
+                            noOptionsMessage={() => "Gru /M.S. terminate"}
+                            closeMenuOnSelect={false}
+                            components={animatedComponents}
+                            isMulti
+                            options={gru}
+                            value={cantiereSelezionato.gruMezziDiSollevamento.listaGru.map(g => {
+                                return {label: g.attr.filter(a => a.nome === "tipologia")[0].value, value: g}
                             })}
-                        </ul>
+                            onChange={(e) => {
+                                let gru: Gru[] = []
+                                e.forEach((v: any) => gru.push(v.value as Gru))
+                                dispatch(setGruInCantiere(gru))
+                            }}
+                        />
                     </>
                     :
                     <Select

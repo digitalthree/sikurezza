@@ -267,7 +267,7 @@ const ElettricoCantieriTab: React.FC<ElettricoCantieriProps> = ({setIndex}) => {
             <Nota controlliPeriodici={verifichePeriodiche} setControlliPeriodici={setVerifichePeriodiche} label={"Verifiche periodiche (AUSL)"}
                   labelSubTitle={"(Trascorsi 2 anni dalla messa in esercizio)"}/>
 
-            {location.state.editabile &&
+            {location.state.editabile && !location.state.modifica &&
                 <div className="flex mt-8 mb-6 mx-auto w-60">
                     <div className="rounded-bl rounded-tl bg-amber-600 p-2">
                         <TfiSave size="30px" className="text-white"/>
@@ -282,6 +282,24 @@ const ElettricoCantieriTab: React.FC<ElettricoCantieriProps> = ({setIndex}) => {
                         }}
                     >
                         Crea Cantiere
+                    </button>
+                </div>
+            }
+            {location.state.editabile && location.state.modifica &&
+                <div className="flex mt-8 mb-6 mx-auto w-60">
+                    <div className="rounded-bl rounded-tl bg-amber-600 p-2">
+                        <TfiSave size="30px" className="text-white"/>
+                    </div>
+                    <button
+                        type="submit"
+                        className="rounded-br rounded-tr bg-amber-400 p-2 w-full text-white hover:cursor-pointer font-bold"
+                        onClick={() => {
+                            dispatch(setRegistroControlliImpiantoElettricoInCantiere(registroDiControllo))
+                            dispatch(setVerifichePeriodicheImpiantoElettricoInCantiere(verifichePeriodiche))
+                            setUploadToS3(true)
+                        }}
+                    >
+                        Modifica Cantiere
                     </button>
                 </div>
             }

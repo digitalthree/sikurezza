@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Select, {OnChangeValue} from "react-select";
-import makeAnimated from "react-select/animated";
+import makeAnimated, {MultiValue} from "react-select/animated";
 import {TfiSave} from "react-icons/tfi";
 import {getMaestranzaById} from "../../../../../faunadb/api/maestranzaAPIs";
 import {
@@ -24,7 +24,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
 
     const location = useLocation()
 
-    const animatedComponents = makeAnimated();
+    const animatedComponents = makeAnimated({});
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
     const maestranze = useSelector(MaestranzeSelector)
     const imprese = useSelector(ImpreseSelector)
@@ -80,15 +80,20 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                 <span className="w-4/12 sm:w-4/12">Responsabile Tecnico</span>
                 {cantiereSelezionato ?
                     <>
-                        <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
-                            {cantiereSelezionato.squadraOperativa.responsabileTecnico.map(i => {
-                                return(
-                                    <>
-                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.anagrafica.filter(m => m.label === 'nome')[0].value} ${i.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
-                                    </>
-                                )
+                        <Select
+                            className="ml-5 w-8/12 sm:w-8/12 rounded-md"
+                            isDisabled={!location.state.editabile}
+                            placeholder="Seleziona"
+                            noOptionsMessage={() => "Operai terminati"}
+                            closeMenuOnSelect={false}
+                            components={animatedComponents}
+                            value={cantiereSelezionato.squadraOperativa.responsabileTecnico.map(m => {
+                                return {label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: m}
                             })}
-                        </ul>
+                            isMulti
+                            options={operai}
+                            onChange={(e) => onSelectionChange(e, "Responsabile Tecnico")}
+                        />
                     </>
                     :
                     <Select
@@ -113,15 +118,20 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                 <span className="w-4/12 sm:w-4/12">Preposti</span>
                 {cantiereSelezionato ?
                     <>
-                        <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
-                            {cantiereSelezionato.squadraOperativa.preposti.map(i => {
-                                return(
-                                    <>
-                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.anagrafica.filter(m => m.label === 'nome')[0].value} ${i.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
-                                    </>
-                                )
+                        <Select
+                            className="ml-5 w-8/12 sm:w-8/12 rounded-md"
+                            isDisabled={!location.state.editabile}
+                            placeholder="Seleziona"
+                            noOptionsMessage={() => "Operai terminati"}
+                            closeMenuOnSelect={false}
+                            components={animatedComponents}
+                            isMulti
+                            options={operai}
+                            value={cantiereSelezionato.squadraOperativa.preposti.map(m => {
+                                return {label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: m}
                             })}
-                        </ul>
+                            onChange={(e) => onSelectionChange(e, "Preposti")}
+                        />
                     </>
                     :
                     <Select
@@ -145,15 +155,20 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                 <span className="w-4/12 sm:w-4/12">Addetti Primo Soccorso</span>
                 {cantiereSelezionato ?
                     <>
-                        <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
-                            {cantiereSelezionato.squadraOperativa.addettiPrimoSoccorso.map(i => {
-                                return(
-                                    <>
-                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.anagrafica.filter(m => m.label === 'nome')[0].value} ${i.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
-                                    </>
-                                )
+                        <Select
+                            className="ml-5 w-8/12 sm:w-8/12 rounded-md"
+                            isDisabled={!location.state.editabile}
+                            placeholder="Seleziona"
+                            noOptionsMessage={() => "Operai terminati"}
+                            closeMenuOnSelect={false}
+                            components={animatedComponents}
+                            isMulti
+                            options={operai}
+                            value={cantiereSelezionato.squadraOperativa.addettiPrimoSoccorso.map(m => {
+                                return {label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: m}
                             })}
-                        </ul>
+                            onChange={(e) => onSelectionChange(e, "Addetti Primo Soccorso")}
+                        />
                     </>
                     :
                     <Select
@@ -177,15 +192,20 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                 <span className="w-4/12 sm:w-4/12">Addetti Antincendio</span>
                 {cantiereSelezionato ?
                     <>
-                        <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
-                            {cantiereSelezionato.squadraOperativa.addettiAntiIncendio.map(i => {
-                                return(
-                                    <>
-                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.anagrafica.filter(m => m.label === 'nome')[0].value} ${i.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
-                                    </>
-                                )
+                        <Select
+                            className="ml-5 w-8/12 sm:w-8/12 rounded-md"
+                            isDisabled={!location.state.editabile}
+                            placeholder="Seleziona"
+                            noOptionsMessage={() => "Operai terminati"}
+                            closeMenuOnSelect={false}
+                            components={animatedComponents}
+                            isMulti
+                            options={operai}
+                            value={cantiereSelezionato.squadraOperativa.addettiAntiIncendio.map(m => {
+                                return {label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: m}
                             })}
-                        </ul>
+                            onChange={(e) => onSelectionChange(e, "Addetti Antincendio")}
+                        />
                     </>
                     :
                     <Select
@@ -207,7 +227,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                               justify-center items-center my-2 text-right leading-4 font-semibold"
             >
                 <span className="w-4/12 sm:w-4/12">RSL</span>
-                {cantiereSelezionato ?
+                {cantiereSelezionato  && !location.state.editabile ?
                     <>
                         <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
                             <li className="rounded bg-gray-200 p-2 ml-1">{`${cantiereSelezionato.squadraOperativa.RLS.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato.squadraOperativa.RLS.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
@@ -222,7 +242,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                         closeMenuOnSelect={false}
                         components={animatedComponents}
                         options={operai}
-                        value={RLS}
+                        value={cantiereSelezionato?.squadraOperativa.RLS ? {label: `${cantiereSelezionato?.squadraOperativa.RLS.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato?.squadraOperativa.RLS.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: cantiereSelezionato?.squadraOperativa.RLS} : RLS}
                         onChange={(e) => {
                             if (e) {
                                 setRLS([e] as { label: string, value: Maestranza }[])
@@ -239,7 +259,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                               justify-center items-center my-2 text-right leading-4 font-semibold"
             >
                 <span className="w-4/12 sm:w-4/12">Medico Competente</span>
-                {cantiereSelezionato ?
+                {cantiereSelezionato && !location.state.editabile ?
                     <>
                         <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
                             <li className="rounded bg-gray-200 p-2 ml-1">{`${cantiereSelezionato.squadraOperativa.medicoCompetente.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato.squadraOperativa.medicoCompetente.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
@@ -254,7 +274,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                         closeMenuOnSelect={false}
                         components={animatedComponents}
                         options={operai}
-                        value={medico}
+                        value={cantiereSelezionato?.squadraOperativa.medicoCompetente ? {label: `${cantiereSelezionato?.squadraOperativa.medicoCompetente.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato?.squadraOperativa.medicoCompetente.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: cantiereSelezionato?.squadraOperativa.medicoCompetente} : medico}
                         onChange={(e) => {
                             if (e) {
                                 setMedico([e] as { label: string, value: Maestranza }[])
@@ -270,7 +290,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                               justify-center items-center my-2 text-right leading-4 font-semibold"
             >
                 <span className="w-4/12 sm:w-4/12">RSPP</span>
-                {cantiereSelezionato ?
+                {cantiereSelezionato && !location.state.editabile ?
                     <>
                         <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
                             <li className="rounded bg-gray-200 p-2 ml-1">{`${cantiereSelezionato.squadraOperativa.RSPP.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato.squadraOperativa.RSPP.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
@@ -285,7 +305,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                         closeMenuOnSelect={false}
                         components={animatedComponents}
                         options={operai}
-                        value={RSPP}
+                        value={cantiereSelezionato?.squadraOperativa.RSPP ? {label: `${cantiereSelezionato?.squadraOperativa.RSPP.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato?.squadraOperativa.RSPP.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: cantiereSelezionato?.squadraOperativa.RSPP} : RSPP}
                         onChange={(e) => {
                             if (e) {
                                 setRSPP([e] as { label: string, value: Maestranza }[])
@@ -303,15 +323,20 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                 <span className="w-4/12 sm:w-4/12">Delegati Sicurezza</span>
                 {cantiereSelezionato ?
                     <>
-                        <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
-                            {cantiereSelezionato.squadraOperativa.delegatiSicurezza.map(i => {
-                                return(
-                                    <>
-                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.anagrafica.filter(m => m.label === 'nome')[0].value} ${i.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
-                                    </>
-                                )
+                        <Select
+                            className="ml-5 w-8/12 sm:w-8/12 rounded-md"
+                            isDisabled={!location.state.editabile}
+                            placeholder="Seleziona"
+                            noOptionsMessage={() => "Operai terminati"}
+                            closeMenuOnSelect={false}
+                            components={animatedComponents}
+                            isMulti
+                            options={operai}
+                            value={cantiereSelezionato.squadraOperativa.delegatiSicurezza.map(m => {
+                                return {label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: m}
                             })}
-                        </ul>
+                            onChange={(e) => onSelectionChange(e, "Delegati Sicurezza")}
+                        />
                     </>
                     :
                     <Select
@@ -335,15 +360,20 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                 <span className="w-4/12 sm:w-4/12">Squadra Operai</span>
                 {cantiereSelezionato ?
                     <>
-                        <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
-                            {cantiereSelezionato.squadraOperativa.squadraOperai.map(i => {
-                                return(
-                                    <>
-                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.anagrafica.filter(m => m.label === 'nome')[0].value} ${i.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
-                                    </>
-                                )
+                        <Select
+                            className="ml-5 w-8/12 sm:w-8/12 rounded-md"
+                            isDisabled={!location.state.editabile}
+                            placeholder="Seleziona"
+                            noOptionsMessage={() => "Operai terminati"}
+                            closeMenuOnSelect={false}
+                            components={animatedComponents}
+                            isMulti
+                            options={operai}
+                            value={cantiereSelezionato.squadraOperativa.squadraOperai.map(m => {
+                                return {label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: m}
                             })}
-                        </ul>
+                            onChange={(e) => onSelectionChange(e, "Squadra Operai")}
+                        />
                     </>
                     :
                     <Select
@@ -369,15 +399,20 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
         </span>
                 {cantiereSelezionato ?
                     <>
-                        <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
-                            {cantiereSelezionato.squadraOperativa.impreseSubappaltatrici.map(i => {
-                                return(
-                                    <>
-                                        <li className="rounded bg-gray-200 p-1 ml-1">{i.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value}</li>
-                                    </>
-                                )
+                        <Select
+                            className="ml-5 w-8/12 sm:w-8/12 rounded-md"
+                            isDisabled={!location.state.editabile}
+                            placeholder="Seleziona"
+                            noOptionsMessage={() => "Terminato"}
+                            closeMenuOnSelect={false}
+                            components={animatedComponents}
+                            isMulti
+                            options={impreseSubAutonomi}
+                            value={cantiereSelezionato.squadraOperativa.impreseSubappaltatrici.map(im => {
+                                return {label: im.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value, value: im}
                             })}
-                        </ul>
+                            onChange={(e) => onSelectionChangeImpreseSub(e, "Imprese Subappaltatrici")}
+                        />
                     </>
                     :
                     <Select

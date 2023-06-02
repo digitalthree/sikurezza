@@ -6,7 +6,13 @@ import {ImpresaSelezionataSelector} from "../../store/impresaSlice";
 import {addGru, resetGru} from "../../store/gruSlice";
 import {getAllGruByCreatoDa} from "../../faunadb/api/gruAPIs";
 import {Gru} from "../../model/Gru";
-import {addCantiere, CantieriSelector, resetCantieri, setCantiereDaCreare} from "../../store/cantiereSlice";
+import {
+    addCantiere,
+    CantieriSelector,
+    resetCantieri,
+    selezionaCantiere,
+    setCantiereDaCreare
+} from "../../store/cantiereSlice";
 import {useFaunaQuery} from "../../faunadb/hooks/useFaunaQuery";
 import {getAllCantieriByCreatoDa} from "../../faunadb/api/cantiereAPIs";
 import {Cantiere, cantiereDefault} from "../../model/Cantiere";
@@ -27,6 +33,7 @@ const CantieriTab: React.FC<CantieriTabProps> = () => {
     useEffect(() => {
         dispatch(resetCantieri())
         dispatch(setCantiereDaCreare(cantiereDefault))
+        dispatch(selezionaCantiere(undefined))
         execQuery(getAllCantieriByCreatoDa, impresaSelezionata?.faunaDocumentId).then((res) => {
             res.forEach((c: { id: string; cantiere: Cantiere }) => {
                 dispatch(

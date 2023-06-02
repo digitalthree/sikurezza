@@ -55,15 +55,23 @@ const EstintoriCantieriTab: React.FC<EstintoriCantieriProps> = ({setIndex}) => {
                 <span className="w-4/12 sm:w-4/12">Estintori in uso</span>
                 {cantiereSelezionato ?
                     <>
-                        <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
-                            {cantiereSelezionato.estintori.map(i => {
-                                return(
-                                    <>
-                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.nome}`}</li>
-                                    </>
-                                )
+                        <Select
+                            className="ml-5 w-8/12 sm:w-8/12 rounded-md"
+                            placeholder="Seleziona"
+                            noOptionsMessage={() => "Estintori terminati"}
+                            closeMenuOnSelect={false}
+                            components={animatedComponents}
+                            isMulti
+                            options={estintori}
+                            value={cantiereSelezionato.estintori.map(e => {
+                                return {label: e.nome, value: e}
                             })}
-                        </ul>
+                            onChange={(e) => {
+                                let estintori: Estintore[] = []
+                                e.forEach((v: any) => estintori.push(v.value as Estintore))
+                                dispatch(setEstintoreInCantiere(estintori))
+                            }}
+                        />
                     </>
                     :
                     <Select

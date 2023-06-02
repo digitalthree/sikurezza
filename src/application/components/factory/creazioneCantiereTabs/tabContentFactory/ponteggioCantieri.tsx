@@ -69,15 +69,23 @@ const PonteggioCantieriTab: React.FC<PonteggioCantieriProps> = ({setIndex}) => {
         </span>
                 {cantiereSelezionato ?
                     <>
-                        <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
-                            {cantiereSelezionato.ponteggi.listaPonteggi.map(i => {
-                                return(
-                                    <>
-                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.attr.filter(a => a.nome === "tipologia")[0].value} - ${i.attr.filter(a => a.nome === "noleggiatore")[0].value}`}</li>
-                                    </>
-                                )
+                        <Select
+                            className="ml-5 w-8/12 sm:w-8/12 rounded-md"
+                            placeholder="Seleziona"
+                            noOptionsMessage={() => "Gru /M.S. terminate"}
+                            closeMenuOnSelect={false}
+                            components={animatedComponents}
+                            isMulti
+                            options={ponteggio}
+                            value={cantiereSelezionato.ponteggi.listaPonteggi.map(p => {
+                                return {label: p.attr.filter(a => a.nome === "tipologia")[0].value, value: p}
                             })}
-                        </ul>
+                            onChange={(e) => {
+                                let ponteggi: Ponteggio[] = []
+                                e.forEach((v: any) => ponteggi.push(v.value as Ponteggio))
+                                dispatch(setPonteggioInCantiere(ponteggi))
+                            }}
+                        />
                     </>
                     :
                     <Select

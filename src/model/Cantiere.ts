@@ -1,5 +1,5 @@
-import {Impresa} from "./Impresa";
-import {Maestranza} from "./Maestranza";
+import {Impresa, impresaTemporanea} from "./Impresa";
+import {Maestranza, maestranzaDefault} from "./Maestranza";
 import {Gru} from "./Gru";
 import {Ponteggio} from "./Ponteggio";
 import {Estintore} from "./Estintore";
@@ -84,9 +84,9 @@ export const cantiereDefault: Cantiere = {
         preposti: [],
         addettiPrimoSoccorso: [],
         addettiAntiIncendio: [],
-        RLS: {} as Maestranza,
-        medicoCompetente: {} as Maestranza,
-        RSPP: {} as Maestranza,
+        RLS: maestranzaDefault,
+        medicoCompetente: maestranzaDefault,
+        RSPP: maestranzaDefault,
         delegatiSicurezza: [],
         squadraOperai: [],
         impreseSubappaltatrici: [],
@@ -101,7 +101,7 @@ export const cantiereDefault: Cantiere = {
     },
     estintori: [],
     impiantoElettrico: {
-        impresaEsecutriceDelleOpereElettriche: {} as Impresa,
+        impresaEsecutriceDelleOpereElettriche: impresaTemporanea,
         prepostoImpresaEsecutrice: "",
         telefonoPrepostoImpresaEsecutrice: "",
         documentiImpiantoElettrico: [],
