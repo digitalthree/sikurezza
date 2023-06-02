@@ -29,9 +29,11 @@ const SezioneCorsoFormazione: React.FC<SezioneCorsoFormazioneProps> = (
     useEffect(() => {
         if(maestranzaSelezionata){
             setMaestranza(maestranzaSelezionata)
+        }else{
+            setMaestranza(maestranzaDaCreare)
         }
-    }, [])
-    let corsoFormazioneArt37 = maestranzaSelezionata?.documenti.filter(d => d.nome === 'corsoFormazioneArt37')[0].file
+    }, [maestranzaSelezionata, maestranzaDaCreare])
+    let corsoFormazioneArt37 = maestranza?.documenti.filter(d => d.nome === 'corsoFormazioneArt37')[0].file
     const dispatch = useDispatch()
 
     return(
@@ -64,8 +66,8 @@ const SezioneCorsoFormazione: React.FC<SezioneCorsoFormazioneProps> = (
                        onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'corsoFormazioneArt37', value: e.target.value}))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoFormazioneArt37')[0].scadenza}
                 />
-                {(corsoFormazioneArt37 || maestranzaDaCreare.documenti.filter(d => d.nome === 'corsoFormazioneArt37')[0].file) ?
-                    <VisualizzaEliminaFile file={corsoFormazioneArt37 as string} modifica={editabile} nome="corsoFormazioneArt37"
+                {corsoFormazioneArt37 ?
+                    <VisualizzaEliminaFile file={corsoFormazioneArt37} modifica={editabile} nome="corsoFormazioneArt37"
                                            eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "corsoFormazioneArt37", file: undefined}))}
                     />:
                     <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({

@@ -96,7 +96,7 @@ const EditButtonMaestranza: React.FC<EditButtonMaestranzaProps> = (
                 <div className="tooltip tooltip-left tooltip-info z-10" data-tip="Elimina">
                     <button className="btn btn-link btn-xs hover:bg-sky-500"
                             onClick={() => {
-                                let confirm = window.confirm(`Sei sicuro di voler eliminare la maetsranza ${maestranzaTarget.anagrafica.nome} ${maestranzaTarget.anagrafica.cognome}`)
+                                let confirm = window.confirm(`Sei sicuro di voler eliminare la maetsranza ${maestranzaTarget.anagrafica.filter(m => m.label === 'nome')[0].value} ${maestranzaTarget.anagrafica.filter(m => m.label === 'cognome')[0].value}`)
                                 if (confirm) {
                                     execQuery(deleteMaestranzaFromFauna, maestranzaTarget.faunaDocumentId).then(() => {
                                         maestranzaTarget.documenti.forEach(d => deleteFileS3(d.file as string))

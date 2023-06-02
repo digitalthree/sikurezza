@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {
-    AnagraficaMaestranza, Documento,
+    Documento,
     Maestranza,
     maestranzaDefault,
 } from "../model/Maestranza";
@@ -33,10 +33,18 @@ export const MaestranzaSlice = createSlice({
         setMaestranzaSelezionata(state: MaestranzaState, action: PayloadAction<Maestranza|undefined>){
             state.maestranzaSelezionata = action.payload
         },
-        setAnagraficaMaestranza(state: MaestranzaState, action: PayloadAction<AnagraficaMaestranza>){
-            state.maestranzaDaCreare.anagrafica = action.payload;
+        setAnagraficaMaestranza(state: MaestranzaState, action: PayloadAction<{label: string, value: string|boolean}>){
+            state.maestranzaDaCreare.anagrafica.forEach(m => {
+                if(m.label === action.payload.label){
+                    m.value = action.payload.value
+                }
+            })
             if(state.maestranzaSelezionata){
-                state.maestranzaSelezionata.anagrafica = action.payload
+                state.maestranzaSelezionata.anagrafica.forEach(m => {
+                    if(m.label === action.payload.label){
+                        m.value = action.payload.value
+                    }
+                })
             }
         },
         setDocumentiMaestranza(state: MaestranzaState, action: PayloadAction<Documento[]>){

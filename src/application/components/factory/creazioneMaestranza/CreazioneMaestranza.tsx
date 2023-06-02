@@ -16,27 +16,21 @@ const CreazioneMaestranza: React.FC<CreazioneMaestranzaProps> = ({}) => {
             <div className="tabs">
                 <a className={`tab tab-bordered p-[50px] text-xl ${tabActive === "Anagrafica" ? 'tab-active' : ''}`}
                    onClick={() => {
-                       if (!location.state.editabile) {
-                           setTabActive("Anagrafica")
-                       }
+                       setTabActive("Anagrafica")
                    }}
                 >
                     Anagrafica
                 </a>
                 <a className={`tab tab-bordered p-[50px] text-xl ${tabActive === "Documenti" ? 'tab-active' : ''}`}
                    onClick={() => {
-                       if (!location.state.editabile) {
-                           setTabActive("Documenti")
-                       }
+                       setTabActive("Documenti")
                    }}
                 >
                     Documenti
                 </a>
                 <a className={`tab tab-bordered p-[50px] text-xl ${tabActive === "Comunicazioni" ? 'tab-active' : ''}`}
                    onClick={() => {
-                       if (!location.state.editabile) {
-                           setTabActive("Comunicazioni")
-                       }
+                       setTabActive("Comunicazioni")
                    }}
                 >
                     Comunicazioni

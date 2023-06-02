@@ -28,9 +28,11 @@ const SezioneVisitaMedica: React.FC<SezioneVisitaMedicaProps> = (
     useEffect(() => {
         if(maestranzaSelezionata){
             setMaestranza(maestranzaSelezionata)
+        }else{
+            setMaestranza(maestranzaDaCreare)
         }
-    }, [])
-    let visitaMedica = maestranzaSelezionata?.documenti.filter(d => d.nome === 'visitaMedica')[0].file
+    }, [maestranzaSelezionata, maestranzaDaCreare])
+    let visitaMedica = maestranza?.documenti.filter(d => d.nome === 'visitaMedica')[0].file
     const dispatch = useDispatch()
 
     return (
@@ -64,8 +66,8 @@ const SezioneVisitaMedica: React.FC<SezioneVisitaMedicaProps> = (
                        onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'visitaMedica', value: e.target.value}))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'visitaMedica')[0].scadenza}
                 />
-                {(visitaMedica || maestranzaDaCreare.documenti.filter(d => d.nome === 'visitaMedica')[0].file) ?
-                    <VisualizzaEliminaFile file={visitaMedica as string} modifica={editabile} nome="visitaMedica"
+                {visitaMedica ?
+                    <VisualizzaEliminaFile file={visitaMedica} modifica={editabile} nome="visitaMedica"
                         eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "visitaMedica", file: undefined}))}
                     />:
                     <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({nome: 'visitaMedica', file: (e.target.files) ? e.target.files[0] : undefined}))}/>

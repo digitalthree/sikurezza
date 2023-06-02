@@ -74,8 +74,8 @@ const MaestranzeTab: React.FC<MaestranzeTabProps> = () => {
                             return (
                                 <tr className="link link-hover hover:text-sky-500">
                                     <th>{index + 1}</th>
-                                    <td>{`${m.anagrafica.nome} ${m.anagrafica.cognome}`}</td>
-                                    <td>{m.anagrafica.impresaAppartenenza}</td>
+                                    <td>{`${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</td>
+                                    <td>{m.anagrafica.filter(m => m.label === 'impresaAppartenenza')[0].value}</td>
                                     <td>
                                         <EditButtonMaestranza maestranzaTarget={m} setEditabile={setEditabile}
                                                               setModifica={setModifica}/>

@@ -31,9 +31,11 @@ const SezioneContratto: React.FC<SezioneContrattoProps> = (
     useEffect(() => {
         if(maestranzaSelezionata){
             setMaestranza(maestranzaSelezionata)
+        }else{
+            setMaestranza(maestranzaDaCreare)
         }
-    }, [])
-    let contratto = maestranzaSelezionata?.documenti.filter(d => d.nome === 'contratto')[0].file
+    }, [maestranzaSelezionata, maestranzaDaCreare])
+    let contratto = maestranza?.documenti.filter(d => d.nome === 'contratto')[0].file
     const dispatch = useDispatch()
 
     return (
@@ -52,8 +54,8 @@ const SezioneContratto: React.FC<SezioneContrattoProps> = (
                     </select>
                     {errors.tipologiaContratto && <span className="font-bold text-red-600">Campo obbligatorio</span>}
                 </div>
-                {(contratto || maestranzaDaCreare.documenti.filter(d => d.nome === 'contratto')[0].file) ?
-                    <VisualizzaEliminaFile file={contratto as string} modifica={editabile} nome="contratto"
+                {contratto ?
+                    <VisualizzaEliminaFile file={contratto} modifica={editabile} nome="contratto"
                                            eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "contratto", file: undefined}))}
                     />
                     : <div className="flex justify-center col-span-4">

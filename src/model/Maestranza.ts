@@ -1,20 +1,11 @@
 export interface Maestranza {
-    anagrafica: AnagraficaMaestranza,
+    anagrafica: { label: string, value: string|boolean }[],
     documenti: Documento[],
     comunicazioni: ComunicazioniMaestranza,
     creatoDa: { id: string, nome: string }
     faunaDocumentId?: string
 }
 
-export interface AnagraficaMaestranza {
-    nome: string,
-    cognome: string,
-    dataNascita: string,
-    luogoNascita: string,
-    codiceFiscale: string,
-    impresaAppartenenza: string,
-    datoreLavoro: boolean
-}
 
 export interface ComunicazioniMaestranza {
     telefono?: number,
@@ -40,15 +31,15 @@ export interface Documento {
 
 
 export const maestranzaDefault: Maestranza = {
-    anagrafica: {
-        nome: "",
-        cognome: "",
-        dataNascita: "",
-        luogoNascita: "",
-        codiceFiscale: "",
-        impresaAppartenenza: "",
-        datoreLavoro: false
-    },
+    anagrafica: [
+        {label: 'nome', value: ''},
+        {label: 'cognome', value: ''},
+        {label: 'dataNascita', value: ''},
+        {label: 'luogoNascita', value: ''},
+        {label: 'codiceFiscale', value: ''},
+        {label: 'impresaAppartenenza', value: ''},
+        {label: 'datoreLavoro', value: false},
+    ],
     documenti: [
         {
             nome: 'contratto',

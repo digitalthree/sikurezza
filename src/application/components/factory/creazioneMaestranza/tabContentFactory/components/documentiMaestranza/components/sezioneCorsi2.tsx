@@ -29,13 +29,15 @@ const SezioneCorsi2: React.FC<SezioneCorsi1Props> = (
     useEffect(() => {
         if(maestranzaSelezionata){
             setMaestranza(maestranzaSelezionata)
+        }else{
+            setMaestranza(maestranzaDaCreare)
         }
-    }, [])
-    let corsoPrimoSoccorso = maestranzaSelezionata?.documenti.filter(d => d.nome === 'corsoPrimoSoccorso')[0].file
-    let corsoPrevIncendi = maestranzaSelezionata?.documenti.filter(d => d.nome === 'corsoPrevIncendi')[0].file
-    let corsoPreposto = maestranzaSelezionata?.documenti.filter(d => d.nome === 'corsoPreposto')[0].file
-    let corsoRLS = maestranzaSelezionata?.documenti.filter(d => d.nome === 'corsoRLS')[0].file
-    let corsoRSPP = maestranzaSelezionata?.documenti.filter(d => d.nome === 'corsoRSPP')[0].file
+    }, [maestranzaSelezionata, maestranzaDaCreare])
+    let corsoPrimoSoccorso = maestranza?.documenti.filter(d => d.nome === 'corsoPrimoSoccorso')[0].file
+    let corsoPrevIncendi = maestranza?.documenti.filter(d => d.nome === 'corsoPrevIncendi')[0].file
+    let corsoPreposto = maestranza?.documenti.filter(d => d.nome === 'corsoPreposto')[0].file
+    let corsoRLS = maestranza?.documenti.filter(d => d.nome === 'corsoRLS')[0].file
+    let corsoRSPP = maestranza?.documenti.filter(d => d.nome === 'corsoRSPP')[0].file
     const dispatch = useDispatch()
 
 
@@ -68,8 +70,8 @@ const SezioneCorsi2: React.FC<SezioneCorsi1Props> = (
                        onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'corsoPrimoSoccorso', value: e.target.value}))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoPrimoSoccorso')[0].scadenza}
                 />
-                {(corsoPrimoSoccorso || maestranzaDaCreare.documenti.filter(d => d.nome === 'corsoPrimoSoccorso')[0].file) ?
-                    <VisualizzaEliminaFile file={corsoPrimoSoccorso as string} modifica={editabile} nome="corsoPrimoSoccorso"
+                {corsoPrimoSoccorso ?
+                    <VisualizzaEliminaFile file={corsoPrimoSoccorso} modifica={editabile} nome="corsoPrimoSoccorso"
                                            eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "corsoPrimoSoccorso", file: undefined}))}
                     />:
                     <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({
@@ -105,8 +107,8 @@ const SezioneCorsi2: React.FC<SezioneCorsi1Props> = (
                        onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'corsoPrevIncendi', value: e.target.value}))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoPrevIncendi')[0].scadenza}
                 />
-                {(corsoPrevIncendi || maestranzaDaCreare.documenti.filter(d => d.nome === 'corsoPrevIncendi')[0].file) ?
-                    <VisualizzaEliminaFile file={corsoPrevIncendi as string} modifica={editabile} nome="corsoPrevIncendi"
+                {corsoPrevIncendi ?
+                    <VisualizzaEliminaFile file={corsoPrevIncendi} modifica={editabile} nome="corsoPrevIncendi"
                                            eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "corsoPrevIncendi", file: undefined}))}
                     />:
                     <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({
@@ -142,8 +144,8 @@ const SezioneCorsi2: React.FC<SezioneCorsi1Props> = (
                        onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'corsoPreposto', value: e.target.value}))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoPreposto')[0].scadenza}
                 />
-                {(corsoPreposto || maestranzaDaCreare.documenti.filter(d => d.nome === 'corsoPreposto')[0].file) ?
-                    <VisualizzaEliminaFile file={corsoPreposto as string} modifica={editabile} nome="corsoPreposto"
+                {corsoPreposto ?
+                    <VisualizzaEliminaFile file={corsoPreposto} modifica={editabile} nome="corsoPreposto"
                                            eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "corsoPreposto", file: undefined}))}
                     />:
                     <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({
@@ -179,8 +181,8 @@ const SezioneCorsi2: React.FC<SezioneCorsi1Props> = (
                        onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'corsoRLS', value: e.target.value}))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoRLS')[0].scadenza}
                 />
-                {(corsoRLS || maestranzaDaCreare.documenti.filter(d => d.nome === 'corsoRLS')[0].file) ?
-                    <VisualizzaEliminaFile file={corsoRLS as string} modifica={editabile} nome="corsoRLS"
+                {corsoRLS ?
+                    <VisualizzaEliminaFile file={corsoRLS} modifica={editabile} nome="corsoRLS"
                                            eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "corsoRLS", file: undefined}))}
                     />:
                     <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({
@@ -216,8 +218,8 @@ const SezioneCorsi2: React.FC<SezioneCorsi1Props> = (
                        onChange={(e) => dispatch(setScadenzaIlInMaestranza({nome: 'corsoRSPP', value: e.target.value}))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoRSPP')[0].scadenza}
                 />
-                {(corsoRSPP || maestranzaDaCreare.documenti.filter(d => d.nome === 'corsoRSPP')[0].file) ?
-                    <VisualizzaEliminaFile file={corsoRSPP as string} modifica={editabile} nome="corsoRSPP"
+                {corsoRSPP ?
+                    <VisualizzaEliminaFile file={corsoRSPP} modifica={editabile} nome="corsoRSPP"
                                            eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "corsoRSPP", file: undefined}))}
                     />:
                     <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({

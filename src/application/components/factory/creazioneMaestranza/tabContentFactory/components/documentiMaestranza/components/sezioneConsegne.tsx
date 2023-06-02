@@ -31,10 +31,12 @@ const SezioneConsegne: React.FC<SezioneConsegneProps> = (
     useEffect(() => {
         if (maestranzaSelezionata) {
             setMaestranza(maestranzaSelezionata)
+        }else{
+            setMaestranza(maestranzaDaCreare)
         }
-    }, [])
-    let consegnaDPI = maestranzaSelezionata?.documenti.filter(d => d.nome === 'consegnaDPI')[0].file
-    let consegnaTesserino = maestranzaSelezionata?.documenti.filter(d => d.nome === 'consegnaTesserino')[0].file
+    }, [maestranzaSelezionata, maestranzaDaCreare])
+    let consegnaDPI = maestranza?.documenti.filter(d => d.nome === 'consegnaDPI')[0].file
+    let consegnaTesserino = maestranza?.documenti.filter(d => d.nome === 'consegnaTesserino')[0].file
     const dispatch = useDispatch()
 
     return (
@@ -73,8 +75,8 @@ const SezioneConsegne: React.FC<SezioneConsegneProps> = (
                        }))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'consegnaDPI')[0].consegnatoIl}
                 />
-                {(consegnaDPI || maestranzaDaCreare.documenti.filter(d => d.nome === 'consegnaDPI')[0].file) ?
-                    <VisualizzaEliminaFile file={consegnaDPI as string} modifica={editabile} nome="consegnaDPI"
+                {consegnaDPI ?
+                    <VisualizzaEliminaFile file={consegnaDPI} modifica={editabile} nome="consegnaDPI"
                                            eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({
                                                nome: "consegnaDPI",
                                                file: undefined
@@ -120,8 +122,8 @@ const SezioneConsegne: React.FC<SezioneConsegneProps> = (
                        }))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'consegnaTesserino')[0].consegnatoIl}
                 />
-                {(consegnaTesserino || maestranzaDaCreare.documenti.filter(d => d.nome === 'consegnaTesserino')[0].file) ?
-                    <VisualizzaEliminaFile file={consegnaTesserino as string} modifica={editabile}
+                {consegnaTesserino ?
+                    <VisualizzaEliminaFile file={consegnaTesserino} modifica={editabile}
                                            nome="consegnaTesserino"
                                            eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({
                                                nome: "consegnaTesserino",

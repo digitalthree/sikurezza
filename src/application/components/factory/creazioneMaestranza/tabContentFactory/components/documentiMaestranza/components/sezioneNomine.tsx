@@ -28,13 +28,15 @@ const SezioneNomine: React.FC<SezioneNomineProps> = (
     useEffect(() => {
         if (maestranzaSelezionata) {
             setMaestranza(maestranzaSelezionata)
+        }else{
+            setMaestranza(maestranzaDaCreare)
         }
-    }, [])
-    let nominaDaPreposto = maestranzaSelezionata?.documenti.filter(d => d.nome === 'nominaDaPreposto')[0].file
-    let nominaDaRSPP = maestranzaSelezionata?.documenti.filter(d => d.nome === 'nominaDaRSPP')[0].file
-    let nominaDaRLS = maestranzaSelezionata?.documenti.filter(d => d.nome === 'nominaDaRLS')[0].file
-    let nominaDaAddettoPSoccorso = maestranzaSelezionata?.documenti.filter(d => d.nome === 'nominaDaAddettoPSoccorso')[0].file
-    let nominaDaAddettoPrevIncendi = maestranzaSelezionata?.documenti.filter(d => d.nome === 'nominaDaAddettoPrevIncendi')[0].file
+    }, [maestranzaSelezionata, maestranzaDaCreare])
+    let nominaDaPreposto = maestranza?.documenti.filter(d => d.nome === 'nominaDaPreposto')[0].file
+    let nominaDaRSPP = maestranza?.documenti.filter(d => d.nome === 'nominaDaRSPP')[0].file
+    let nominaDaRLS = maestranza?.documenti.filter(d => d.nome === 'nominaDaRLS')[0].file
+    let nominaDaAddettoPSoccorso = maestranza?.documenti.filter(d => d.nome === 'nominaDaAddettoPSoccorso')[0].file
+    let nominaDaAddettoPrevIncendi = maestranza?.documenti.filter(d => d.nome === 'nominaDaAddettoPrevIncendi')[0].file
     const dispatch = useDispatch()
 
     return (
@@ -58,8 +60,8 @@ const SezioneNomine: React.FC<SezioneNomineProps> = (
                     SI
                 </div>
                 <span className="col-span-4"></span>
-                {(nominaDaPreposto || maestranzaDaCreare.documenti.filter(d => d.nome === 'nominaDaPreposto')[0].file) ?
-                    <VisualizzaEliminaFile file={nominaDaPreposto as string} modifica={editabile}
+                {nominaDaPreposto ?
+                    <VisualizzaEliminaFile file={nominaDaPreposto} modifica={editabile}
                                            nome="nominaDaPreposto"
                                            eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({
                                                nome: "nominaDaPreposto",
@@ -91,8 +93,8 @@ const SezioneNomine: React.FC<SezioneNomineProps> = (
                     SI
                 </div>
                 <span className="col-span-4"></span>
-                {(nominaDaRSPP || maestranzaDaCreare.documenti.filter(d => d.nome === 'nominaDaRSPP')[0].file) ?
-                    <VisualizzaEliminaFile file={nominaDaRSPP as string} modifica={editabile} nome="nominaDaRSPP"
+                {nominaDaRSPP ?
+                    <VisualizzaEliminaFile file={nominaDaRSPP} modifica={editabile} nome="nominaDaRSPP"
                                            eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({
                                                nome: "nominaDaRSPP",
                                                file: undefined
@@ -123,8 +125,8 @@ const SezioneNomine: React.FC<SezioneNomineProps> = (
                     SI
                 </div>
                 <span className="col-span-4"></span>
-                {(nominaDaRLS || maestranzaDaCreare.documenti.filter(d => d.nome === 'nominaDaRLS')[0].file) ?
-                    <VisualizzaEliminaFile file={nominaDaRLS as string} modifica={editabile} nome="nominaDaRLS"
+                {nominaDaRLS ?
+                    <VisualizzaEliminaFile file={nominaDaRLS} modifica={editabile} nome="nominaDaRLS"
                                            eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({
                                                nome: "nominaDaRLS",
                                                file: undefined
@@ -155,8 +157,8 @@ const SezioneNomine: React.FC<SezioneNomineProps> = (
                     SI
                 </div>
                 <span className="col-span-4"></span>
-                {(nominaDaAddettoPSoccorso || maestranzaDaCreare.documenti.filter(d => d.nome === 'nominaDaAddettoPSoccorso')[0].file) ?
-                    <VisualizzaEliminaFile file={nominaDaAddettoPSoccorso as string} modifica={editabile}
+                {nominaDaAddettoPSoccorso ?
+                    <VisualizzaEliminaFile file={nominaDaAddettoPSoccorso} modifica={editabile}
                                            nome="nominaDaAddettoPSoccorso"
                                            eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({
                                                nome: "nominaDaAddettoPSoccorso",
@@ -188,7 +190,7 @@ const SezioneNomine: React.FC<SezioneNomineProps> = (
                     SI
                 </div>
                 <span className="col-span-4"></span>
-                {(nominaDaAddettoPrevIncendi || maestranzaDaCreare.documenti.filter(d => d.nome === 'nominaDaAddettoPrevIncendi')[0].file) ?
+                {nominaDaAddettoPrevIncendi ?
                     <VisualizzaEliminaFile file={nominaDaAddettoPrevIncendi as string} modifica={editabile}
                                            nome="nominaDaAddettoPrevIncendi"
                                            eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({

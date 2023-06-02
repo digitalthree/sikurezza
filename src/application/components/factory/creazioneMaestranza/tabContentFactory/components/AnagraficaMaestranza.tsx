@@ -27,7 +27,8 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
 
 
 
-    const {register, handleSubmit, formState: {errors}, setValue} = useForm();
+    const {register,  formState: {errors}} = useForm();
+
     const onSubmit = (data: any) => {
         dispatch(setAnagraficaMaestranza(data))
         setTabActive("Documenti")
@@ -36,7 +37,7 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)} className="mt-20 w-[40%] p-10 shadow-2xl">
+            <form className="mt-20 w-[40%] p-10 shadow-2xl">
 
                 <div className="flex justify-between items-center">
                     <span className="font-bold">Nome*: </span>
@@ -49,7 +50,8 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                                }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
-                               defaultValue={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.nome : maestranzaDaCreare.anagrafica.nome}
+                               value={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.filter(m => m.label === 'nome')[0].value as string : maestranzaDaCreare.anagrafica.filter(m => m.label === 'nome')[0].value as string}
+                               onChange={(e) => dispatch(setAnagraficaMaestranza({label: 'nome', value: e.target.value}))}
                         />
                         {errors.nome && <span className="font-bold text-red-600">Campo obbligatorio</span>}
                     </div>
@@ -66,7 +68,8 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                                }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
-                               defaultValue={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.cognome : maestranzaDaCreare.anagrafica.cognome}
+                               value={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.filter(m => m.label === 'cognome')[0].value as string : maestranzaDaCreare.anagrafica.filter(m => m.label === 'cognome')[0].value as string}
+                               onChange={(e) => dispatch(setAnagraficaMaestranza({label: 'cognome', value: e.target.value}))}
                         />
                         {errors.cognome && <span className="font-bold text-red-600">Campo obbligatorio</span>}
                     </div>
@@ -83,7 +86,8 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                                }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
-                               defaultValue={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.dataNascita : maestranzaDaCreare.anagrafica.dataNascita}
+                               value={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.filter(m => m.label === 'dataNascita')[0].value as string : maestranzaDaCreare.anagrafica.filter(m => m.label === 'dataNascita')[0].value as string}
+                               onChange={(e) => dispatch(setAnagraficaMaestranza({label: 'dataNascita', value: e.target.value}))}
                         />
                         {errors.dataNascita && <span className="font-bold text-red-600">Campo obbligatorio</span>}
                     </div>
@@ -100,7 +104,8 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                                }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
-                               defaultValue={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.luogoNascita : maestranzaDaCreare.anagrafica.luogoNascita}
+                               value={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.filter(m => m.label === 'luogoNascita')[0].value as string : maestranzaDaCreare.anagrafica.filter(m => m.label === 'luogoNascita')[0].value as string}
+                               onChange={(e) => dispatch(setAnagraficaMaestranza({label: 'luogoNascita', value: e.target.value}))}
                         />
                         {errors.luogoNascita && <span className="font-bold text-red-600">Campo obbligatorio</span>}
                     </div>
@@ -117,7 +122,8 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                                }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
-                               defaultValue={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.codiceFiscale : maestranzaDaCreare.anagrafica.codiceFiscale}
+                               value={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.filter(m => m.label === 'codiceFiscale')[0].value as string : maestranzaDaCreare.anagrafica.filter(m => m.label === 'codiceFiscale')[0].value as string}
+                               onChange={(e) => dispatch(setAnagraficaMaestranza({label: 'codiceFiscale', value: e.target.value}))}
                         />
                         {errors.codiceFiscale && <span className="font-bold text-red-600">Campo obbligatorio</span>}
                     </div>
@@ -134,7 +140,8 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                                }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
-                               defaultValue={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.impresaAppartenenza : maestranzaDaCreare.anagrafica.impresaAppartenenza}
+                               value={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.filter(m => m.label === 'impresaAppartenenza')[0].value as string : maestranzaDaCreare.anagrafica.filter(m => m.label === 'impresaAppartenenza')[0].value as string}
+                               onChange={(e) => dispatch(setAnagraficaMaestranza({label: 'impresaAppartenenza', value: e.target.value}))}
                         />
                         {errors.impresaAppartenenza && <span className="font-bold text-red-600">Campo obbligatorio</span>}
                     </div>
@@ -151,7 +158,8 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                                    }
                                }}
                                disabled={!editabile}
-                               defaultChecked={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.datoreLavoro : maestranzaDaCreare.anagrafica.datoreLavoro}
+                               checked={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.filter(m => m.label === 'datoreLavoro')[0].value as boolean : maestranzaDaCreare.anagrafica.filter(m => m.label === 'datoreLavoro')[0].value as boolean}
+                               onChange={(e) => dispatch(setAnagraficaMaestranza({label: 'datoreLavoro', value: e.target.checked}))}
                         />
                         SI
                     </div>
@@ -162,7 +170,8 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                         <div className="rounded-bl rounded-tl bg-amber-600 p-2">
                             <TfiSave size="30px" className="text-white"/>
                         </div>
-                        <button type="submit" className="rounded-br rounded-tr bg-amber-400 p-2 w-full text-white hover:cursor-pointer font-bold">
+                        <button onClick={() => setTabActive("Documenti")}
+                            className="rounded-br rounded-tr bg-amber-400 p-2 w-full text-white hover:cursor-pointer font-bold">
                             Salva e Prosegui
                         </button>
 

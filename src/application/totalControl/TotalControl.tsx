@@ -117,7 +117,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
         else if (ricercaByMaestranza && ricercaByMaestranza !== "") {
             let itemsRicerca = items.filter(i => {
                 if(i.tipo === "Maestranza"){
-                    if ((i.item as Maestranza).anagrafica.nome.toLowerCase()
+                    if (((i.item as Maestranza).anagrafica.filter(m => m.label === 'nome')[0].value as string).toLowerCase()
                         .replace(/\s+/g, '')
                         .includes(ricercaByMaestranza.toLowerCase().replace(/\s+/g, ''))) {
                         return i
@@ -222,7 +222,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                                         className="link link-hover hover:text-sky-500">
                                         <th>{index + 1}</th>
                                         <td>{(i.item as Maestranza).creatoDa.nome.toUpperCase()}</td>
-                                        <td>{(i.item as Maestranza).anagrafica.nome}</td>
+                                        <td>{(i.item as Maestranza).anagrafica.filter(m => m.label === 'nome')[0].value}</td>
                                         <td>
                                             <FiAlertTriangle size={30} color="red"/>
                                         </td>

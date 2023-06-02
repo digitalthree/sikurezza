@@ -51,7 +51,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
 
     /* MULTI SELECT PER SCEGLIERE GLI OPERAI NELLA SCHEDA SQUADRA OPERATIVA */
     const operai = maestranze.map(m => {
-        return {label: `${m.anagrafica.nome} ${m.anagrafica.cognome}`, value: m}
+        return {label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: m}
     })
 
     /* MULTI SELECT PER IMPRESE SUBALPALT. E OPERAI AUTONOMI SCHEDA SQUADRA OPERATIVA */
@@ -84,7 +84,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             {cantiereSelezionato.squadraOperativa.responsabileTecnico.map(i => {
                                 return(
                                     <>
-                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.anagrafica.nome} ${i.anagrafica.cognome}`}</li>
+                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.anagrafica.filter(m => m.label === 'nome')[0].value} ${i.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
                                     </>
                                 )
                             })}
@@ -117,7 +117,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             {cantiereSelezionato.squadraOperativa.preposti.map(i => {
                                 return(
                                     <>
-                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.anagrafica.nome} ${i.anagrafica.cognome}`}</li>
+                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.anagrafica.filter(m => m.label === 'nome')[0].value} ${i.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
                                     </>
                                 )
                             })}
@@ -149,7 +149,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             {cantiereSelezionato.squadraOperativa.addettiPrimoSoccorso.map(i => {
                                 return(
                                     <>
-                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.anagrafica.nome} ${i.anagrafica.cognome}`}</li>
+                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.anagrafica.filter(m => m.label === 'nome')[0].value} ${i.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
                                     </>
                                 )
                             })}
@@ -181,7 +181,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             {cantiereSelezionato.squadraOperativa.addettiAntiIncendio.map(i => {
                                 return(
                                     <>
-                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.anagrafica.nome} ${i.anagrafica.cognome}`}</li>
+                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.anagrafica.filter(m => m.label === 'nome')[0].value} ${i.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
                                     </>
                                 )
                             })}
@@ -210,7 +210,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                 {cantiereSelezionato ?
                     <>
                         <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
-                            <li className="rounded bg-gray-200 p-2 ml-1">{`${cantiereSelezionato.squadraOperativa.RLS.anagrafica.nome} ${cantiereSelezionato.squadraOperativa.RLS.anagrafica.cognome}`}</li>
+                            <li className="rounded bg-gray-200 p-2 ml-1">{`${cantiereSelezionato.squadraOperativa.RLS.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato.squadraOperativa.RLS.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
                         </ul>
                     </>
                     :
@@ -242,7 +242,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                 {cantiereSelezionato ?
                     <>
                         <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
-                            <li className="rounded bg-gray-200 p-2 ml-1">{`${cantiereSelezionato.squadraOperativa.medicoCompetente.anagrafica.nome} ${cantiereSelezionato.squadraOperativa.medicoCompetente.anagrafica.cognome}`}</li>
+                            <li className="rounded bg-gray-200 p-2 ml-1">{`${cantiereSelezionato.squadraOperativa.medicoCompetente.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato.squadraOperativa.medicoCompetente.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
                         </ul>
                     </>
                     :
@@ -273,7 +273,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                 {cantiereSelezionato ?
                     <>
                         <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
-                            <li className="rounded bg-gray-200 p-2 ml-1">{`${cantiereSelezionato.squadraOperativa.RSPP.anagrafica.nome} ${cantiereSelezionato.squadraOperativa.RSPP.anagrafica.cognome}`}</li>
+                            <li className="rounded bg-gray-200 p-2 ml-1">{`${cantiereSelezionato.squadraOperativa.RSPP.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato.squadraOperativa.RSPP.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
                         </ul>
                     </>
                     :
@@ -307,7 +307,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             {cantiereSelezionato.squadraOperativa.delegatiSicurezza.map(i => {
                                 return(
                                     <>
-                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.anagrafica.nome} ${i.anagrafica.cognome}`}</li>
+                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.anagrafica.filter(m => m.label === 'nome')[0].value} ${i.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
                                     </>
                                 )
                             })}
@@ -339,7 +339,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             {cantiereSelezionato.squadraOperativa.squadraOperai.map(i => {
                                 return(
                                     <>
-                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.anagrafica.nome} ${i.anagrafica.cognome}`}</li>
+                                        <li className="rounded bg-gray-200 p-2 ml-1">{`${i.anagrafica.filter(m => m.label === 'nome')[0].value} ${i.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
                                     </>
                                 )
                             })}
