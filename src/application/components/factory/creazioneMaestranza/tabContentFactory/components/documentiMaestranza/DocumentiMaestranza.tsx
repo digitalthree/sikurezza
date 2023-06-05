@@ -32,7 +32,7 @@ const DocumentiMaestranza: React.FC<DocumentiMaestranzaProps> = (
 
 
     return(
-        <form className="mt-20 w-[70%] p-10 shadow-2xl">
+        <form className="mt-20 w-[100%] p-10 shadow-2xl">
             <SezioneContratto register={register} errors={errors} editabile={editabile} modifica={modifica}/>
             <SezioneVisitaMedica register={register} errors={errors} editabile={editabile} modifica={modifica}/>
             <SezioneCorsoFormazione register={register} errors={errors} editabile={editabile} modifica={modifica}/>

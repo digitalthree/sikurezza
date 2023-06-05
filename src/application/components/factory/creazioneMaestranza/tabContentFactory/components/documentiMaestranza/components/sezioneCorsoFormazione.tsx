@@ -40,6 +40,7 @@ const SezioneCorsoFormazione: React.FC<SezioneCorsoFormazioneProps> = (
         <>
             <div className="grid grid-cols-12 gap-4">
                 <span className="font-bold col-span-3">Corso Formazione art. 37*: </span>
+                <span className="font-bold col-span-1">svolto il: </span>
                 <div className="flex flex-col col-span-2">
                     <input type="date" {...register("corsoFormazioneArt3637EffettuatoIl")}
                            className="rounded border border-gray-400 shadow p-1"

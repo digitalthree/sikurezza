@@ -4,7 +4,7 @@ import {Maestranza} from "../../../../../../../../model/Maestranza";
 import {useDispatch, useSelector} from "react-redux";
 import {
     MaestranzaDaCreareSelector,
-    MaestranzaSelezionataSelector,
+    MaestranzaSelezionataSelector, setConsegnatoInMaestranza,
     setDataAssunzioneIlInMaestranza, setDataFineContrattoIlInMaestranza,
     setFileInDocumentiMaestranza, setMansioneInMaestranza,
     setTipologiaContrattoInMaestranza,
@@ -29,9 +29,9 @@ const SezioneContratto: React.FC<SezioneContrattoProps> = (
     const maestranzaDaCreare = useSelector(MaestranzaDaCreareSelector)
     const [maestranza, setMaestranza] = useState(maestranzaDaCreare)
     useEffect(() => {
-        if(maestranzaSelezionata){
+        if (maestranzaSelezionata) {
             setMaestranza(maestranzaSelezionata)
-        }else{
+        } else {
             setMaestranza(maestranzaDaCreare)
         }
     }, [maestranzaSelezionata, maestranzaDaCreare])
@@ -42,7 +42,7 @@ const SezioneContratto: React.FC<SezioneContrattoProps> = (
         <>
             <div className="grid grid-cols-12 gap-4">
                 <span className="font-bold col-span-3">Tipologia Contratto*: </span>
-                <div className="flex flex-col col-span-5">
+                <div className="flex flex-col col-span-6">
                     <select {...register("tipologiaContratto", {required: true})}
                             defaultValue={maestranza.documenti?.filter(d => d.nome === 'contratto')[0].tipologia}
                             onChange={(e) => dispatch(setTipologiaContrattoInMaestranza(e.target.value as ("Indeterminato")))}
@@ -56,25 +56,27 @@ const SezioneContratto: React.FC<SezioneContrattoProps> = (
                 </div>
                 {contratto ?
                     <VisualizzaEliminaFile file={contratto} modifica={editabile} nome="contratto"
-                                           eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({nome: "contratto", file: undefined}))}
+                                           eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({
+                                               nome: "contratto",
+                                               file: undefined
+                                           }))}
                     />
-                    : <div className="flex justify-center col-span-4">
-                        <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({
-                            nome: 'contratto',
-                            file: (e.target.files) ? e.target.files[0] : undefined
-                        }))}/>
-                    </div>
+                    :
+                    <InputFile editabile={editabile} onChangeFunction={(e) => dispatch(setFileInDocumentiMaestranza({
+                        nome: 'contratto',
+                        file: (e.target.files) ? e.target.files[0] : undefined
+                    }))}/>
                 }
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
                 <span className="font-bold col-span-3">Data Assunzione: </span>
                 <input type="date" {...register("dataAssunzione")}
                        onKeyDown={(e) => {
-                           if(e.key === "Enter"){
+                           if (e.key === "Enter") {
                                e.preventDefault()
                            }
                        }}
-                       className="rounded border border-gray-400 shadow p-1 col-span-5"
+                       className="rounded border border-gray-400 shadow p-1 col-span-6"
                        disabled={!editabile}
                        onChange={(e) => dispatch(setDataAssunzioneIlInMaestranza(e.target.value))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'contratto')[0].dataAssunzione}
@@ -84,11 +86,11 @@ const SezioneContratto: React.FC<SezioneContrattoProps> = (
                 <span className="font-bold col-span-3">Data di fine contratto: </span>
                 <input type="date" {...register("dataFineContratto")}
                        onKeyDown={(e) => {
-                           if(e.key === "Enter"){
+                           if (e.key === "Enter") {
                                e.preventDefault()
                            }
                        }}
-                       className="rounded border border-gray-400 shadow p-1 col-span-5"
+                       className="rounded border border-gray-400 shadow p-1 col-span-6"
                        disabled={!editabile}
                        onChange={(e) => dispatch(setDataFineContrattoIlInMaestranza(e.target.value))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'contratto')[0].dataFineContratto}
@@ -98,11 +100,11 @@ const SezioneContratto: React.FC<SezioneContrattoProps> = (
                 <span className="font-bold col-span-3">Mansione: </span>
                 <input placeholder="Mansione" {...register("mansione")}
                        onKeyDown={(e) => {
-                           if(e.key === "Enter"){
+                           if (e.key === "Enter") {
                                e.preventDefault()
                            }
                        }}
-                       className="rounded border border-gray-400 shadow p-1 col-span-5"
+                       className="rounded border border-gray-400 shadow p-1 col-span-6"
                        disabled={!editabile}
                        onChange={(e) => dispatch(setMansioneInMaestranza(e.target.value))}
                        defaultValue={maestranza.documenti?.filter(d => d.nome === 'contratto')[0].mansione}

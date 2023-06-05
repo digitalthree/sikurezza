@@ -15,7 +15,8 @@ export interface ComunicazioniMaestranza {
 }
 
 export interface Documento {
-    nome: string
+    nome: string,
+    richiedibile?: boolean,
     tipologia?: 'Indeterminato' | 'Determinato',
     dataAssunzione?: string,
     dataFineContratto?: string,
@@ -64,42 +65,49 @@ export const maestranzaDefault: Maestranza = {
         },
         {
             nome: 'corsoFormazioneArt37',
+            richiedibile: true,
             effettuatoIl: "",
             scadenza: "",
             file: undefined
         },
         {
             nome: 'corsoMacchineMovTerra',
+            richiedibile: true,
             effettuatoIl: "",
             scadenza: "",
             file: undefined
         },
         {
             nome: 'corsoPonteggi',
+            richiedibile: true,
             effettuatoIl: "",
             scadenza: "",
             file: undefined
         },
         {
             nome: 'corsoPLE',
+            richiedibile: true,
             effettuatoIl: "",
             scadenza: "",
             file: undefined
         },
         {
             nome: 'corsoConduzioneGRU',
+            richiedibile: true,
             effettuatoIl: "",
             scadenza: "",
             file: undefined
         },
         {
             nome: 'corsoGRUSuAutocarro',
+            richiedibile: true,
             effettuatoIl: "",
             scadenza: "",
             file: undefined
         },
         {
             nome: 'corsoEscavatoriIdraulici',
+            richiedibile: true,
             effettuatoIl: "",
             scadenza: "",
             file: undefined
@@ -149,30 +157,35 @@ export const maestranzaDefault: Maestranza = {
         },
         {
             nome: 'corsoPrimoSoccorso',
+            richiedibile: true,
             effettuatoIl: "",
             scadenza: "",
             file: undefined
         },
         {
             nome: 'corsoPrevIncendi',
+            richiedibile: true,
             effettuatoIl: "",
             scadenza: "",
             file: undefined
         },
         {
             nome: 'corsoPreposto',
+            richiedibile: true,
             effettuatoIl: "",
             scadenza: "",
             file: undefined
         },
         {
             nome: 'corsoRLS',
+            richiedibile: true,
             effettuatoIl: "",
             scadenza: "",
             file: undefined
         },
         {
             nome: 'corsoRSPP',
+            richiedibile: true,
             effettuatoIl: "",
             scadenza: "",
             file: undefined

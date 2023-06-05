@@ -11,7 +11,7 @@ export interface VisualizzaEliminaFileProps {
 const VisualizzaEliminaFile: React.FC<VisualizzaEliminaFileProps> = ({file, modifica, nome, eliminaFunction}) => {
     return (
         <>
-            <div className="flex col-span-4 gap-10">
+            <div className="flex col-span-3 gap-4 justify-center">
                 <div className="btn btn-active btn-ghost btn-sm hover:opacity-70"
                         onClick={() => getFileFromS3(file)}>
                     Visualizza File

@@ -59,7 +59,6 @@ const SezioneNomine: React.FC<SezioneNomineProps> = (
                            defaultChecked={maestranza.documenti?.filter(d => d.nome === 'nominaDaPreposto')[0].nomina}/>
                     SI
                 </div>
-                <span className="col-span-4"></span>
                 {nominaDaPreposto ?
                     <VisualizzaEliminaFile file={nominaDaPreposto} modifica={editabile}
                                            nome="nominaDaPreposto"
@@ -92,7 +91,6 @@ const SezioneNomine: React.FC<SezioneNomineProps> = (
                            defaultChecked={maestranza.documenti?.filter(d => d.nome === 'nominaDaRSPP')[0].nomina}/>
                     SI
                 </div>
-                <span className="col-span-4"></span>
                 {nominaDaRSPP ?
                     <VisualizzaEliminaFile file={nominaDaRSPP} modifica={editabile} nome="nominaDaRSPP"
                                            eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({
@@ -124,7 +122,6 @@ const SezioneNomine: React.FC<SezioneNomineProps> = (
                            defaultChecked={maestranza.documenti?.filter(d => d.nome === 'nominaDaRLS')[0].nomina}/>
                     SI
                 </div>
-                <span className="col-span-4"></span>
                 {nominaDaRLS ?
                     <VisualizzaEliminaFile file={nominaDaRLS} modifica={editabile} nome="nominaDaRLS"
                                            eliminaFunction={() => dispatch(setFileInDocumentiMaestranza({
@@ -156,7 +153,6 @@ const SezioneNomine: React.FC<SezioneNomineProps> = (
                            defaultChecked={maestranza.documenti?.filter(d => d.nome === 'nominaDaAddettoPSoccorso')[0].nomina}/>
                     SI
                 </div>
-                <span className="col-span-4"></span>
                 {nominaDaAddettoPSoccorso ?
                     <VisualizzaEliminaFile file={nominaDaAddettoPSoccorso} modifica={editabile}
                                            nome="nominaDaAddettoPSoccorso"
@@ -189,7 +185,6 @@ const SezioneNomine: React.FC<SezioneNomineProps> = (
                            defaultChecked={maestranza.documenti?.filter(d => d.nome === 'nominaDaAddettoPrevIncendi')[0].nomina}/>
                     SI
                 </div>
-                <span className="col-span-4"></span>
                 {nominaDaAddettoPrevIncendi ?
                     <VisualizzaEliminaFile file={nominaDaAddettoPrevIncendi as string} modifica={editabile}
                                            nome="nominaDaAddettoPrevIncendi"

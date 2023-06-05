@@ -38,7 +38,8 @@ const SezioneVisitaMedica: React.FC<SezioneVisitaMedicaProps> = (
     return (
         <>
             <div className="grid grid-cols-12 gap-4">
-                <span className="font-bold col-span-3">Visita Medica effettuata il*: </span>
+                <span className="font-bold col-span-3">Visita Medica: </span>
+                <span className="font-bold col-span-1">svolta il: </span>
                 <div className="flex flex-col col-span-2">
                     <input type="date" {...register("visitaMedicaEffettuataIl")}
                            className="rounded border border-gray-400 shadow p-1"
@@ -76,7 +77,7 @@ const SezioneVisitaMedica: React.FC<SezioneVisitaMedicaProps> = (
             <div className="grid grid-cols-12 mt-2">
                 <span className="font-bold col-span-3">Prescrizioni o limitazioni: </span>
                 <textarea {...register("prescrizioniLimitazioni")}
-                          className="rounded border border-gray-400 shadow p-1 col-span-9 w-1/2"
+                          className="rounded border border-gray-400 shadow p-1 col-span-9 w-2/3"
                           onKeyDown={(e) => {
                               if(e.key === "Enter"){
                                   e.preventDefault()

@@ -73,6 +73,39 @@ export const MaestranzaSlice = createSlice({
                 })
             }
         },
+        setRichiedibileInMaestranza(state: MaestranzaState, action: PayloadAction<{nome: string, value: boolean}>){
+            state.maestranzaDaCreare.documenti.forEach((d) => {
+                if(d.nome === action.payload.nome) {
+                    d.richiedibile = action.payload.value
+                }
+            })
+            if(state.maestranzaSelezionata){
+                state.maestranzaSelezionata.documenti.forEach((d) => {
+                    if(d.nome === action.payload.nome) {
+                        d.richiedibile = action.payload.value
+                    }
+                })
+            }
+            if(!action.payload.value){
+                state.maestranzaDaCreare.documenti.forEach(d => {
+                    if(d.nome === action.payload.nome){
+                        d.file = undefined
+                        d.effettuatoIl = ""
+                        d.scadenza = ""
+                    }
+                })
+                if(state.maestranzaSelezionata){
+                    state.maestranzaSelezionata.documenti.forEach(d => {
+                        if(d.nome === action.payload.nome){
+                            d.file = undefined
+                            d.effettuatoIl = ""
+                            d.scadenza = ""
+                        }
+                    })
+                }
+
+            }
+        },
         setEffettuatoIlInMaestranza(state: MaestranzaState, action: PayloadAction<{nome: string, value: string}>){
             state.maestranzaDaCreare.documenti.forEach((d) => {
                 if(d.nome === action.payload.nome) {
@@ -243,7 +276,7 @@ export const {
     setDocumentiMaestranza, setMaestranzaDaCreare, setFileInDocumentiMaestranza, setConsegnatoInMaestranza, setScadenzaIlInMaestranza,
     setTipologiaContrattoInMaestranza, setConsegnatoIlInMaestranza, setDataFineContrattoIlInMaestranza, setDataAssunzioneIlInMaestranza,
     setPrescrizioniLimitazioniInMaestranza, setEffettuatoIlInMaestranza, setMansioneInMaestranza, setNominaInMaestranza,
-    setComunicazioniInMaestranza, resetMaestranzeInMaestranzaSlice
+    setComunicazioniInMaestranza, resetMaestranzeInMaestranzaSlice, setRichiedibileInMaestranza
 } = MaestranzaSlice.actions
 
 
