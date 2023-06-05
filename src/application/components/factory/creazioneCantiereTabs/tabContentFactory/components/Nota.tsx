@@ -3,12 +3,27 @@ import {ControlloCantiere} from "../../../../../../model/Cantiere";
 import InputFile from "../../../../../../shared/Files/InputFile";
 import VisualizzaEliminaFile from "../../../../../../shared/Files/VisualizzaEliminaFile";
 import {useLocation} from "react-router-dom";
+import {AiOutlineDelete} from "react-icons/ai";
+import {deleteFileS3} from "../../../../../../aws/s3APIs";
 
 export interface NotaProps{
     controlliPeriodici: ControlloCantiere[],
     setControlliPeriodici: Function,
     label: string,
     labelSubTitle?: string
+}
+
+function exportToFile(nota: ControlloCantiere) {
+    let a = document.createElement("a")
+    let json = JSON.stringify({
+        data: nota.data, nota: nota.nota
+    })
+    let blob = new Blob([json], {type: "octet/stream"})
+    let url = window.URL.createObjectURL(blob)
+    a.href = url
+    a.download = `Sikurezza_Nota_Del_${nota.data}.txt`
+    a.click()
+    window.URL.revokeObjectURL(url);
 }
 
 const Nota: React.FC<NotaProps> = ({controlliPeriodici,setControlliPeriodici, label, labelSubTitle}) => {
@@ -76,9 +91,8 @@ const Nota: React.FC<NotaProps> = ({controlliPeriodici,setControlliPeriodici, la
                 <div className="flex flex-col mx-auto justify-center items-center my-4 mt-12 text-right leading-4">
                     <div className="overflow-y-auto w-full max-h-[300px] border-2 p-6 rounded mb-5">
                         {controlliPeriodici.map(cp => {
-                            console.log(cp)
                             return (
-                                <div className="w-full mb-2">
+                                <div className="w-full relative mb-2">
                                     <div className="w-full border-slate-300 border-y flex flex-row sm:ml-3">
                                         <div className="flex flex-col w-7/12 text-center mt-2">
                                         <span className="border-slate-300 border-b font-normal py-2">
@@ -96,11 +110,32 @@ const Nota: React.FC<NotaProps> = ({controlliPeriodici,setControlliPeriodici, la
                                                 }}/> :
                                                 <span>Nessun File</span>
                                             }
-                                            <button className="btn btn-sm btn-disabled border-0 text-white mt-2">
+                                            <button className="btn btn-sm border-0 text-white mt-2"
+                                                    onClick={() => exportToFile(cp)}
+                                            >
                                                 Esporta Nota
                                             </button>
                                         </div>
                                     </div>
+                                    {location.state.editabile &&
+                                        <div className="absolute top-[-10px] p-1 bg-red-400 rounded-xl right-[-15px] text-white tooltip tooltip-error tooltip-left" data-tip="Elimina"
+                                             onClick={(e) => {
+                                                 let confirm = window.confirm("Sei sicuro di voler eliminare la nota?")
+                                                 if(confirm) {
+                                                     if (typeof cp.file.value === 'string') {
+                                                         deleteFileS3(cp.file.value).then(() => {
+                                                             setControlliPeriodici(controlliPeriodici.filter(c => (c.nota !== cp.nota && c.data !== cp.data)))
+                                                         })
+                                                     } else {
+                                                         setControlliPeriodici(controlliPeriodici.filter(c => (c.nota !== cp.nota && c.data !== cp.data)))
+                                                     }
+                                                 }
+                                             }}
+                                        >
+                                            <AiOutlineDelete />
+                                        </div>
+                                    }
+
                                 </div>
                             )
                         })}

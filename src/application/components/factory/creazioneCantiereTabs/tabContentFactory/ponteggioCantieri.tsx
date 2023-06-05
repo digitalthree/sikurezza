@@ -73,7 +73,6 @@ const PonteggioCantieriTab: React.FC<PonteggioCantieriProps> = ({setIndex}) => {
                             className="ml-5 w-8/12 sm:w-8/12 rounded-md"
                             placeholder="Seleziona"
                             noOptionsMessage={() => "Gru /M.S. terminate"}
-                            closeMenuOnSelect={false}
                             components={animatedComponents}
                             isMulti
                             options={ponteggio}
@@ -92,7 +91,6 @@ const PonteggioCantieriTab: React.FC<PonteggioCantieriProps> = ({setIndex}) => {
                         className="ml-5 w-8/12 sm:w-8/12 rounded-md"
                         placeholder="Seleziona"
                         noOptionsMessage={() => "Gru /M.S. terminate"}
-                        closeMenuOnSelect={false}
                         components={animatedComponents}
                         isMulti
                         options={ponteggio}

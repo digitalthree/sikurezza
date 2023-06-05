@@ -70,7 +70,6 @@ const GruCantieriTab: React.FC<GruCantieriProps> = ({setIndex}) => {
                             isDisabled={!location.state.editabile}
                             placeholder="Seleziona"
                             noOptionsMessage={() => "Gru /M.S. terminate"}
-                            closeMenuOnSelect={false}
                             components={animatedComponents}
                             isMulti
                             options={gru}
@@ -90,7 +89,6 @@ const GruCantieriTab: React.FC<GruCantieriProps> = ({setIndex}) => {
                         isDisabled={!location.state.editabile}
                         placeholder="Seleziona"
                         noOptionsMessage={() => "Gru /M.S. terminate"}
-                        closeMenuOnSelect={false}
                         components={animatedComponents}
                         isMulti
                         options={gru}

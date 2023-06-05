@@ -85,7 +85,6 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             isDisabled={!location.state.editabile}
                             placeholder="Seleziona"
                             noOptionsMessage={() => "Operai terminati"}
-                            closeMenuOnSelect={false}
                             components={animatedComponents}
                             value={cantiereSelezionato.squadraOperativa.responsabileTecnico.map(m => {
                                 return {label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: m}
@@ -101,7 +100,6 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                         isDisabled={!location.state.editabile}
                         placeholder="Seleziona"
                         noOptionsMessage={() => "Operai terminati"}
-                        closeMenuOnSelect={false}
                         components={animatedComponents}
                         isMulti
                         options={operai}
@@ -123,7 +121,6 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             isDisabled={!location.state.editabile}
                             placeholder="Seleziona"
                             noOptionsMessage={() => "Operai terminati"}
-                            closeMenuOnSelect={false}
                             components={animatedComponents}
                             isMulti
                             options={operai}
@@ -139,7 +136,6 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                         isDisabled={!location.state.editabile}
                         placeholder="Seleziona"
                         noOptionsMessage={() => "Operai terminati"}
-                        closeMenuOnSelect={false}
                         components={animatedComponents}
                         isMulti
                         options={operai}
@@ -160,7 +156,6 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             isDisabled={!location.state.editabile}
                             placeholder="Seleziona"
                             noOptionsMessage={() => "Operai terminati"}
-                            closeMenuOnSelect={false}
                             components={animatedComponents}
                             isMulti
                             options={operai}
@@ -176,7 +171,6 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                         isDisabled={!location.state.editabile}
                         placeholder="Seleziona"
                         noOptionsMessage={() => "Operai terminati"}
-                        closeMenuOnSelect={false}
                         components={animatedComponents}
                         isMulti
                         options={operai}
@@ -197,7 +191,6 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             isDisabled={!location.state.editabile}
                             placeholder="Seleziona"
                             noOptionsMessage={() => "Operai terminati"}
-                            closeMenuOnSelect={false}
                             components={animatedComponents}
                             isMulti
                             options={operai}
@@ -213,7 +206,6 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                         isDisabled={!location.state.editabile}
                         placeholder="Seleziona"
                         noOptionsMessage={() => "Operai terminati"}
-                        closeMenuOnSelect={false}
                         components={animatedComponents}
                         isMulti
                         options={operai}
@@ -239,7 +231,6 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                         isDisabled={!location.state.editabile}
                         placeholder="Seleziona"
                         noOptionsMessage={() => "Operai terminati"}
-                        closeMenuOnSelect={false}
                         components={animatedComponents}
                         options={operai}
                         value={cantiereSelezionato?.squadraOperativa.RLS ? {label: `${cantiereSelezionato?.squadraOperativa.RLS.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato?.squadraOperativa.RLS.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: cantiereSelezionato?.squadraOperativa.RLS} : RLS}
@@ -271,7 +262,6 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                         isDisabled={!location.state.editabile}
                         placeholder="Seleziona"
                         noOptionsMessage={() => "Operai terminati"}
-                        closeMenuOnSelect={false}
                         components={animatedComponents}
                         options={operai}
                         value={cantiereSelezionato?.squadraOperativa.medicoCompetente ? {label: `${cantiereSelezionato?.squadraOperativa.medicoCompetente.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato?.squadraOperativa.medicoCompetente.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: cantiereSelezionato?.squadraOperativa.medicoCompetente} : medico}
@@ -302,7 +292,6 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                         isDisabled={!location.state.editabile}
                         placeholder="Seleziona"
                         noOptionsMessage={() => "Operai terminati"}
-                        closeMenuOnSelect={false}
                         components={animatedComponents}
                         options={operai}
                         value={cantiereSelezionato?.squadraOperativa.RSPP ? {label: `${cantiereSelezionato?.squadraOperativa.RSPP.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato?.squadraOperativa.RSPP.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: cantiereSelezionato?.squadraOperativa.RSPP} : RSPP}
@@ -328,7 +317,6 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             isDisabled={!location.state.editabile}
                             placeholder="Seleziona"
                             noOptionsMessage={() => "Operai terminati"}
-                            closeMenuOnSelect={false}
                             components={animatedComponents}
                             isMulti
                             options={operai}
@@ -344,7 +332,6 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                         isDisabled={!location.state.editabile}
                         placeholder="Seleziona"
                         noOptionsMessage={() => "Operai terminati"}
-                        closeMenuOnSelect={false}
                         components={animatedComponents}
                         isMulti
                         options={operai}
@@ -365,7 +352,6 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             isDisabled={!location.state.editabile}
                             placeholder="Seleziona"
                             noOptionsMessage={() => "Operai terminati"}
-                            closeMenuOnSelect={false}
                             components={animatedComponents}
                             isMulti
                             options={operai}
@@ -381,7 +367,6 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                         isDisabled={!location.state.editabile}
                         placeholder="Seleziona"
                         noOptionsMessage={() => "Operai terminati"}
-                        closeMenuOnSelect={false}
                         components={animatedComponents}
                         isMulti
                         options={operai}
@@ -404,7 +389,6 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             isDisabled={!location.state.editabile}
                             placeholder="Seleziona"
                             noOptionsMessage={() => "Terminato"}
-                            closeMenuOnSelect={false}
                             components={animatedComponents}
                             isMulti
                             options={impreseSubAutonomi}
@@ -420,7 +404,6 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                         isDisabled={!location.state.editabile}
                         placeholder="Seleziona"
                         noOptionsMessage={() => "Terminato"}
-                        closeMenuOnSelect={false}
                         components={animatedComponents}
                         isMulti
                         options={impreseSubAutonomi}

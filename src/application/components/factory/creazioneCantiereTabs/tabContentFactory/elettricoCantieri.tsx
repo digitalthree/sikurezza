@@ -169,7 +169,6 @@ const ElettricoCantieriTab: React.FC<ElettricoCantieriProps> = ({setIndex}) => {
                     isDisabled={!location.state.editabile}
                     placeholder="Seleziona"
                     noOptionsMessage={() => "Imprese terminate"}
-                    closeMenuOnSelect={false}
                     components={animatedComponents}
                     options={impresa}
                     required={true}

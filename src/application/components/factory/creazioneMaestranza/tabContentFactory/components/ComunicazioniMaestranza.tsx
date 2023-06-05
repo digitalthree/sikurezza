@@ -51,11 +51,9 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
     const [save, setSave] = useState(false)
 
 
-
-    const {user} = useAuth0()
     const {execQuery} = useFaunaQuery()
 
-    const {register, handleSubmit, formState: {errors}} = useForm();
+    const {handleSubmit} = useForm();
     const onSubmit = (data: any) => {
         maestranza.documenti.forEach(e => {
             if(e.file && typeof e.file !== 'string'){
@@ -123,7 +121,7 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
                 <div className="flex justify-between items-center">
                     <span className="font-bold">Telefono: </span>
                     <div className="flex flex-col">
-                        <input placeholder="Telefono" {...register("telefono")}
+                        <input placeholder="Telefono"
                                className="rounded border border-gray-400 shadow p-1"
                                onKeyDown={(e) => {
                                    if(e.key === "Enter"){
@@ -140,7 +138,7 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
                 <div className="flex justify-between items-center mt-2">
                     <span className="font-bold">Cellulare privato: </span>
                     <div className="flex flex-col">
-                        <input placeholder="Cellulare privato" {...register("cellularePrivato")}
+                        <input placeholder="Cellulare privato"
                                className="rounded border border-gray-400 shadow p-1"
                                onKeyDown={(e) => {
                                    if(e.key === "Enter"){
@@ -157,7 +155,7 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
                 <div className="flex justify-between items-center mt-2">
                     <span className="font-bold">Cellulare aziendale: </span>
                     <div className="flex flex-col">
-                        <input placeholder="Cellulare aziendale" {...register("cellulareAziendale")}
+                        <input placeholder="Cellulare aziendale"
                                className="rounded border border-gray-400 shadow p-1"
                                onKeyDown={(e) => {
                                    if(e.key === "Enter"){
@@ -174,7 +172,7 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
                 <div className="flex justify-between items-center mt-2">
                     <span className="font-bold">Indirizzo mail*: </span>
                     <div className="flex flex-col">
-                        <input placeholder="Indirizzo mail" {...register("email", {required: true})}
+                        <input placeholder="Indirizzo mail"
                                className="rounded border border-gray-400 shadow p-1"
                                onKeyDown={(e) => {
                                    if(e.key === "Enter"){
@@ -185,7 +183,6 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
                                onChange={(e) => dispatch(setComunicazioniInMaestranza({nome: 'email', value: e.target.value}))}
                                defaultValue={maestranza.comunicazioni.email}
                         />
-                        {errors.email && <span className="font-bold text-red-600">Campo obbligatorio</span>}
                     </div>
                 </div>
                 {editabile &&
