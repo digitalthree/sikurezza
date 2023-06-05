@@ -20,7 +20,7 @@ import VisualizzaEliminaFile from "../../../../../shared/Files/VisualizzaElimina
 import DocumentoImpiantoElettrico from "./components/DocumentoImpiantoElettrico";
 import {Cantiere, ControlloCantiere} from "../../../../../model/Cantiere";
 import Nota from "./components/Nota";
-import {createCantiereInFauna} from "../../../../../faunadb/api/cantiereAPIs";
+import {createCantiereInFauna, updateCantiereInFauna} from "../../../../../faunadb/api/cantiereAPIs";
 import {useFaunaQuery} from "../../../../../faunadb/hooks/useFaunaQuery";
 import {useAuth0} from "@auth0/auth0-react";
 import {uploadFileS3} from "../../../../../aws/s3APIs";
@@ -55,6 +55,7 @@ const ElettricoCantieriTab: React.FC<ElettricoCantieriProps> = ({setIndex}) => {
     const [uploadToS3, setUploadToS3] = useState(false)
     const [savedToS3, setSavedToS3] = useState(false)
     const [uploadToFauna, setUploadToFauna] = useState(false)
+    const [update, setUpdate] = useState(false)
 
     const {execQuery} = useFaunaQuery()
     const {user} = useAuth0()
@@ -144,15 +145,25 @@ const ElettricoCantieriTab: React.FC<ElettricoCantieriProps> = ({setIndex}) => {
     }, [cantiereDaCreare, savedToS3])
 
     useEffect(() => {
-        if(uploadToFauna){
+        if(uploadToFauna && !update){
             execQuery(createCantiereInFauna, {
                 ...cantiereDaCreare,
                 creatoDa: impresaSelezionata?.faunaDocumentId as string,
             }).then(res => {
                 navigate(`/impresa/${impresaSelezionata?.faunaDocumentId}/cantieri`)
+                setUploadToFauna(false)
             })
         }
-    }, [uploadToFauna])
+        if(uploadToFauna && update){
+            execQuery(updateCantiereInFauna, {
+                ...cantiereSelezionato,
+            }).then(res => {
+                navigate(`/impresa/${impresaSelezionata?.faunaDocumentId}/cantieri`)
+                setUploadToFauna(false)
+                setUpdate(false)
+            })
+        }
+    }, [uploadToFauna, update])
 
     return (
         <>
@@ -295,6 +306,7 @@ const ElettricoCantieriTab: React.FC<ElettricoCantieriProps> = ({setIndex}) => {
                         onClick={() => {
                             dispatch(setRegistroControlliImpiantoElettricoInCantiere(registroDiControllo))
                             dispatch(setVerifichePeriodicheImpiantoElettricoInCantiere(verifichePeriodiche))
+                            setUpdate(true)
                             setUploadToS3(true)
                         }}
                     >
