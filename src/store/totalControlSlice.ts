@@ -11,7 +11,7 @@ export interface TotalControlState {
     ricercaByMacchinaEAttrezzatura?: string,
     ricercaByPonteggio?: string,
     ricercaByGru?: string,
-    items: {item: (Impresa|Maestranza|MacchinaEAttrezzatura|Ponteggio|Gru), tipo: "Impresa"|"Maestranza"|"MacchinaEAttrezzatura"|"Ponteggio"|"Gru"}[]
+    items: {item: (Impresa|Maestranza|MacchinaEAttrezzatura|Ponteggio|Gru), tipo: "Impresa"|"Maestranza"|"MacchinaEAttrezzatura"|"Ponteggio"|"Gru", problema: string}[]
 }
 
 export const TotalControlSlice = createSlice({
@@ -20,7 +20,7 @@ export const TotalControlSlice = createSlice({
         items: []
     } as TotalControlState,
     reducers: {
-        addItem(state: TotalControlState, action: PayloadAction<{item: (Impresa|Maestranza|MacchinaEAttrezzatura|Ponteggio|Gru), tipo: "Impresa"|"Maestranza"|"MacchinaEAttrezzatura"|"Ponteggio"|"Gru"}>){
+        addItem(state: TotalControlState, action: PayloadAction<{item: (Impresa|Maestranza|MacchinaEAttrezzatura|Ponteggio|Gru), tipo: "Impresa"|"Maestranza"|"MacchinaEAttrezzatura"|"Ponteggio"|"Gru", problema: string}>){
             state.items.push(action.payload)
         },
         resetItem(state: TotalControlState){

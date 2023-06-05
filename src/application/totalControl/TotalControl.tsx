@@ -55,7 +55,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
 
     const [modifica, setModifica] = useState(true)
 
-    const [itemsFiltered, setItemFiltered] = useState<{item: Impresa | MacchinaEAttrezzatura | Maestranza | Ponteggio | Gru, tipo: "Impresa" | "Maestranza" | "MacchinaEAttrezzatura" | "Ponteggio" | "Gru"}[]>([])
+    const [itemsFiltered, setItemFiltered] = useState<{item: Impresa | MacchinaEAttrezzatura | Maestranza | Ponteggio | Gru, tipo: "Impresa" | "Maestranza" | "MacchinaEAttrezzatura" | "Ponteggio" | "Gru", problema: string}[]>([])
 
     useEffect(() => {
         dispatch(resetItem())
@@ -65,8 +65,8 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                     if (r.macchinaEAttrezzatura && (Date.parse(r.macchinaEAttrezzatura.ultimaRevisione.scadenza) - Date.now() < 45*24*3600*1000)) {
                             dispatch(addItem({item: {
                                 ...r.macchinaEAttrezzatura,
-                                    faunaDocumentId: r.id
-                                }, tipo: "MacchinaEAttrezzatura"}))
+                                    faunaDocumentId: r.id,
+                                }, tipo: "MacchinaEAttrezzatura", problema: "Ultima Revisione"}))
 
                     }
                 })
@@ -74,21 +74,34 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
             execQuery(getAllMaestranzeByCreatoDa, i.faunaDocumentId).then((res) => {
                 res.forEach((r: { id: string; maestranza: Maestranza }) => {
                     if (r.maestranza) {
-                        dispatch(addItem({item: {...r.maestranza, faunaDocumentId: r.id}, tipo: "Maestranza"}))
+                        r.maestranza.documenti.forEach(d => {
+                            if((Date.parse(d.scadenza as string) - Date.now() < 45*24*3600*1000)){
+                                dispatch(addItem({item: {...r.maestranza, faunaDocumentId: r.id}, tipo: "Maestranza", problema: d.nome}))
+                            }
+                        })
                     }
                 })
             })
             execQuery(getAllPonteggiByCreatoDa, i.faunaDocumentId).then((res) => {
                 res.forEach((r: { id: string; ponteggio: Ponteggio }) => {
                     if (r.ponteggio) {
-                        dispatch(addItem({item: {...r.ponteggio, faunaDocumentId: r.id}, tipo: "Ponteggio"}))
+                        r.ponteggio.controlli.forEach(c => {
+                            if((Date.parse(c.data) - Date.now() < 45*24*3600*1000)){
+                                dispatch(addItem({item: {...r.ponteggio, faunaDocumentId: r.id}, tipo: "Ponteggio", problema: c.nome}))
+                            }
+                        })
+
                     }
                 })
             })
             execQuery(getAllGruByCreatoDa, i.faunaDocumentId).then((res) => {
                 res.forEach((r: { id: string; gru: Gru }) => {
                     if (r.gru) {
-                        dispatch(addItem({item: {...r.gru, faunaDocumentId: r.id}, tipo: "Gru"}))
+                        r.gru.verifiche.forEach(v => {
+                            if((Date.parse(v.scadenza) - Date.now() < 45*24*3600*1000)){
+                                dispatch(addItem({item: {...r.gru, faunaDocumentId: r.id}, tipo: "Gru", problema: v.label}))
+                            }
+                        })
                     }
                 })
             })
@@ -209,6 +222,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                                         <th>{index + 1}</th>
                                         <td>{(i.item as MacchinaEAttrezzatura).creatoDa.nome.toUpperCase()}</td>
                                         <td>{(i.item as MacchinaEAttrezzatura).attr.filter(a => a.nome === "denominazione")[0].value}</td>
+                                        <td>{i.problema}</td>
                                         <td>
                                             <FiAlertTriangle size={30}
                                                              color={`${Date.parse((i.item as MacchinaEAttrezzatura).ultimaRevisione.scadenza) - Date.now() < 30 * 24 * 3600 * 1000 ? 'red' : 'orange'}`}/>
@@ -230,6 +244,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                                         <th>{index + 1}</th>
                                         <td>{(i.item as Maestranza).creatoDa.nome.toUpperCase()}</td>
                                         <td>{(i.item as Maestranza).anagrafica.filter(m => m.label === 'nome')[0].value} {(i.item as Maestranza).anagrafica.filter(m => m.label === 'cognome')[0].value}</td>
+                                        <td>{i.problema}</td>
                                         <td>
                                             <FiAlertTriangle size={30} color="red"/>
                                         </td>
@@ -252,6 +267,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                                         <th>{index + 1}</th>
                                         <td>{(i.item as Ponteggio).creatoDa.nome.toUpperCase()}</td>
                                         <td>{(i.item as Ponteggio).attr.filter(a => a.nome === "tipologia")[0].value}</td>
+                                        <td>{i.problema}</td>
                                         <td>
                                             <FiAlertTriangle size={30} color="red"/>
                                         </td>
@@ -274,6 +290,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                                         <th>{index + 1}</th>
                                         <td>{(i.item as Gru).creatoDa.nome.toUpperCase()}</td>
                                         <td>{(i.item as Gru).attr.filter(a => a.nome === "tipologia")[0].value}</td>
+                                        <td>{i.problema}</td>
                                         <td>
                                             <FiAlertTriangle size={30} color="red"/>
                                         </td>
