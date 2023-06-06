@@ -120,6 +120,12 @@ export const ImpresaSlice = createSlice({
             }
 
         },
+        setLogoImpresa(state: ImpresaState, action: PayloadAction<string|File|undefined>){
+            state.impresaDaCreare.anagrafica.logo.value = action.payload
+            if(state.impresaSelezionata){
+                state.impresaSelezionata.anagrafica.logo.value = action.payload
+            }
+        },
     }
 })
 
@@ -127,7 +133,7 @@ export const ImpresaSlice = createSlice({
 export const {
     addImpresa, removeImpresa, setImpresaDaCreare, setPresenzaInDocumenti, setFileInDocumenti, setComunicazioneInComunicazioni,
     setImpresaSelezionata, addComunicazioneInComunicazioni, addMaestranza, removeMaestranza, setObjectToCreate, addBreadcrumbItem,
-    removeBreadcrumbItem, resetBreadcrumbItems, setTipologiaImpresa, setAttributoAnagraficaImpresa
+    removeBreadcrumbItem, resetBreadcrumbItems, setTipologiaImpresa, setAttributoAnagraficaImpresa, setLogoImpresa
 } = ImpresaSlice.actions
 
 export const ImpreseSelector = (state: { impresaSlice: ImpresaState }) => state.impresaSlice.imprese;

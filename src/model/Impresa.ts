@@ -4,7 +4,8 @@ import {Maestranza} from "./Maestranza";
 export interface Impresa {
     tipo: 'Affidataria' | 'Subappaltatrice',
     anagrafica: {
-        attr: {label: string, value: string}[]
+        attr: {label: string, value: string}[],
+        logo: {nome: string, value: File|string|undefined},
         dvr: {
             nome: string,
             presenza: boolean,
@@ -53,6 +54,7 @@ export const impresaTemporanea: Impresa = {
             {label: 'durc', value: ''},
             {label: 'scadenza', value: ''},
         ],
+        logo: {nome: "logo", value: undefined},
         dvr: {
             nome: "dvr",
             presenza: false,

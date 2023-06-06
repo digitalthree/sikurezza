@@ -7,7 +7,7 @@ import {
     addImpresa, ImpresaSelezionataSelector,
     ImpreseDaCreareSelector, removeImpresa, setComunicazioneInComunicazioni,
     setFileInDocumenti,
-    setImpresaDaCreare, setObjectToCreate
+    setImpresaDaCreare, setLogoImpresa, setObjectToCreate
 } from "../../../../../../store/impresaSlice";
 import {Impresa, impresaTemporanea, ItemComunicazione} from "../../../../../../model/Impresa";
 import {useFaunaQuery} from "../../../../../../faunadb/hooks/useFaunaQuery";
@@ -47,10 +47,17 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
                 })
             }
         })
+        if(impresaDaCreare.anagrafica.logo.value && typeof impresaDaCreare.anagrafica.logo.value !== "string"){
+            uploadFileS3(impresaDaCreare.anagrafica.logo.value).then(res => {
+                dispatch(setLogoImpresa(res?.key))
+            })
+        }
     }
 
     useEffect(() => {
-        if (impresaDaCreare.documentiIdoneitaImpresa.filter(d => !d.file.value || typeof d.file.value === 'string').length === impresaDaCreare.documentiIdoneitaImpresa.length) {
+        if (impresaDaCreare.documentiIdoneitaImpresa.filter(d => !d.file.value || typeof d.file.value === 'string').length === impresaDaCreare.documentiIdoneitaImpresa.length ||
+            !impresaDaCreare.anagrafica.logo.value || typeof impresaDaCreare.anagrafica.logo.value === 'string'
+        ) {
             setUploadToFauna(true)
         }
     }, [impresaDaCreare])
@@ -104,7 +111,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)} className="mt-20 w-[50%] p-10 shadow-2xl flex flex-col">
+            <form onSubmit={handleSubmit(onSubmit)} className="w-[50%] p-10 shadow-2xl flex flex-col">
                 {impresaDaCreare.comunicazioni.map(c => {
                     return (
                         <div key={c.mansione}>

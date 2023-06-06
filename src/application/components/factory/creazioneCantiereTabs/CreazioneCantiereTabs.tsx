@@ -6,16 +6,21 @@ import GruCantieriTab from "./tabContentFactory/gruCantieri";
 import PonteggioCantieriTab from "./tabContentFactory/ponteggioCantieri";
 import SquadraOperativaCantieriTab from "./tabContentFactory/squadraOperativaCantiere";
 import {useLocation} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {ImpresaSelezionataSelector} from "../../../../store/impresaSlice";
 export interface CreazioneCantieriTabsProps {}
 
 const CreazioneCantiereTabs: React.FC<CreazioneCantieriTabsProps> = ({}) => {
+
   const [index, setIndex] = useState(0);
+  //const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
+  //TODO: implementare visualizzazione dinamica del logo
   
   return (
     <>
-      <div className="flex flex-row w-full h-16 justify-center">
+      <div className="flex flex-row w-full h-24 justify-center">
         <img
-          src="\img\loghi_schede\prova_logo_azienda.png"
+          src="\img\loghi_schede\logo_impresa.png"
           alt="logo azienda"
         ></img>
       </div>

@@ -4,13 +4,15 @@ import {useDispatch} from "react-redux";
 
 export interface InputFileProps{
     editabile: boolean,
-    onChangeFunction: (ev:  React.ChangeEvent<HTMLInputElement>) => void
+    onChangeFunction: (ev:  React.ChangeEvent<HTMLInputElement>) => void,
+    accept?: 'image' | 'pdf'
 }
 
-const InputFile: React.FC<InputFileProps> = ({editabile, onChangeFunction}) => {
+const InputFile: React.FC<InputFileProps> = ({editabile, onChangeFunction, accept}) => {
     return(
         <>
             <input type="file"
+                   accept={accept && accept === 'image' ? 'image/png, image/jpeg': 'application/pdf'}
                    onKeyDown={(e) => {
                        if(e.key === "Enter"){
                            e.preventDefault()

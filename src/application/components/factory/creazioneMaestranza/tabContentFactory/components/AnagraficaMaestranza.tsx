@@ -10,7 +10,11 @@ import {
 import {Impresa} from "../../../../../../model/Impresa";
 import {estintoreDefault} from "../../../../../../model/Estintore";
 import {maestranzaDefault} from "../../../../../../model/Maestranza";
-import {ImpresaSelezionataSelector} from "../../../../../../store/impresaSlice";
+import {
+    addBreadcrumbItem,
+    BreadcrumbItemsSelector,
+    ImpresaSelezionataSelector
+} from "../../../../../../store/impresaSlice";
 
 export interface AnagraficaMaestranzaProps{
     setTabActive: (s:string) => void
@@ -26,10 +30,18 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
     const maestranzaDaCreare = useSelector(MaestranzaDaCreareSelector)
     const maestranzaSelezionata = useSelector(MaestranzaSelezionataSelector)
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
+    const breadcrumbItems = useSelector(BreadcrumbItemsSelector)
 
     useEffect(() => {
         dispatch(setAnagraficaMaestranza({label: 'impresaAppartenenza', value: impresaSelezionata?.anagrafica.attr.filter(a => a.label === "denominazione")[0].value as string}))
     }, [impresaSelezionata])
+
+
+    useEffect(() => {
+        if(maestranzaSelezionata && breadcrumbItems.filter(bi => bi === `${maestranzaSelezionata.anagrafica.filter(a => a.label === "nome")[0].value} ${maestranzaSelezionata.anagrafica.filter(a => a.label === "cognome")[0].value}`).length === 0){
+            dispatch(addBreadcrumbItem(`${maestranzaSelezionata.anagrafica.filter(a => a.label === "nome")[0].value} ${maestranzaSelezionata.anagrafica.filter(a => a.label === "cognome")[0].value}`))
+        }
+    }, [maestranzaSelezionata])
 
 
 
@@ -39,8 +51,7 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
 
     return (
         <>
-            <form className="mt-20 w-[40%] p-10 shadow-2xl">
-
+            <form className="w-[40%] p-10 shadow-2xl">
                 <div className="flex justify-between items-center">
                     <span className="font-bold">Nome*: </span>
                     <div className="flex flex-col">

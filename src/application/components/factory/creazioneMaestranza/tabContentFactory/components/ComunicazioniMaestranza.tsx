@@ -115,7 +115,7 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}
-                  className={`mt-20 w-[40%] p-10 shadow-2xl ${spinner && 'opacity-20'}`}
+                  className={`w-[40%] p-10 shadow-2xl ${spinner && 'opacity-20'}`}
             >
 
                 <div className="flex justify-between items-center">

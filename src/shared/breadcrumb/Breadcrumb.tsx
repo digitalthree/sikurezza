@@ -2,7 +2,7 @@ import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {
     BreadcrumbItemsSelector,
-    ImpresaSelezionataSelector,
+    ImpresaSelezionataSelector, removeBreadcrumbItem,
     setImpresaSelezionata, setObjectToCreate,
 } from "../../store/impresaSlice";
 import {useNavigate} from "react-router-dom";
@@ -61,7 +61,13 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = () => {
                                 key={bi}
                                 className={`${
                                     index === breadcrumbsItems.length - 1 && "font-bold"
-                                }`}
+                                } hover:cursor-pointer`}
+                                onClick={() => {
+                                    if(index !== breadcrumbsItems.length - 1){
+                                        dispatch(removeBreadcrumbItem())
+                                        navigate(-1)
+                                    }
+                                }}
                             >
                                 {bi}
                             </li>
@@ -74,6 +80,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = () => {
                 onClick={() => {
                     navigate(-1)
                     dispatch(setObjectToCreate(undefined));
+                    dispatch(removeBreadcrumbItem())
                 }}
             >
                 <svg

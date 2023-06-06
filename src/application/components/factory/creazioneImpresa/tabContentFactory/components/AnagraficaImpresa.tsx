@@ -1,12 +1,17 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useForm} from "react-hook-form";
 import {TfiSave} from "react-icons/tfi";
 import {useDispatch, useSelector} from "react-redux";
 import {
     ImpresaSelezionataSelector,
     ImpreseDaCreareSelector, setAttributoAnagraficaImpresa,
-    setImpresaDaCreare, setTipologiaImpresa
+    setImpresaDaCreare, setLogoImpresa, setTipologiaImpresa
 } from "../../../../../../store/impresaSlice";
+import {Impresa, impresaTemporanea} from "../../../../../../model/Impresa";
+import VisualizzaEliminaFile from "../../../../../../shared/Files/VisualizzaEliminaFile";
+import {setFileInDocumentiMaestranza} from "../../../../../../store/maestranzaSlice";
+import InputFile from "../../../../../../shared/Files/InputFile";
+import {deleteFileS3, uploadFileS3} from "../../../../../../aws/s3APIs";
 
 interface AnagraficaProps {
     setTabActive: (s:string) => void,
@@ -18,14 +23,17 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
     const dispatch = useDispatch()
     const impresaDaCreare = useSelector(ImpreseDaCreareSelector)
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
+    const [impresa, setImpresa] = useState<Impresa>(impresaTemporanea)
 
     useEffect(() => {
         if(impresaSelezionata){
             dispatch(setImpresaDaCreare(impresaSelezionata))
+            setImpresa(impresaSelezionata)
         }else{
             dispatch(setTipologiaImpresa("Subappaltatrice"))
+            setImpresa(impresaDaCreare)
         }
-    }, [impresaSelezionata])
+    }, [impresaSelezionata, impresaDaCreare])
 
     const {register, formState: {errors}} = useForm();
 
@@ -33,7 +41,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
 
     return (
         <>
-            <form onSubmit={(e) => e.preventDefault()} className="mt-20 w-[40%] p-10 shadow-2xl">
+            <form onSubmit={(e) => e.preventDefault()} className="w-[40%] p-10 shadow-2xl">
 
                 <div className="flex justify-between items-center">
                     <span className="font-bold">Tipologia Impresa*: </span>
@@ -41,7 +49,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                         <select placeholder="Tipologia Impresa" {...register("tipologiaImpresa", {required: true})}
                                 className="rounded border border-gray-400 shadow p-1"
                                 disabled={!primoAccesso}
-                                value={(impresaSelezionata) ? impresaSelezionata.tipo : "Subappaltatrice"}
+                                value={(impresa) ? impresa.tipo : "Subappaltatrice"}
                                 onChange={(e) => {
                                     if(e.target.value === "Affidataria"){
                                         dispatch(setTipologiaImpresa(e.target.value as "Affidataria"))
@@ -58,6 +66,25 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                 </div>
 
                 <div className="flex justify-between items-center mt-2">
+                    <span className="font-bold">Logo: </span>
+                    {impresa.anagrafica.logo.value ?
+                        <VisualizzaEliminaFile file={impresa.anagrafica.logo.value} modifica={true} nome="logo"
+                                               eliminaFunction={() => {
+                                                   if(typeof impresa.anagrafica.logo.value === "string"){
+                                                       deleteFileS3(impresa.anagrafica.logo.value).then(() => dispatch(setLogoImpresa(undefined)))
+                                                   }else{
+                                                       dispatch(setLogoImpresa(undefined))
+                                                   }
+                                               }}
+                        />
+                        :
+                        <InputFile editabile={true} accept="image" onChangeFunction={(e) => {
+                            dispatch(setLogoImpresa((e.target.files) ? e.target.files[0] : undefined))
+                        }}/>
+                    }
+                </div>
+
+                <div className="flex justify-between items-center mt-2">
                     <span className="font-bold">Denominazione*: </span>
                     <div className="flex flex-col">
                         <input placeholder="Denominazione" {...register("denominazione", {required: true})}
@@ -67,7 +94,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                                        e.preventDefault()
                                    }
                                }}
-                               value={(impresaSelezionata) ? impresaSelezionata.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value}
+                               value={(impresa) ? impresa.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value}
                                onChange={(e) => dispatch(setAttributoAnagraficaImpresa({label: 'denominazione', value: e.target.value}))}
                         />
                         {errors.denominazione && <span className="font-bold text-red-600">Campo obbligatorio</span>}
@@ -85,7 +112,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                                        e.preventDefault()
                                    }
                                }}
-                               value={(impresaSelezionata) ? impresaSelezionata.anagrafica.attr.filter(a => a.label === 'sedeLegale')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'sedeLegale')[0].value}
+                               value={(impresa) ? impresa.anagrafica.attr.filter(a => a.label === 'sedeLegale')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'sedeLegale')[0].value}
                                onChange={(e) => dispatch(setAttributoAnagraficaImpresa({label: 'sedeLegale', value: e.target.value}))}
                         />
                         {errors.sedeLegale && <span className="font-bold text-red-600">Campo obbligatorio</span>}
@@ -101,7 +128,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                                        e.preventDefault()
                                    }
                                }}
-                           value={(impresaSelezionata) ? impresaSelezionata.anagrafica.attr.filter(a => a.label === 'codiceFiscale')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'codiceFiscale')[0].value}
+                           value={(impresa) ? impresa.anagrafica.attr.filter(a => a.label === 'codiceFiscale')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'codiceFiscale')[0].value}
                            onChange={(e) => dispatch(setAttributoAnagraficaImpresa({label: 'codiceFiscale', value: e.target.value}))}
                     />
                 </div>
@@ -115,7 +142,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                                        e.preventDefault()
                                    }
                                }}
-                           value={(impresaSelezionata) ? impresaSelezionata.anagrafica.attr.filter(a => a.label === 'partitaIva')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'partitaIva')[0].value}
+                           value={(impresa) ? impresa.anagrafica.attr.filter(a => a.label === 'partitaIva')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'partitaIva')[0].value}
                            onChange={(e) => dispatch(setAttributoAnagraficaImpresa({label: 'partitaIva', value: e.target.value}))}
                     />
                 </div>
@@ -129,7 +156,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                                        e.preventDefault()
                                    }
                                }}
-                           value={(impresaSelezionata) ? impresaSelezionata.anagrafica.attr.filter(a => a.label === 'formaGiuridica')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'formaGiuridica')[0].value}
+                           value={(impresa) ? impresa.anagrafica.attr.filter(a => a.label === 'formaGiuridica')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'formaGiuridica')[0].value}
                            onChange={(e) => dispatch(setAttributoAnagraficaImpresa({label: 'formaGiuridica', value: e.target.value}))}
                     />
                 </div>
@@ -143,7 +170,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                                        e.preventDefault()
                                    }
                                }}
-                           value={(impresaSelezionata) ? impresaSelezionata.anagrafica.attr.filter(a => a.label === 'amministratore')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'amministratore')[0].value}
+                           value={(impresa) ? impresa.anagrafica.attr.filter(a => a.label === 'amministratore')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'amministratore')[0].value}
                            onChange={(e) => dispatch(setAttributoAnagraficaImpresa({label: 'amministratore', value: e.target.value}))}
                     />
                 </div>
@@ -157,7 +184,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                                        e.preventDefault()
                                    }
                                }}
-                           value={(impresaSelezionata) ? impresaSelezionata.anagrafica.attr.filter(a => a.label === 'codiceFiscaleAmministratore')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'codiceFiscaleAmministratore')[0].value}
+                           value={(impresa) ? impresa.anagrafica.attr.filter(a => a.label === 'codiceFiscaleAmministratore')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'codiceFiscaleAmministratore')[0].value}
                            onChange={(e) => dispatch(setAttributoAnagraficaImpresa({label: 'codiceFiscaleAmministratore', value: e.target.value}))}
                     />
                 </div>
@@ -172,7 +199,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                                        e.preventDefault()
                                    }
                                }}
-                               value={(impresaSelezionata) ? impresaSelezionata.anagrafica.attr.filter(a => a.label === 'durc')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'durc')[0].value}
+                               value={(impresa) ? impresa.anagrafica.attr.filter(a => a.label === 'durc')[0].value :impresaDaCreare.anagrafica.attr.filter(a => a.label === 'durc')[0].value}
                                onChange={(e) => dispatch(setAttributoAnagraficaImpresa({label: 'durc', value: e.target.value}))}
                         />
                     </div>
@@ -185,7 +212,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                                        e.preventDefault()
                                    }
                                }}
-                               value={(impresaSelezionata) ? impresaSelezionata.anagrafica.attr.filter(a => a.label === 'scadenza')[0].value : impresaDaCreare.anagrafica.attr.filter(a => a.label === 'scadenza')[0].value}
+                               value={(impresa) ? impresa.anagrafica.attr.filter(a => a.label === 'scadenza')[0].value : impresaDaCreare.anagrafica.attr.filter(a => a.label === 'scadenza')[0].value}
                                onChange={(e) => dispatch(setAttributoAnagraficaImpresa({label: 'scadenza', value: e.target.value}))}
                         />
                     </div>
