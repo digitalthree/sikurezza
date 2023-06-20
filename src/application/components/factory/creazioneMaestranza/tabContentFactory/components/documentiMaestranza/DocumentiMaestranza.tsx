@@ -1,8 +1,7 @@
-import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from "react-redux";
+import React from 'react';
+import {useSelector} from "react-redux";
 import {
     MaestranzaDaCreareSelector, MaestranzaSelezionataSelector,
-    setDocumentiMaestranza
 } from "../../../../../../../store/maestranzaSlice";
 import {useForm} from "react-hook-form";
 import SezioneContratto from "./components/sezioneContratto";
@@ -13,8 +12,6 @@ import SezioneConsegne from "./components/sezioneConsegne";
 import SezioneNomine from "./components/sezioneNomine";
 import SezioneCorsi2 from "./components/sezioneCorsi2";
 import {TfiSave} from "react-icons/tfi";
-import {convertiInDocumentiMaestranza} from "../utils/conversioneDocumentiMaestranza";
-import {addBreadcrumbItem} from "../../../../../../../store/impresaSlice";
 
 export interface DocumentiMaestranzaProps{
     setTabActive: (s:string) => void,

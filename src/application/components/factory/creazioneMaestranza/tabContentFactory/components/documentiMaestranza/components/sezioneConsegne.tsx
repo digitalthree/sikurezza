@@ -43,7 +43,7 @@ const SezioneConsegne: React.FC<SezioneConsegneProps> = (
         <>
             <div className="grid grid-cols-12 gap-4">
                 <span className="font-bold col-span-2">Consegna DPI: </span>
-                <div className="col-span-2 flex flex-row">
+                <div className="col-span-1 flex flex-row">
                     NO
                     <input type="checkbox" className="toggle ml-2 mr-2" {...register('consegnaDPI')}
                            onKeyDown={(e) => {
@@ -60,9 +60,9 @@ const SezioneConsegne: React.FC<SezioneConsegneProps> = (
                     />
                     SI
                 </div>
-                <span className="font-bold col-span-2">consegnato il: </span>
+                <span className="font-bold col-span-1">consegnato il: </span>
                 <input type="date" {...register("consegnaDPIConsegnatoIl")}
-                       className="rounded border border-gray-400 shadow p-1 col-span-2"
+                       className="rounded border border-gray-400 shadow p-1 col-span-5"
                        onKeyDown={(e) => {
                            if (e.key === "Enter") {
                                e.preventDefault()
@@ -90,7 +90,7 @@ const SezioneConsegne: React.FC<SezioneConsegneProps> = (
             </div>
             <div className="grid grid-cols-12 gap-4 mt-2">
                 <span className="font-bold col-span-2">Consegna Tesserino: </span>
-                <div className="col-span-2 flex flex-row">
+                <div className="col-span-1 flex flex-row">
                     NO
                     <input type="checkbox" className="toggle ml-2 mr-2" {...register('consegnaTesserino')}
                            onKeyDown={(e) => {
@@ -107,9 +107,9 @@ const SezioneConsegne: React.FC<SezioneConsegneProps> = (
                     />
                     SI
                 </div>
-                <span className="font-bold col-span-2">consegnato il: </span>
+                <span className="font-bold col-span-1">consegnato il: </span>
                 <input type="date" {...register("consegnaTesserinoConsegnatoIl")}
-                       className="rounded border border-gray-400 shadow p-1 col-span-2"
+                       className="rounded border border-gray-400 shadow p-1 col-span-5"
                        onKeyDown={(e) => {
                            if (e.key === "Enter") {
                                e.preventDefault()

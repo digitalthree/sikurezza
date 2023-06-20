@@ -49,7 +49,7 @@ export const CantiereSlice = createSlice({
                 })
             }
         },
-        setAttributoSquadraOperativa(state: CantiereState, action: PayloadAction<{nome: string, value: (Maestranza | Impresa)[]}>){
+        setAttributoSquadraOperativa(state: CantiereState, action: PayloadAction<{nome: string, value: (Maestranza | Impresa)[] | string}>){
             switch (action.payload.nome) {
                 case "Responsabile Tecnico":
                     state.cantiereDaCreare.squadraOperativa.responsabileTecnico = action.payload.value as Maestranza[]
@@ -81,16 +81,28 @@ export const CantiereSlice = createSlice({
                         state.cantiereSelezionato.squadraOperativa.RLS = action.payload.value[0] as Maestranza
                     }
                     break;
-                case "Medico Competente":
-                    state.cantiereDaCreare.squadraOperativa.medicoCompetente = action.payload.value[0] as Maestranza
+                case "RLST":
+                    state.cantiereDaCreare.squadraOperativa.RLST = action.payload.value as string
                     if(state.cantiereSelezionato){
-                        state.cantiereSelezionato.squadraOperativa.medicoCompetente = action.payload.value[0] as Maestranza
+                        state.cantiereSelezionato.squadraOperativa.RLST = action.payload.value as string
+                    }
+                    break;
+                case "Medico Competente":
+                    state.cantiereDaCreare.squadraOperativa.medicoCompetente = action.payload.value as string
+                    if(state.cantiereSelezionato){
+                        state.cantiereSelezionato.squadraOperativa.medicoCompetente = action.payload.value as string
                     }
                     break;
                 case "RSPP":
                     state.cantiereDaCreare.squadraOperativa.RSPP = action.payload.value[0] as Maestranza
                     if(state.cantiereSelezionato){
                         state.cantiereSelezionato.squadraOperativa.RSPP = action.payload.value[0] as Maestranza
+                    }
+                    break;
+                case "RSPPT":
+                    state.cantiereDaCreare.squadraOperativa.RSPPT = action.payload.value as string
+                    if(state.cantiereSelezionato){
+                        state.cantiereSelezionato.squadraOperativa.RSPPT = action.payload.value as string
                     }
                     break;
                 case "Delegati Sicurezza":

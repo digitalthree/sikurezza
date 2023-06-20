@@ -12,7 +12,11 @@ import {useDispatch, useSelector} from "react-redux";
 import {ImpresaSelezionataSelector, ImpreseSelector} from "../../../../../store/impresaSlice";
 import {useFaunaQuery} from "../../../../../faunadb/hooks/useFaunaQuery";
 import {Maestranza} from "../../../../../model/Maestranza";
-import {CantiereSelezionatoSelector, setAttributoSquadraOperativa} from "../../../../../store/cantiereSlice";
+import {
+    CantiereSelezionatoSelector,
+    setAttributoAnagrafica,
+    setAttributoSquadraOperativa
+} from "../../../../../store/cantiereSlice";
 import {useLocation} from "react-router-dom";
 import {Impresa} from "../../../../../model/Impresa";
 
@@ -31,8 +35,9 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
     const cantiereSelezionato = useSelector(CantiereSelezionatoSelector)
 
     const [RLS, setRLS] = useState([{label: "", value: cantiereSelezionato?.squadraOperativa.RLS}])
-    const [medico, setMedico] = useState([{label: "", value: cantiereSelezionato?.squadraOperativa.medicoCompetente}])
+    const [RLST, setRLST] = useState("")
     const [RSPP, setRSPP] = useState([{label: "", value: cantiereSelezionato?.squadraOperativa.RSPP}])
+    const [RSPPT, setRSPPT] = useState("")
 
     const {execQuery} = useFaunaQuery()
     const dispatch = useDispatch()
@@ -51,7 +56,10 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
 
     /* MULTI SELECT PER SCEGLIERE GLI OPERAI NELLA SCHEDA SQUADRA OPERATIVA */
     const operai = maestranze.map(m => {
-        return {label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: m}
+        return {
+            label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`,
+            value: m
+        }
     })
 
     /* MULTI SELECT PER IMPRESE SUBALPALT. E OPERAI AUTONOMI SCHEDA SQUADRA OPERATIVA */
@@ -87,7 +95,10 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             noOptionsMessage={() => "Operai terminati"}
                             components={animatedComponents}
                             value={cantiereSelezionato.squadraOperativa.responsabileTecnico.map(m => {
-                                return {label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: m}
+                                return {
+                                    label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`,
+                                    value: m
+                                }
                             })}
                             isMulti
                             options={operai}
@@ -125,7 +136,10 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             isMulti
                             options={operai}
                             value={cantiereSelezionato.squadraOperativa.preposti.map(m => {
-                                return {label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: m}
+                                return {
+                                    label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`,
+                                    value: m
+                                }
                             })}
                             onChange={(e) => onSelectionChange(e, "Preposti")}
                         />
@@ -160,7 +174,10 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             isMulti
                             options={operai}
                             value={cantiereSelezionato.squadraOperativa.addettiPrimoSoccorso.map(m => {
-                                return {label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: m}
+                                return {
+                                    label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`,
+                                    value: m
+                                }
                             })}
                             onChange={(e) => onSelectionChange(e, "Addetti Primo Soccorso")}
                         />
@@ -195,7 +212,10 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             isMulti
                             options={operai}
                             value={cantiereSelezionato.squadraOperativa.addettiAntiIncendio.map(m => {
-                                return {label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: m}
+                                return {
+                                    label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`,
+                                    value: m
+                                }
                             })}
                             onChange={(e) => onSelectionChange(e, "Addetti Antincendio")}
                         />
@@ -219,7 +239,7 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                               justify-center items-center my-2 text-right leading-4 font-semibold"
             >
                 <span className="w-4/12 sm:w-4/12">RSL</span>
-                {cantiereSelezionato  && !location.state.editabile ?
+                {cantiereSelezionato && !location.state.editabile ?
                     <>
                         <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
                             <li className="rounded bg-gray-200 p-2 ml-1">{`${cantiereSelezionato.squadraOperativa.RLS.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato.squadraOperativa.RLS.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
@@ -228,12 +248,15 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                     :
                     <Select
                         className="ml-5 w-8/12 sm:w-8/12 rounded-md"
-                        isDisabled={!location.state.editabile}
+                        isDisabled={!location.state.editabile || RLST.length > 0}
                         placeholder="Seleziona"
                         noOptionsMessage={() => "Operai terminati"}
                         components={animatedComponents}
                         options={operai}
-                        value={cantiereSelezionato?.squadraOperativa.RLS ? {label: `${cantiereSelezionato?.squadraOperativa.RLS.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato?.squadraOperativa.RLS.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: cantiereSelezionato?.squadraOperativa.RLS} : RLS}
+                        value={cantiereSelezionato?.squadraOperativa.RLS ? {
+                            label: `${cantiereSelezionato?.squadraOperativa.RLS.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato?.squadraOperativa.RLS.anagrafica.filter(m => m.label === 'cognome')[0].value}`,
+                            value: cantiereSelezionato?.squadraOperativa.RLS
+                        } : RLS}
                         onChange={(e) => {
                             if (e) {
                                 setRLS([e] as { label: string, value: Maestranza }[])
@@ -249,28 +272,58 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                 className="mx-auto flex flex-row w-full sm:w-10/12 md:w-9/12 lg:w-8/12 xl:w-7/12 2xl:w-6/12
                               justify-center items-center my-2 text-right leading-4 font-semibold"
             >
+                <span className="w-4/12 sm:w-4/12">RSLT</span>
+                {cantiereSelezionato && !location.state.editabile ?
+                    <>
+                        <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
+                            <li className="rounded bg-gray-200 p-2 ml-1">{cantiereSelezionato.squadraOperativa.RLST}</li>
+                        </ul>
+                    </>
+                    :
+                    <input
+                        className="ml-5 input input-bordered input-sm w-8/12 sm:w-8/12"
+                        disabled={!location.state.editabile}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                e.preventDefault()
+                            }
+                        }}
+                        value={cantiereSelezionato && cantiereSelezionato.squadraOperativa.RLST}
+                        onChange={(e) => {
+                            setRLST(e.target.value)
+                            dispatch(setAttributoSquadraOperativa({nome: "RLST", value: e.target.value}))
+                        }
+                        }
+                    />
+                }
+
+            </div>
+
+            <div
+                className="mx-auto flex flex-row w-full sm:w-10/12 md:w-9/12 lg:w-8/12 xl:w-7/12 2xl:w-6/12
+                              justify-center items-center my-2 text-right leading-4 font-semibold"
+            >
                 <span className="w-4/12 sm:w-4/12">Medico Competente</span>
                 {cantiereSelezionato && !location.state.editabile ?
                     <>
                         <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
-                            <li className="rounded bg-gray-200 p-2 ml-1">{`${cantiereSelezionato.squadraOperativa.medicoCompetente.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato.squadraOperativa.medicoCompetente.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</li>
+                            <li className="rounded bg-gray-200 p-2 ml-1">{cantiereSelezionato.squadraOperativa.medicoCompetente}</li>
                         </ul>
                     </>
                     :
-                    <Select
-                        className="ml-5 w-8/12 sm:w-8/12 rounded-md"
-                        isDisabled={!location.state.editabile}
-                        placeholder="Seleziona"
-                        noOptionsMessage={() => "Operai terminati"}
-                        components={animatedComponents}
-                        options={operai}
-                        value={cantiereSelezionato?.squadraOperativa.medicoCompetente ? {label: `${cantiereSelezionato?.squadraOperativa.medicoCompetente.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato?.squadraOperativa.medicoCompetente.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: cantiereSelezionato?.squadraOperativa.medicoCompetente} : medico}
-                        onChange={(e) => {
-                            if (e) {
-                                setMedico([e] as { label: string, value: Maestranza }[])
-                                onSelectionChange([e], "Medico Competente")
+                    <input
+                        className="ml-5 input input-bordered input-sm w-8/12 sm:w-8/12"
+                        disabled={!location.state.editabile}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                e.preventDefault()
                             }
                         }}
+                        value={cantiereSelezionato && cantiereSelezionato.squadraOperativa.medicoCompetente}
+                        onChange={(e) => {
+                            dispatch(setAttributoSquadraOperativa({nome: "Medico Competente", value: e.target.value}))
+                        }
+                        }
                     />
                 }
             </div>
@@ -289,12 +342,15 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                     :
                     <Select
                         className="ml-5 w-8/12 sm:w-8/12 rounded-md"
-                        isDisabled={!location.state.editabile}
+                        isDisabled={!location.state.editabile || RSPPT.length > 0}
                         placeholder="Seleziona"
                         noOptionsMessage={() => "Operai terminati"}
                         components={animatedComponents}
                         options={operai}
-                        value={cantiereSelezionato?.squadraOperativa.RSPP ? {label: `${cantiereSelezionato?.squadraOperativa.RSPP.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato?.squadraOperativa.RSPP.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: cantiereSelezionato?.squadraOperativa.RSPP} : RSPP}
+                        value={cantiereSelezionato?.squadraOperativa.RSPP ? {
+                            label: `${cantiereSelezionato?.squadraOperativa.RSPP.anagrafica.filter(m => m.label === 'nome')[0].value} ${cantiereSelezionato?.squadraOperativa.RSPP.anagrafica.filter(m => m.label === 'cognome')[0].value}`,
+                            value: cantiereSelezionato?.squadraOperativa.RSPP
+                        } : RSPP}
                         onChange={(e) => {
                             if (e) {
                                 setRSPP([e] as { label: string, value: Maestranza }[])
@@ -303,6 +359,37 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                         }}
                     />
                 }
+            </div>
+
+            <div
+                className="mx-auto flex flex-row w-full sm:w-10/12 md:w-9/12 lg:w-8/12 xl:w-7/12 2xl:w-6/12
+                              justify-center items-center my-2 text-right leading-4 font-semibold"
+            >
+                <span className="w-4/12 sm:w-4/12">RSPPT</span>
+                {cantiereSelezionato && !location.state.editabile ?
+                    <>
+                        <ul className="ml-5 w-8/12 sm:w-8/12 rounded-md flex">
+                            <li className="rounded bg-gray-200 p-2 ml-1">{cantiereSelezionato.squadraOperativa.RSPPT}</li>
+                        </ul>
+                    </>
+                    :
+                    <input
+                        className="ml-5 input input-bordered input-sm w-8/12 sm:w-8/12"
+                        disabled={!location.state.editabile || !cantiereSelezionato?.squadraOperativa.RSPP}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                e.preventDefault()
+                            }
+                        }}
+                        value={cantiereSelezionato && cantiereSelezionato.squadraOperativa.RSPPT}
+                        onChange={(e) => {
+                            setRSPPT(e.target.value)
+                            dispatch(setAttributoSquadraOperativa({nome: "RSPPT", value: e.target.value}))
+                        }
+                        }
+                    />
+                }
+
             </div>
 
             <div
@@ -321,7 +408,10 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             isMulti
                             options={operai}
                             value={cantiereSelezionato.squadraOperativa.delegatiSicurezza.map(m => {
-                                return {label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: m}
+                                return {
+                                    label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`,
+                                    value: m
+                                }
                             })}
                             onChange={(e) => onSelectionChange(e, "Delegati Sicurezza")}
                         />
@@ -356,7 +446,10 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             isMulti
                             options={operai}
                             value={cantiereSelezionato.squadraOperativa.squadraOperai.map(m => {
-                                return {label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`, value: m}
+                                return {
+                                    label: `${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`,
+                                    value: m
+                                }
                             })}
                             onChange={(e) => onSelectionChange(e, "Squadra Operai")}
                         />
@@ -393,7 +486,10 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
                             isMulti
                             options={impreseSubAutonomi}
                             value={cantiereSelezionato.squadraOperativa.impreseSubappaltatrici.map(im => {
-                                return {label: im.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value, value: im}
+                                return {
+                                    label: im.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value,
+                                    value: im
+                                }
                             })}
                             onChange={(e) => onSelectionChangeImpreseSub(e, "Imprese Subappaltatrici")}
                         />

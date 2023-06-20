@@ -71,7 +71,8 @@ const GruTab: React.FC<GruTabProps> = ({}) => {
                 return(
                     <tr className="link link-hover hover:text-sky-500">
                       <th>{index+1}</th>
-                      <td>{g.attr.filter(gr => gr.nome === 'tipologia')[0].value}</td>
+                      <td>{g.attr.filter(gr => gr.nome === 'marca')[0].value}</td>
+                      <td>{g.attr.filter(gr => gr.nome === 'modello')[0].value}</td>
                       <td>{g.attr.filter(gr => gr.nome === 'cantiere')[0].value}</td>
                       <td>
                         <EditButtonGru gruTarget={g} setEditabile={setEditabile} setModifica={setModifica}/>

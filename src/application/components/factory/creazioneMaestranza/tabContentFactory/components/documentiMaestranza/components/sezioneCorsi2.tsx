@@ -61,23 +61,9 @@ const SezioneCorsi2: React.FC<SezioneCorsi1Props> = (
                            defaultChecked={!maestranza.documenti?.filter(d => d.nome === 'corsoPrimoSoccorso')[0].richiedibile}
                     />
                 </div>
-                <span className="font-bold col-span-1">svolto il: </span>
-                <div className="flex flex-col col-span-2">
-                    <input type="date" {...register("corsoPrimoSoccorsoEffettuatoIl")}
-                           className="rounded border border-gray-400 shadow p-1"
-                           onKeyDown={(e) => {
-                               if(e.key === "Enter"){
-                                   e.preventDefault()
-                               }
-                           }}
-                           disabled={!editabile || !maestranza.documenti?.filter(d => d.nome === 'corsoPrimoSoccorso')[0].richiedibile}
-                           onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'corsoPrimoSoccorso', value: e.target.value}))}
-                           defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoPrimoSoccorso')[0].effettuatoIl}
-                    />
-                </div>
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("corsoPrimoSoccorsoScadenza")}
-                       className="rounded border border-gray-400 shadow p-1 col-span-2"
+                       className="rounded border border-gray-400 shadow p-1 col-span-5"
                        onKeyDown={(e) => {
                            if(e.key === "Enter"){
                                e.preventDefault()
@@ -115,23 +101,9 @@ const SezioneCorsi2: React.FC<SezioneCorsi1Props> = (
                            defaultChecked={!maestranza.documenti?.filter(d => d.nome === 'corsoPrevIncendi')[0].richiedibile}
                     />
                 </div>
-                <span className="font-bold col-span-1">svolto il: </span>
-                <div className="flex flex-col col-span-2">
-                    <input type="date" {...register("corsoPrevIncendiEffettuatoIl")}
-                           className="rounded border border-gray-400 shadow p-1"
-                           onKeyDown={(e) => {
-                               if(e.key === "Enter"){
-                                   e.preventDefault()
-                               }
-                           }}
-                           disabled={!editabile || !maestranza.documenti?.filter(d => d.nome === 'corsoPrevIncendi')[0].richiedibile}
-                           onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'corsoPrevIncendi', value: e.target.value}))}
-                           defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoPrevIncendi')[0].effettuatoIl}
-                    />
-                </div>
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("corsoPrevIncendiScadenza")}
-                       className="rounded border border-gray-400 shadow p-1 col-span-2"
+                       className="rounded border border-gray-400 shadow p-1 col-span-5"
                        onKeyDown={(e) => {
                            if(e.key === "Enter"){
                                e.preventDefault()
@@ -169,23 +141,9 @@ const SezioneCorsi2: React.FC<SezioneCorsi1Props> = (
                            defaultChecked={!maestranza.documenti?.filter(d => d.nome === 'corsoPreposto')[0].richiedibile}
                     />
                 </div>
-                <span className="font-bold col-span-1">svolto il: </span>
-                <div className="flex flex-col col-span-2">
-                    <input type="date" {...register("corsoPrepostoEffettuatoIl")}
-                           className="rounded border border-gray-400 shadow p-1"
-                           onKeyDown={(e) => {
-                               if(e.key === "Enter"){
-                                   e.preventDefault()
-                               }
-                           }}
-                           disabled={!editabile || !maestranza.documenti?.filter(d => d.nome === 'corsoPreposto')[0].richiedibile}
-                           onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'corsoPreposto', value: e.target.value}))}
-                           defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoPreposto')[0].effettuatoIl}
-                    />
-                </div>
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("corsoPrepostoScadenza")}
-                       className="rounded border border-gray-400 shadow p-1 col-span-2"
+                       className="rounded border border-gray-400 shadow p-1 col-span-5"
                        onKeyDown={(e) => {
                            if(e.key === "Enter"){
                                e.preventDefault()
@@ -223,23 +181,9 @@ const SezioneCorsi2: React.FC<SezioneCorsi1Props> = (
                            defaultChecked={!maestranza.documenti?.filter(d => d.nome === 'corsoRLS')[0].richiedibile}
                     />
                 </div>
-                <span className="font-bold col-span-1">svolto il: </span>
-                <div className="flex flex-col col-span-2">
-                    <input type="date" {...register("corsoRLSEffettuatoIl")}
-                           className="rounded border border-gray-400 shadow p-1"
-                           onKeyDown={(e) => {
-                               if(e.key === "Enter"){
-                                   e.preventDefault()
-                               }
-                           }}
-                           disabled={!editabile || !maestranza.documenti?.filter(d => d.nome === 'corsoRLS')[0].richiedibile}
-                           onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'corsoRLS', value: e.target.value}))}
-                           defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoRLS')[0].effettuatoIl}
-                    />
-                </div>
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("corsoRLSScadenza")}
-                       className="rounded border border-gray-400 shadow p-1 col-span-2"
+                       className="rounded border border-gray-400 shadow p-1 col-span-5"
                        onKeyDown={(e) => {
                            if(e.key === "Enter"){
                                e.preventDefault()
@@ -277,23 +221,9 @@ const SezioneCorsi2: React.FC<SezioneCorsi1Props> = (
                            defaultChecked={!maestranza.documenti?.filter(d => d.nome === 'corsoRSPP')[0].richiedibile}
                     />
                 </div>
-                <span className="font-bold col-span-1">svolto il: </span>
-                <div className="flex flex-col col-span-2">
-                    <input type="date" {...register("corsoRSPPEffettuatoIl")}
-                           className="rounded border border-gray-400 shadow p-1"
-                           onKeyDown={(e) => {
-                               if(e.key === "Enter"){
-                                   e.preventDefault()
-                               }
-                           }}
-                           disabled={!editabile || !maestranza.documenti?.filter(d => d.nome === 'corsoRSPP')[0].richiedibile}
-                           onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'corsoRSPP', value: e.target.value}))}
-                           defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoRSPP')[0].effettuatoIl}
-                    />
-                </div>
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("corsoRSPPScadenza")}
-                       className="rounded border border-gray-400 shadow p-1 col-span-2"
+                       className="rounded border border-gray-400 shadow p-1 col-span-5"
                        onKeyDown={(e) => {
                            if(e.key === "Enter"){
                                e.preventDefault()

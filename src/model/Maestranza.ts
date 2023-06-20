@@ -1,6 +1,7 @@
 export interface Maestranza {
     anagrafica: { label: string, value: string|boolean }[],
     documenti: Documento[],
+    corsi: Corso[]
     comunicazioni: ComunicazioniMaestranza,
     creatoDa: { id: string, nome: string }
     faunaDocumentId?: string
@@ -18,7 +19,6 @@ export interface Documento {
     nome: string,
     richiedibile?: boolean,
     tipologia?: 'Indeterminato' | 'Determinato',
-    dataAssunzione?: string,
     dataFineContratto?: string,
     mansione?: string,
     effettuatoIl?: string,
@@ -27,6 +27,14 @@ export interface Documento {
     consegnato?: boolean,
     consegnatoIl?: string,
     nomina?: boolean,
+    file: string|File|undefined
+}
+
+export interface Corso {
+    nome: string,
+    label: string,
+    richiedibile: boolean,
+    scadenza: string,
     file: string|File|undefined
 }
 
@@ -45,69 +53,24 @@ export const maestranzaDefault: Maestranza = {
         {
             nome: 'contratto',
             tipologia: "Indeterminato",
-            dataAssunzione: undefined,
             dataFineContratto: "",
             mansione: undefined,
             file: undefined
         },
         {
             nome: 'visitaMedica',
-            effettuatoIl: "",
             scadenza: "",
             prescrizioniLimitazioni: "",
             file: undefined
         },
         {
-            nome: 'vaccinazioneAntitetanica',
-            effettuatoIl: "",
-            scadenza: "",
-            file: undefined
-        },
-        {
             nome: 'corsoFormazioneArt37',
             richiedibile: true,
-            effettuatoIl: "",
             scadenza: "",
             file: undefined
         },
         {
-            nome: 'corsoMacchineMovTerra',
-            richiedibile: true,
-            effettuatoIl: "",
-            scadenza: "",
-            file: undefined
-        },
-        {
-            nome: 'corsoPonteggi',
-            richiedibile: true,
-            effettuatoIl: "",
-            scadenza: "",
-            file: undefined
-        },
-        {
-            nome: 'corsoPLE',
-            richiedibile: true,
-            effettuatoIl: "",
-            scadenza: "",
-            file: undefined
-        },
-        {
-            nome: 'corsoConduzioneGRU',
-            richiedibile: true,
-            effettuatoIl: "",
-            scadenza: "",
-            file: undefined
-        },
-        {
-            nome: 'corsoGRUSuAutocarro',
-            richiedibile: true,
-            effettuatoIl: "",
-            scadenza: "",
-            file: undefined
-        },
-        {
-            nome: 'corsoEscavatoriIdraulici',
-            richiedibile: true,
+            nome: 'vaccinazioneAntitetanica',
             effettuatoIl: "",
             scadenza: "",
             file: undefined
@@ -190,6 +153,50 @@ export const maestranzaDefault: Maestranza = {
             scadenza: "",
             file: undefined
         }
+    ],
+    corsi: [
+        {
+            nome: 'corsoMacchineMovTerra',
+            label: 'Corso Macchine Mov. Terra',
+            richiedibile: true,
+            scadenza: "",
+            file: undefined
+        },
+        {
+            nome: 'corsoPonteggi',
+            label: 'Corso Ponteggi',
+            richiedibile: true,
+            scadenza: "",
+            file: undefined
+        },
+        {
+            nome: 'corsoPLE',
+            label: 'Corso PLE',
+            richiedibile: true,
+            scadenza: "",
+            file: undefined
+        },
+        {
+            nome: 'corsoConduzioneGRU',
+            label: 'Corso Conduzione GRU',
+            richiedibile: true,
+            scadenza: "",
+            file: undefined
+        },
+        {
+            nome: 'corsoGRUSuAutocarro',
+            label: 'Corso GRU Su Autocarro',
+            richiedibile: true,
+            scadenza: "",
+            file: undefined
+        },
+        {
+            nome: 'corsoEscavatoriIdraulici',
+            label: 'Corso Escavatori Idraulici',
+            richiedibile: true,
+            scadenza: "",
+            file: undefined
+        },
     ],
     comunicazioni: {
         telefono: undefined,

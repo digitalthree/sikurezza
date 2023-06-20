@@ -5,7 +5,6 @@ export const convertiInDocumentiMaestranza = (data: any) => {
         {
             nome: 'contratto',
             tipologia: data.tipologiaContratto,
-            dataAssunzione: data.dataAssunzione,
             dataFineContratto: data.dataFineContratto,
             file: data.contrattoFile
         },

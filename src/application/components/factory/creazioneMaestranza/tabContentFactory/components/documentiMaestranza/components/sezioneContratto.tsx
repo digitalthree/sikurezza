@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {FieldErrors} from "react-hook-form";
-import {Maestranza} from "../../../../../../../../model/Maestranza";
 import {useDispatch, useSelector} from "react-redux";
 import {
     MaestranzaDaCreareSelector,
-    MaestranzaSelezionataSelector, setConsegnatoInMaestranza,
-    setDataAssunzioneIlInMaestranza, setDataFineContrattoIlInMaestranza,
+    MaestranzaSelezionataSelector,
+    setDataFineContrattoIlInMaestranza,
     setFileInDocumentiMaestranza, setMansioneInMaestranza,
     setTipologiaContrattoInMaestranza,
 } from "../../../../../../../../store/maestranzaSlice";
@@ -68,34 +67,22 @@ const SezioneContratto: React.FC<SezioneContrattoProps> = (
                     }))}/>
                 }
             </div>
-            <div className="grid grid-cols-12 gap-4 mt-2">
-                <span className="font-bold col-span-3">Data Assunzione: </span>
-                <input type="date" {...register("dataAssunzione")}
-                       onKeyDown={(e) => {
-                           if (e.key === "Enter") {
-                               e.preventDefault()
-                           }
-                       }}
-                       className="rounded border border-gray-400 shadow p-1 col-span-6"
-                       disabled={!editabile}
-                       onChange={(e) => dispatch(setDataAssunzioneIlInMaestranza(e.target.value))}
-                       defaultValue={maestranza.documenti?.filter(d => d.nome === 'contratto')[0].dataAssunzione}
-                />
-            </div>
-            <div className="grid grid-cols-12 gap-4 mt-2">
-                <span className="font-bold col-span-3">Data di fine contratto: </span>
-                <input type="date" {...register("dataFineContratto")}
-                       onKeyDown={(e) => {
-                           if (e.key === "Enter") {
-                               e.preventDefault()
-                           }
-                       }}
-                       className="rounded border border-gray-400 shadow p-1 col-span-6"
-                       disabled={!editabile}
-                       onChange={(e) => dispatch(setDataFineContrattoIlInMaestranza(e.target.value))}
-                       defaultValue={maestranza.documenti?.filter(d => d.nome === 'contratto')[0].dataFineContratto}
-                />
-            </div>
+            {maestranza.documenti?.filter(d => d.nome === 'contratto')[0].tipologia === "Determinato" &&
+                <div className="grid grid-cols-12 gap-4 mt-2">
+                    <span className="font-bold col-span-3">Data di fine contratto: </span>
+                    <input type="date" {...register("dataFineContratto")}
+                           onKeyDown={(e) => {
+                               if (e.key === "Enter") {
+                                   e.preventDefault()
+                               }
+                           }}
+                           className="rounded border border-gray-400 shadow p-1 col-span-6"
+                           disabled={!editabile}
+                           onChange={(e) => dispatch(setDataFineContrattoIlInMaestranza(e.target.value))}
+                           defaultValue={maestranza.documenti?.filter(d => d.nome === 'contratto')[0].dataFineContratto}
+                    />
+                </div>
+            }
             <div className="grid grid-cols-12 gap-4 mt-2">
                 <span className="font-bold col-span-3">Mansione: </span>
                 <input placeholder="Mansione" {...register("mansione")}

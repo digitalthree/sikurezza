@@ -40,24 +40,9 @@ const SezioneCorsoFormazione: React.FC<SezioneCorsoFormazioneProps> = (
         <>
             <div className="grid grid-cols-12 gap-4">
                 <span className="font-bold col-span-3">Corso Formazione art. 37*: </span>
-                <span className="font-bold col-span-1">svolto il: </span>
-                <div className="flex flex-col col-span-2">
-                    <input type="date" {...register("corsoFormazioneArt3637EffettuatoIl")}
-                           className="rounded border border-gray-400 shadow p-1"
-                           onKeyDown={(e) => {
-                               if(e.key === "Enter"){
-                                   e.preventDefault()
-                               }
-                           }}
-                           disabled={!editabile}
-                           onChange={(e) => dispatch(setEffettuatoIlInMaestranza({nome: 'corsoFormazioneArt37', value: e.target.value}))}
-                           defaultValue={maestranza.documenti?.filter(d => d.nome === 'corsoFormazioneArt37')[0].effettuatoIl}
-                    />
-                    {errors.corsoFormazioneArt3637EffettuatoIl && <span className="font-bold text-red-600">Campo obbligatorio</span>}
-                </div>
                 <span className="font-bold col-span-1">scadenza: </span>
                 <input type="date" {...register("corsoFormazioneArt3637Scadenza")}
-                       className="rounded border border-gray-400 shadow p-1 col-span-2"
+                       className="rounded border border-gray-400 shadow p-1 col-span-5"
                        onKeyDown={(e) => {
                            if(e.key === "Enter"){
                                e.preventDefault()

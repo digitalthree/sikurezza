@@ -121,13 +121,14 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
         <>
             <input type="checkbox" id="my-modal-5" className="modal-toggle"/>
             <label htmlFor="my-modal-5" className="modal cursor-pointer">
-                <label className="modal-box relative max-w-5xl">
+                <label className="modal-box relative max-w-7xl">
                     {gru.attr.map(a => {
-                        console.log(a)
                         return (
                             <div className="flex justify-between items-center mb-3">
-                                <span className="font-bold">{a.label}</span>
-                                {typeof a.value === 'string' && a.nome !== 'note' &&
+                                {a.nome !== "tecnicoIncaricatoAllaProgettazioneDellaStrutturaDiFondazione" &&
+                                    <span className="font-bold">{a.label}</span>
+                                }
+                                {typeof a.value === 'string' && a.nome !== 'note' && a.nome !== "tecnicoIncaricatoAllaProgettazioneDellaStrutturaDiFondazione" &&
                                     <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
                                            onKeyDown={(e) => {
                                                if (e.key === "Enter") {
@@ -142,18 +143,23 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
                                     />
                                 }
                                 {typeof a.value === 'boolean' &&
-                                    <input type="checkbox" className="toggle"
-                                           onKeyDown={(e) => {
-                                               if (e.key === "Enter") {
-                                                   e.preventDefault()
-                                               }
-                                           }}
-                                           disabled={!editabile}
-                                           checked={a.value as boolean}
-                                           onChange={(e) => {
-                                               dispatch(setAttributoInGru({nome: a.nome, value: e.target.checked}))
-                                           }}
-                                    />
+                                    <div className="flex flex-row items-center">
+                                        NO
+                                        <input type="checkbox" className="toggle ml-2 mr-2"
+                                               onKeyDown={(e) => {
+                                                   if (e.key === "Enter") {
+                                                       e.preventDefault()
+                                                   }
+                                               }}
+                                               disabled={!editabile}
+                                               checked={a.value as boolean}
+                                               onChange={(e) => {
+                                                   dispatch(setAttributoInGru({nome: a.nome, value: e.target.checked}))
+                                               }}
+                                        />
+                                        SI
+                                    </div>
+
                                 }
                                 {a.nome === 'note' &&
                                     <textarea className="rounded border border-gray-400 shadow p-1 col-span-9 w-1/2"
@@ -176,7 +182,7 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
                     {gru.verifiche.map(v => {
                         return (
                             <div className="grid grid-cols-4 gap-10 items-center mb-3">
-                                <span className="font-bold">{v.label}: </span>
+                                <span className="font-bold">{v.label} {v.nome === "verificaPeriodica" ? "(verifica annuale)" : "(verifica trimestrale)"}: </span>
                                 <div className="flex flex-col">
                                     <input type="date"
                                            className="rounded border border-gray-400 shadow p-1"
@@ -214,6 +220,28 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
                                 />
                             </div>
                         )
+                    })}
+                    {gru.attr.map(a => {
+                        if (a.nome === "tecnicoIncaricatoAllaProgettazioneDellaStrutturaDiFondazione") {
+                            return (
+                                <div className="flex justify-between items-center mb-3">
+                                    <span className="font-bold">{a.label}</span>
+                                    <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                           onKeyDown={(e) => {
+                                               if (e.key === "Enter") {
+                                                   e.preventDefault()
+                                               }
+                                           }}
+                                           disabled={!editabile}
+                                           value={a.value as string}
+                                           onChange={e => {
+                                               dispatch(setAttributoInGru({nome: a.nome, value: e.target.value}))
+                                           }}
+                                    />
+                                </div>
+                            )
+                        }
+
                     })}
                     <hr className="mb-3"/>
                     {gru.documenti.map(d => {

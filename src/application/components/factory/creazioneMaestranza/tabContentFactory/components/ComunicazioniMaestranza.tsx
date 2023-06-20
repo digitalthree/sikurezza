@@ -4,7 +4,7 @@ import {
     addMaestranzaToMaestranzaSlice,
     MaestranzaDaCreareSelector,
     MaestranzaSelezionataSelector,
-    removeMaestranzaToMaestranzaSlice, setComunicazioniInMaestranza,
+    removeMaestranzaToMaestranzaSlice, setComunicazioniInMaestranza, setFileInCorsiMaestranza,
     setFileInDocumentiMaestranza,
     setMaestranzaDaCreare,
 } from "../../../../../../store/maestranzaSlice";
@@ -64,11 +64,20 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
                 });
             }
         })
+        maestranza.corsi.forEach(e => {
+            if(e.file && typeof e.file !== 'string'){
+                uploadFileS3(e.file as File).then((res) => {
+                    if (res) {
+                        dispatch(setFileInCorsiMaestranza({nome: e.nome, file: res.key}))
+                    }
+                });
+            }
+        })
         setSave(true)
     }
 
     useEffect(() => {
-        if(maestranza.documenti.filter(d => !d.file || typeof d.file === 'string').length === Object.entries(maestranza.documenti).length){
+        if(maestranza.documenti.filter(d => !d.file || typeof d.file === 'string').length === Object.entries(maestranza.documenti).length && maestranza.corsi.filter(d => !d.file || typeof d.file === 'string').length === Object.entries(maestranza.corsi).length){
             setUploadToFauna(true)
         }
     }, [maestranza])

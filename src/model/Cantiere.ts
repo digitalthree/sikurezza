@@ -31,8 +31,10 @@ export interface SquadraOperativa {
     addettiPrimoSoccorso: Maestranza[]
     addettiAntiIncendio: Maestranza[]
     RLS: Maestranza
-    medicoCompetente: Maestranza
+    RLST: string
+    medicoCompetente: string
     RSPP: Maestranza
+    RSPPT: string
     delegatiSicurezza: Maestranza[]
     squadraOperai: Maestranza[]
     impreseSubappaltatrici: Impresa[]
@@ -85,8 +87,10 @@ export const cantiereDefault: Cantiere = {
         addettiPrimoSoccorso: [],
         addettiAntiIncendio: [],
         RLS: maestranzaDefault,
-        medicoCompetente: maestranzaDefault,
+        RLST: "",
+        medicoCompetente: "",
         RSPP: maestranzaDefault,
+        RSPPT: "",
         delegatiSicurezza: [],
         squadraOperai: [],
         impreseSubappaltatrici: [],
