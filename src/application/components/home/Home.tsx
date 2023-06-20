@@ -3,7 +3,7 @@ import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useFaunaQuery } from "../../../faunadb/hooks/useFaunaQuery";
 import { useDispatch, useSelector } from "react-redux";
 import { clearOrganizationStorages } from "../../../utils/auth0/auth0";
-import { getAllImpreseByCreataDa } from "../../../faunadb/api/impresaAPIs";
+import {getAllImpreseByCreataDa, getImpresaById, updateImpresaInFauna} from "../../../faunadb/api/impresaAPIs";
 import {Impresa, impresaTemporanea} from "../../../model/Impresa";
 import {
   addImpresa,
@@ -42,8 +42,16 @@ const Home: React.FC<HomeProps> = () => {
                 faunaDocumentId: r.id,
               } as Impresa)
           );
+          if(r.impresa.tipo === "Affidataria"){
+            r.impresa.impreseSubappaltatrici.forEach(is => {
+              execQuery(getImpresaById, is).then(res => {
+                dispatch(addImpresa(res))
+              })
+            })
+
+          }
         });
-      });
+      })
     }
   }, []);
 
@@ -146,10 +154,17 @@ const Home: React.FC<HomeProps> = () => {
                                 impresa: Impresa;
                                 macchineEAttrezzature: MacchinaEAttrezzatura[]
                               } = JSON.parse(value);
-                              dispatch(addImpresa(impresaDaImportare.impresa))
-                              impresaDaImportare.macchineEAttrezzature.forEach(m => {
-                                dispatch(addMacchinaEAttrezzatura(m))
+                              execQuery(updateImpresaInFauna, {
+                                ...imprese.filter((i) => i.tipo === "Affidataria")[0],
+                                impreseSubappaltatrici: [...imprese.filter((i) => i.tipo === "Affidataria")[0]?.impreseSubappaltatrici as string[], impresaDaImportare.impresa.faunaDocumentId]
+                              }).then((res) => {
+                                console.log(res)
+                                dispatch(addImpresa(impresaDaImportare.impresa))
+                                impresaDaImportare.macchineEAttrezzature.forEach(m => {
+                                  dispatch(addMacchinaEAttrezzatura(m))
+                                })
                               })
+
                             });
                           }}
                       />

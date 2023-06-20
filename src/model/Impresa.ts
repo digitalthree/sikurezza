@@ -20,7 +20,7 @@ export interface Impresa {
         }
     },
     maestranze: string[],
-    impreseSubappaltatrici: Impresa[],
+    impreseSubappaltatrici: string[],
     documentiIdoneitaImpresa: Autodichiarazione[],
     comunicazioni: ItemComunicazione[],
     creataDa: string
