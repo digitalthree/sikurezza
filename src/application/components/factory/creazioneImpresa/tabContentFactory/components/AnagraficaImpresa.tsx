@@ -30,7 +30,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
             dispatch(setImpresaDaCreare(impresaSelezionata))
             setImpresa(impresaSelezionata)
         }else{
-            dispatch(setTipologiaImpresa("Subappaltatrice"))
+            //
             setImpresa(impresaDaCreare)
         }
     }, [impresaSelezionata, impresaDaCreare])
@@ -48,8 +48,8 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                     <div className="flex flex-col">
                         <select placeholder="Tipologia Impresa" {...register("tipologiaImpresa", {required: true})}
                                 className="rounded border border-gray-400 shadow p-1"
-                                disabled={!primoAccesso}
-                                value={(impresa) ? impresa.tipo : "Subappaltatrice"}
+                                disabled={primoAccesso}
+                                value={primoAccesso ? "Affidataria" : "Subappaltatrice"}
                                 onChange={(e) => {
                                     if(e.target.value === "Affidataria"){
                                         dispatch(setTipologiaImpresa(e.target.value as "Affidataria"))
@@ -65,7 +65,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                     </div>
                 </div>
 
-                <div className="flex justify-between items-center mt-2">
+                {/*<div className="flex justify-between items-center mt-2">
                     <span className="font-bold">Logo: </span>
                     {impresa.anagrafica.logo.value ?
                         <VisualizzaEliminaFile file={impresa.anagrafica.logo.value} modifica={true} nome="logo"
@@ -82,7 +82,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                             dispatch(setLogoImpresa((e.target.files) ? e.target.files[0] : undefined))
                         }}/>
                     }
-                </div>
+                </div>*/}
 
                 <div className="flex justify-between items-center mt-2">
                     <span className="font-bold">Denominazione*: </span>

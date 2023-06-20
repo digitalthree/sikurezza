@@ -13,8 +13,6 @@ export const CreazioneImpresa: React.FC<CreazioneImpresaProps> = ({primoAccesso}
     const [tabActive, setTabActive] = useState("Anagrafica");
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
 
-    console.log(primoAccesso)
-
     return (
         <>
             {!impresaSelezionata && <Breadcrumb />}

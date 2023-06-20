@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useRef} from "react";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useFaunaQuery } from "../../../faunadb/hooks/useFaunaQuery";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +13,9 @@ import {
 import { AiOutlinePlus } from "react-icons/ai";
 import { CreazioneImpresa } from "../factory/creazioneImpresa/CreazioneImpresa";
 import { useNavigate } from "react-router-dom";
+import {TfiImport} from "react-icons/tfi";
+import {MacchinaEAttrezzatura} from "../../../model/MacchineEAttrezzature";
+import {addMacchinaEAttrezzatura} from "../../../store/macchinaEAttrezzaturaSlice";
 
 interface HomeProps {}
 
@@ -32,7 +35,6 @@ const Home: React.FC<HomeProps> = () => {
     dispatch(setImpresaDaCreare(impresaTemporanea))
     if (imprese.length === 0) {
       execQuery(getAllImpreseByCreataDa, user?.email).then((res) => {
-        console.log(res)
         res.forEach((r: { id: string; impresa: Impresa }) => {
           dispatch(
               addImpresa({
@@ -45,6 +47,14 @@ const Home: React.FC<HomeProps> = () => {
     }
   }, []);
 
+  const importRef = useRef(null)
+
+  const onImportPhysicsClick = () => {
+    let input = importRef.current;
+    if (input) {
+      (input as HTMLInputElement).click();
+    }
+  };
 
   return (
       <>
@@ -81,9 +91,8 @@ const Home: React.FC<HomeProps> = () => {
                   </div>
 
                   <div className="w-full gap-6 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-                    {imprese
-                        .filter((i) => i.tipo === "Subappaltatrice")
-                        .map((is) => {
+                    {imprese.filter((i) => i.tipo === "Subappaltatrice").length > 0 &&
+                      imprese.filter((i) => i.tipo === "Subappaltatrice").map((is) => {
                           return (
                               <div
                                   key={(is as Impresa).faunaDocumentId}
@@ -113,8 +122,37 @@ const Home: React.FC<HomeProps> = () => {
                     >
                       <AiOutlinePlus size="50px" className="text-white" />
                       <span className="text-white font-semibold text-center mt-3">
-                    Aggiungi impresa sub
-                  </span>
+                          Aggiungi impresa sub
+                      </span>
+                    </div>
+                    <div
+                        className="bg-gray-300 shadow-md rounded-3xl min-h-[180px] flex justify-center flex-col items-center hover:cursor-pointer hover:opacity-60"
+                        onClick={onImportPhysicsClick}
+                    >
+                      <TfiImport size="50px" className="text-white" />
+                      <span className="text-white font-semibold text-center mt-3">
+                          Importa impresa sub
+                      </span>
+                      <input
+                          type="file"
+                          ref={importRef}
+                          style={{display: "none"}}
+                          accept="application/json"
+                          onChange={(e) => {
+                            let files = e.target.files;
+                            files &&
+                            files[0].text().then((value) => {
+                              let impresaDaImportare: {
+                                impresa: Impresa;
+                                macchineEAttrezzature: MacchinaEAttrezzatura[]
+                              } = JSON.parse(value);
+                              dispatch(addImpresa(impresaDaImportare.impresa))
+                              impresaDaImportare.macchineEAttrezzature.forEach(m => {
+                                dispatch(addMacchinaEAttrezzatura(m))
+                              })
+                            });
+                          }}
+                      />
                     </div>
                   </div>
                 </div>

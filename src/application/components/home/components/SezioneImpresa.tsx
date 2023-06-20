@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {Breadcrumb} from "../../../../shared/breadcrumb/Breadcrumb";
 import {useDispatch, useSelector} from "react-redux";
 import {
@@ -7,6 +7,13 @@ import {
     setObjectToCreate
 } from "../../../../store/impresaSlice";
 import {Outlet, useNavigate} from "react-router-dom";
+import {TiExportOutline} from "react-icons/ti";
+import {exportToJsonFileThis} from "../../../../utils/ImportExportFunctions";
+import {addMacchinaEAttrezzatura, MacchinaEAttrezzaturaSelector} from "../../../../store/macchinaEAttrezzaturaSlice";
+import {getAllMacchineEAttrezzatureByCreatoDa} from "../../../../faunadb/api/macchinaEAttrezzaturaAPIs";
+import {MacchinaEAttrezzatura} from "../../../../model/MacchineEAttrezzature";
+import {useFaunaQuery} from "../../../../faunadb/hooks/useFaunaQuery";
+import {Impresa} from "../../../../model/Impresa";
 
 export interface SezioneImpresaProps {
 }
@@ -16,6 +23,16 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
+    const [macchineEAttrezzature, setMacchineEAttrezzature] = useState<MacchinaEAttrezzatura[]>([])
+    const {execQuery} = useFaunaQuery()
+
+    useEffect(() => {
+        execQuery(getAllMacchineEAttrezzatureByCreatoDa, impresaSelezionata?.faunaDocumentId).then((res) => {
+            res.forEach((m: { id: string; macchinaEAttrezzatura: MacchinaEAttrezzatura }) => {
+                setMacchineEAttrezzature([...macchineEAttrezzature, m.macchinaEAttrezzatura])
+            });
+        });
+    }, [])
 
     useEffect(() => {
         if(
@@ -154,6 +171,17 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = () => {
                         >
                             <span>Estintori</span>
                         </div>
+                    </div>
+                    <div className="flex flex-row justify-center mt-7">
+                        <button className="btn btn-warning flex flex-row items-center hover:cursor-pointer hover:opacity-70" onClick={() => {
+                            exportToJsonFileThis({
+                                impresa: {...impresaSelezionata, tipo: "Subappaltatrice"} as Impresa,
+                                macchineEAttrezzature: macchineEAttrezzature
+                            }, `${impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value}.json`)
+                        }}>
+                            <TiExportOutline size={25} className="mr-2"/>
+                            <span className="mt-1 font-light">EXPORT IMPRESA</span>
+                        </button>
                     </div>
                 </div>
             ) : (
