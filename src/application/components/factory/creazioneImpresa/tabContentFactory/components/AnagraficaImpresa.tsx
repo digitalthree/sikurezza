@@ -26,11 +26,18 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
     const [impresa, setImpresa] = useState<Impresa>(impresaTemporanea)
 
     useEffect(() => {
+        if(primoAccesso){
+            dispatch(setTipologiaImpresa("Affidataria"))
+        }else{
+            dispatch(setTipologiaImpresa("Subappaltatrice"))
+        }
+    }, [])
+
+    useEffect(() => {
         if(impresaSelezionata){
             dispatch(setImpresaDaCreare(impresaSelezionata))
             setImpresa(impresaSelezionata)
         }else{
-            //
             setImpresa(impresaDaCreare)
         }
     }, [impresaSelezionata, impresaDaCreare])
@@ -48,7 +55,7 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                     <div className="flex flex-col">
                         <select placeholder="Tipologia Impresa" {...register("tipologiaImpresa", {required: true})}
                                 className="rounded border border-gray-400 shadow p-1"
-                                disabled={primoAccesso}
+                                disabled
                                 value={primoAccesso ? "Affidataria" : "Subappaltatrice"}
                                 onChange={(e) => {
                                     if(e.target.value === "Affidataria"){

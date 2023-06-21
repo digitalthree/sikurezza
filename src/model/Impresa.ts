@@ -41,7 +41,7 @@ export interface ItemComunicazione {
 }
 
 export const impresaTemporanea: Impresa = {
-    tipo: "Affidataria",
+    tipo: "Subappaltatrice",
     anagrafica: {
         attr: [
             {label: 'denominazione', value: ''},

@@ -47,16 +47,16 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
                 })
             }
         })
-        if(impresaDaCreare.anagrafica.logo.value && typeof impresaDaCreare.anagrafica.logo.value !== "string"){
+        /*if(impresaDaCreare.anagrafica.logo.value && typeof impresaDaCreare.anagrafica.logo.value !== "string"){
             uploadFileS3(impresaDaCreare.anagrafica.logo.value).then(res => {
                 dispatch(setLogoImpresa(res?.key))
             })
-        }
+        }*/
     }
 
     useEffect(() => {
-        if (impresaDaCreare.documentiIdoneitaImpresa.filter(d => !d.file.value || typeof d.file.value === 'string').length === impresaDaCreare.documentiIdoneitaImpresa.length ||
-            !impresaDaCreare.anagrafica.logo.value || typeof impresaDaCreare.anagrafica.logo.value === 'string'
+        if (impresaDaCreare.documentiIdoneitaImpresa.filter(d => !d.file.value || typeof d.file.value === 'string').length === impresaDaCreare.documentiIdoneitaImpresa.length
+            //|| !impresaDaCreare.anagrafica.logo.value || typeof impresaDaCreare.anagrafica.logo.value === 'string'
         ) {
             setUploadToFauna(true)
         }

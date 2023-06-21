@@ -79,3 +79,7 @@ export const getImpresaById = async (faunaClient: faunadb.Client, faunaQuery: ty
         ));
     return response as Impresa
 }
+
+export const deleteImpresaFromFauna = async (faunaClient: faunadb.Client, faunaQuery: typeof faunadb.query, impresaToDelete: string) => {
+    await faunaClient.query(faunaQuery.Delete(faunaQuery.Ref(faunaQuery.Collection('Imprese'), impresaToDelete)))
+}

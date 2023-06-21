@@ -43,9 +43,16 @@ export const ImpresaSlice = createSlice({
         },
         setTipologiaImpresa(state: ImpresaState, action: PayloadAction<"Subappaltatrice" | "Affidataria">){
             state.impresaDaCreare.tipo = action.payload
-            if(state.impresaSelezionata){
+            /*if(state.impresaSelezionata){
                 state.impresaSelezionata.tipo = action.payload
-            }
+            }*/
+        },
+        addImpresaSubId(state: ImpresaState, action: PayloadAction<string>){
+            state.imprese.forEach(i => {
+                if(i.tipo === "Affidataria"){
+                    i.impreseSubappaltatrici.push(action.payload)
+                }
+            })
         },
         setAttributoAnagraficaImpresa(state: ImpresaState, action: PayloadAction<{ label:string, value: string }>){
             state.impresaDaCreare.anagrafica.attr.forEach(a => {
@@ -133,7 +140,7 @@ export const ImpresaSlice = createSlice({
 export const {
     addImpresa, removeImpresa, setImpresaDaCreare, setPresenzaInDocumenti, setFileInDocumenti, setComunicazioneInComunicazioni,
     setImpresaSelezionata, addComunicazioneInComunicazioni, addMaestranza, removeMaestranza, setObjectToCreate, addBreadcrumbItem,
-    removeBreadcrumbItem, resetBreadcrumbItems, setTipologiaImpresa, setAttributoAnagraficaImpresa, setLogoImpresa
+    removeBreadcrumbItem, resetBreadcrumbItems, setTipologiaImpresa, setAttributoAnagraficaImpresa, setLogoImpresa, addImpresaSubId
 } = ImpresaSlice.actions
 
 export const ImpreseSelector = (state: { impresaSlice: ImpresaState }) => state.impresaSlice.imprese;
