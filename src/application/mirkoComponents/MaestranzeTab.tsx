@@ -26,6 +26,7 @@ const MaestranzeTab: React.FC<MaestranzeTabProps> = () => {
     const [modifica, setModifica] = useState<boolean>(false)
 
     useEffect(() => {
+        dispatch(resetMaestranzeInMaestranzaSlice())
         if(impresaSelezionata?.maestranze.length !== 0){
             impresaSelezionata?.maestranze.forEach(m => {
                 execQuery(getMaestranzaById, m).then(res => {
@@ -35,7 +36,7 @@ const MaestranzeTab: React.FC<MaestranzeTabProps> = () => {
         }else{
             dispatch(resetMaestranzeInMaestranzaSlice())
         }
-    }, [])
+    }, [impresaSelezionata])
 
     return (
         <>
