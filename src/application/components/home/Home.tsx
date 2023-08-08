@@ -4,6 +4,7 @@ import { useFaunaQuery } from "../../../faunadb/hooks/useFaunaQuery";
 import { useDispatch, useSelector } from "react-redux";
 import { clearOrganizationStorages } from "../../../utils/auth0/auth0";
 import {
+    createImpresaInFauna,
     deleteImpresaFromFauna,
     getAllImpreseByCreataDa,
     getImpresaById,
@@ -182,13 +183,18 @@ const Home: React.FC<HomeProps> = () => {
                           accept="application/json"
                           onChange={(e) => {
                             let files = e.target.files;
-                              console.log(files)
                             files &&
                             files[0].text().then((value) => {
                               let impresaDaImportare: {
                                 impresa: Impresa;
                                 macchineEAttrezzature: MacchinaEAttrezzatura[]
                               } = JSON.parse(value);
+                              /*execQuery(createImpresaInFauna, {
+                                  ...impresaDaImportare.impresa,
+                                  creataDa: user?.email
+                              }).then(res => {
+
+                              })*/
                               execQuery(updateImpresaInFauna, {
                                 ...imprese.filter((i) => i.tipo === "Affidataria")[0],
                                 impreseSubappaltatrici: [...imprese.filter((i) => i.tipo === "Affidataria")[0]?.impreseSubappaltatrici as string[], impresaDaImportare.impresa.faunaDocumentId]

@@ -53,7 +53,7 @@ const PonteggioCantieriTab: React.FC<PonteggioCantieriProps> = ({setIndex}) => {
 
     /* MULTI SELECT PER SCEGLIERE I PONTEGGI */
     const ponteggio = ponteggiFromStore.map(p => {
-        return {label: p.attr.filter(a => a.nome === "tipologia")[0].value, value: p}
+        return {label: `${p.attr.filter(a => a.nome === "marca")[0].value} - ${p.attr.filter(a => a.nome === "tipologia")[0].value}`, value: p}
     })
 
     const [controlliPeriodici, setControlliPeriodici] = useState<ControlloCantiere[]>(cantiereSelezionato ? cantiereSelezionato?.ponteggi.controlliPeriodici : [])
@@ -77,7 +77,7 @@ const PonteggioCantieriTab: React.FC<PonteggioCantieriProps> = ({setIndex}) => {
                             isMulti
                             options={ponteggio}
                             value={cantiereSelezionato.ponteggi.listaPonteggi.map(p => {
-                                return {label: p.attr.filter(a => a.nome === "tipologia")[0].value, value: p}
+                                return {label: `${p.attr.filter(a => a.nome === "marca")[0].value} - ${p.attr.filter(a => a.nome === "tipologia")[0].value}`, value: p}
                             })}
                             onChange={(e) => {
                                 let ponteggi: Ponteggio[] = []

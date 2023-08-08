@@ -77,7 +77,7 @@ const PonteggioTab: React.FC<PonteggioTabProps> = ({}) => {
                 return(
                     <tr className="link link-hover hover:text-sky-500">
                       <th>{index+1}</th>
-                      <td>{p.attr.filter(po => po.nome === 'cantiere')[0].value}</td>
+                      <td>{p.attr.filter(po => po.nome === 'marca')[0].value}</td>
                       <td>{p.attr.filter(po => po.nome === 'tipologia')[0].value}</td>
                       <td>
                         <EditButtonPonteggio ponteggioTarget={p} setEditabile={setEditabile} setModifica={setModifica} />

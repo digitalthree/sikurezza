@@ -112,16 +112,12 @@ export const MaestranzaSlice = createSlice({
                 state.maestranzaDaCreare.documenti.forEach(d => {
                     if (d.nome === action.payload.nome) {
                         d.file = undefined
-                        d.effettuatoIl = ""
-                        d.scadenza = ""
                     }
                 })
                 if (state.maestranzaSelezionata) {
                     state.maestranzaSelezionata.documenti.forEach(d => {
                         if (d.nome === action.payload.nome) {
                             d.file = undefined
-                            d.effettuatoIl = ""
-                            d.scadenza = ""
                         }
                     })
                 }
@@ -145,14 +141,12 @@ export const MaestranzaSlice = createSlice({
                 state.maestranzaDaCreare.corsi.forEach(d => {
                     if (d.nome === action.payload.nome) {
                         d.file = undefined
-                        d.scadenza = ""
                     }
                 })
                 if (state.maestranzaSelezionata) {
                     state.maestranzaSelezionata.corsi.forEach(d => {
                         if (d.nome === action.payload.nome) {
                             d.file = undefined
-                            d.scadenza = ""
                         }
                     })
                 }

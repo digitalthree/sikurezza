@@ -48,7 +48,7 @@ const GruCantieriTab: React.FC<GruCantieriProps> = ({setIndex}) => {
 
     /* MULTI SELECT PER SCEGLIERE LE GRU */
     const gru = gruFromStore.map(g => {
-        return {label: g.attr.filter(a => a.nome === "tipologia")[0].value, value: g}
+        return {label: `${g.attr.filter(a => a.nome === "modello")[0].value} - n. ${g.attr.filter(a => a.nome === "numeroDiFabbrica")[0].value}`, value: g}
     })
 
     const [controlliPeriodici, setControlliPeriodici] = useState<ControlloCantiere[]>(cantiereSelezionato ? cantiereSelezionato?.gruMezziDiSollevamento.controlliPeriodici : [])
@@ -74,7 +74,7 @@ const GruCantieriTab: React.FC<GruCantieriProps> = ({setIndex}) => {
                             isMulti
                             options={gru}
                             value={cantiereSelezionato.gruMezziDiSollevamento.listaGru.map(g => {
-                                return {label: g.attr.filter(a => a.nome === "tipologia")[0].value, value: g}
+                                return {label: `${g.attr.filter(a => a.nome === "modello")[0].value} - n. ${g.attr.filter(a => a.nome === "numeroDiFabbrica")[0].value}` , value: g}
                             })}
                             onChange={(e) => {
                                 let gru: Gru[] = []

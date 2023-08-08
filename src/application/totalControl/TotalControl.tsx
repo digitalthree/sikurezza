@@ -55,7 +55,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
 
     const [modifica, setModifica] = useState(true)
 
-    const [itemsFiltered, setItemFiltered] = useState<{item: Impresa | MacchinaEAttrezzatura | Maestranza | Ponteggio | Gru, tipo: "Impresa" | "Maestranza" | "MacchinaEAttrezzatura" | "Ponteggio" | "Gru", problema: string}[]>([])
+    const [itemsFiltered, setItemFiltered] = useState<{item: Impresa | MacchinaEAttrezzatura | Maestranza | Ponteggio | Gru, tipo: "Impresa" | "Maestranza" | "MacchinaEAttrezzatura" | "Ponteggio" | "Gru", scadenza: string, problema: string}[]>([])
 
     useEffect(() => {
         dispatch(resetItem())
@@ -66,7 +66,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                             dispatch(addItem({item: {
                                 ...r.macchinaEAttrezzatura,
                                     faunaDocumentId: r.id,
-                                }, tipo: "MacchinaEAttrezzatura", problema: "Ultima Revisione"}))
+                                }, tipo: "MacchinaEAttrezzatura", scadenza: r.macchinaEAttrezzatura.ultimaRevisione.scadenza, problema: "Ultima Revisione"}))
 
                     }
                 })
@@ -76,7 +76,12 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                     if (r.maestranza) {
                         r.maestranza.documenti.forEach(d => {
                             if((Date.parse(d.scadenza as string) - Date.now() < 45*24*3600*1000)){
-                                dispatch(addItem({item: {...r.maestranza, faunaDocumentId: r.id}, tipo: "Maestranza", problema: d.nome}))
+                                dispatch(addItem({item: {...r.maestranza, faunaDocumentId: r.id}, tipo: "Maestranza", scadenza: d.scadenza as string, problema: d.nome}))
+                            }
+                        })
+                        r.maestranza.corsi.forEach(d => {
+                            if((Date.parse(d.scadenza as string) - Date.now() < 45*24*3600*1000)){
+                                dispatch(addItem({item: {...r.maestranza, faunaDocumentId: r.id}, tipo: "Maestranza", scadenza: d.scadenza as string, problema: d.nome}))
                             }
                         })
                     }
@@ -87,7 +92,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                     if (r.ponteggio) {
                         r.ponteggio.controlli.forEach(c => {
                             if((Date.parse(c.data) - Date.now() < 45*24*3600*1000)){
-                                dispatch(addItem({item: {...r.ponteggio, faunaDocumentId: r.id}, tipo: "Ponteggio", problema: c.nome}))
+                                dispatch(addItem({item: {...r.ponteggio, faunaDocumentId: r.id}, tipo: "Ponteggio", scadenza: c.data, problema: c.nome}))
                             }
                         })
 
@@ -99,7 +104,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                     if (r.gru) {
                         r.gru.verifiche.forEach(v => {
                             if((Date.parse(v.scadenza) - Date.now() < 45*24*3600*1000)){
-                                dispatch(addItem({item: {...r.gru, faunaDocumentId: r.id}, tipo: "Gru", problema: v.label}))
+                                dispatch(addItem({item: {...r.gru, faunaDocumentId: r.id}, tipo: "Gru", scadenza: v.scadenza, problema: v.label}))
                             }
                         })
                     }
@@ -225,7 +230,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                                         <td>{i.problema}</td>
                                         <td>
                                             <FiAlertTriangle size={30}
-                                                             color={`${Date.parse((i.item as MacchinaEAttrezzatura).ultimaRevisione.scadenza) - Date.now() < 30 * 24 * 3600 * 1000 ? 'red' : 'orange'}`}/>
+                                                             color={`${Date.parse(i.scadenza) - Date.now() < 30 * 24 * 3600 * 1000 ? 'red' : 'orange'}`}/>
                                         </td>
                                         <td><label className="hover:cursor-pointer hover:underline hover:text-black"
                                                    htmlFor="my-modal-7"
@@ -246,7 +251,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                                         <td>{(i.item as Maestranza).anagrafica.filter(m => m.label === 'nome')[0].value} {(i.item as Maestranza).anagrafica.filter(m => m.label === 'cognome')[0].value}</td>
                                         <td>{i.problema}</td>
                                         <td>
-                                            <FiAlertTriangle size={30} color="red"/>
+                                            <FiAlertTriangle size={30} color={`${Date.parse(i.scadenza) - Date.now() < 30 * 24 * 3600 * 1000 ? 'red' : 'orange'}`}/>
                                         </td>
                                         <td><label
                                             htmlFor="my-modal-8"
@@ -269,7 +274,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                                         <td>{(i.item as Ponteggio).attr.filter(a => a.nome === "tipologia")[0].value}</td>
                                         <td>{i.problema}</td>
                                         <td>
-                                            <FiAlertTriangle size={30} color="red"/>
+                                            <FiAlertTriangle size={30} color={`${Date.parse(i.scadenza) - Date.now() < 30 * 24 * 3600 * 1000 ? 'red' : 'orange'}`}/>
                                         </td>
                                         <td><label
                                             htmlFor="my-modal-6"
@@ -292,7 +297,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                                         <td>{(i.item as Gru).attr.filter(a => a.nome === "tipologia")[0].value}</td>
                                         <td>{i.problema}</td>
                                         <td>
-                                            <FiAlertTriangle size={30} color="red"/>
+                                            <FiAlertTriangle size={30} color={`${Date.parse(i.scadenza) - Date.now() < 30 * 24 * 3600 * 1000 ? 'red' : 'orange'}`}/>
                                         </td>
                                         <td><label
                                             htmlFor="my-modal-5"
@@ -312,10 +317,10 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                 </div>
             </div>
             {/*<CreazioneMaestranzaModale/>*/}
-            <CreazioneMacchinaEAttrezzatura editabile={true} modifica={modifica} setModifica={setModifica}/>
-            <CreazionePonteggio editabile={true} modifica={modifica} setModifica={setModifica}/>
-            <CreazioneGru editabile={true} modifica={modifica} setModifica={setModifica}/>
-            <CreazioneMaestranzaModale editabile={true} modifica={modifica}/>
+            <CreazioneMacchinaEAttrezzatura editabile={true} modifica={true} setModifica={setModifica}/>
+            <CreazionePonteggio editabile={true} modifica={true} setModifica={setModifica}/>
+            <CreazioneGru editabile={true} modifica={true} setModifica={setModifica}/>
+            <CreazioneMaestranzaModale editabile={true} modifica={true}/>
         </>
     )
 }
