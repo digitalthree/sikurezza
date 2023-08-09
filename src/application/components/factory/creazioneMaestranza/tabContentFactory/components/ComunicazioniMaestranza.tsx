@@ -117,11 +117,12 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
                 dispatch(setMaestranzaDaCreare(maestranzaDefault))
                 setSpinner(false)
                 dispatch(setObjectToCreate(undefined))
-                if(location.pathname === "/totalControl"){
-                    navigate(`/totalControl`)
+                /*if(location.pathname === "/totalControl"){
+
                 }else{
                     navigate(`/impresa/${impresaSelezionata?.faunaDocumentId}/maestranze`)
-                }
+                }*/
+                navigate(`/impresa/${impresaSelezionata?.faunaDocumentId}/maestranze`)
 
             })
         }
