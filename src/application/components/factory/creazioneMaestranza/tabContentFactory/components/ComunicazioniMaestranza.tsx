@@ -21,7 +21,7 @@ import {
     removeImpresa,
     setObjectToCreate
 } from "../../../../../../store/impresaSlice";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {updateImpresaInFauna} from "../../../../../../faunadb/api/impresaAPIs";
 
 export interface ComunicazioniMaestranzaProps {
@@ -49,6 +49,7 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
     const [spinner, setSpinner] = useState(false)
     const [uploadToFauna, setUploadToFauna] = useState(false)
     const [save, setSave] = useState(false)
+    const location = useLocation()
 
 
     const {execQuery} = useFaunaQuery()
@@ -116,7 +117,12 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = (
                 dispatch(setMaestranzaDaCreare(maestranzaDefault))
                 setSpinner(false)
                 dispatch(setObjectToCreate(undefined))
-                navigate(`/impresa/${impresaSelezionata?.faunaDocumentId}/maestranze`)
+                if(location.pathname === "/totalControl"){
+                    navigate(`/totalControl`)
+                }else{
+                    navigate(`/impresa/${impresaSelezionata?.faunaDocumentId}/maestranze`)
+                }
+
             })
         }
     }, [uploadToFauna, save])
