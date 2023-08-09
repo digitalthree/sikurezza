@@ -230,7 +230,7 @@ const Home: React.FC<HomeProps> = () => {
                 <button
                     onClick={() => {
                       clearOrganizationStorages();
-                      logout({ returnTo: "http://localhost:3000/" });
+                      logout({ returnTo: process.env.REACT_BASE_URL });
                     }}
                 >
                   🚪Log Out🚪
