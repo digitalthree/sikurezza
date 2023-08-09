@@ -41,7 +41,7 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
         if(maestranzaSelezionata && breadcrumbItems.filter(bi => bi === `${maestranzaSelezionata.anagrafica.filter(a => a.label === "nome")[0].value} ${maestranzaSelezionata.anagrafica.filter(a => a.label === "cognome")[0].value}`).length === 0){
             dispatch(addBreadcrumbItem(`${maestranzaSelezionata.anagrafica.filter(a => a.label === "nome")[0].value} ${maestranzaSelezionata.anagrafica.filter(a => a.label === "cognome")[0].value}`))
         }
-    }, [maestranzaSelezionata])
+    }, [])
 
 
 
