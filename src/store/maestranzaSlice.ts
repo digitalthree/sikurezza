@@ -21,12 +21,12 @@ export const MaestranzaSlice = createSlice({
     } as MaestranzaState,
     reducers: {
         addMaestranzaToMaestranzaSlice(state: MaestranzaState, action: PayloadAction<Maestranza>) {
-            if (state.maestranze.filter(m => m.faunaDocumentId === action.payload.faunaDocumentId).length === 0) {
+            if (state.maestranze.filter(m => m.id === action.payload.id).length === 0) {
                 state.maestranze.push(action.payload)
             }
         },
         removeMaestranzaToMaestranzaSlice(state: MaestranzaState, action: PayloadAction<string>) {
-            state.maestranze = state.maestranze.filter(m => m.faunaDocumentId !== action.payload)
+            state.maestranze = state.maestranze.filter(m => m.id !== action.payload)
         },
         resetMaestranzeInMaestranzaSlice(state: MaestranzaState) {
             state.maestranze = []
@@ -177,6 +177,18 @@ export const MaestranzaSlice = createSlice({
                 state.maestranzaSelezionata.documenti.forEach((d) => {
                     if (d.nome === action.payload.nome) {
                         d.scadenza = action.payload.value
+                    }
+                })
+            }
+            state.maestranzaDaCreare.corsi.forEach((c) => {
+                if (c.nome === action.payload.nome) {
+                    c.scadenza = action.payload.value
+                }
+            })
+            if (state.maestranzaSelezionata) {
+                state.maestranzaSelezionata.corsi.forEach((c) => {
+                    if (c.nome === action.payload.nome) {
+                        c.scadenza = action.payload.value
                     }
                 })
             }

@@ -6,7 +6,7 @@ export interface Estintore {
     dataUltimaRevisione: string,
     scadenza: string,
     creatoDa: string,
-    faunaDocumentId?: string
+    id?: string
 }
 
 export const estintoreDefault: Estintore = {

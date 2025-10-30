@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {useFaunaQuery} from "../../../faunadb/hooks/useFaunaQuery";
 import {useDispatch, useSelector} from "react-redux";
 import {ImpresaSelezionataSelector} from "../../../store/impresaSlice";
 import {uploadFileS3} from "../../../aws/s3APIs";
@@ -14,10 +13,9 @@ import {
     setMacchinaEAttrezzaturaSelezionato, setUltimaRevisioneInMacchinaEAttrezzatura
 } from "../../../store/macchinaEAttrezzaturaSlice";
 import {MacchinaEAttrezzatura, macchinaEAttrezzaturaDefault} from "../../../model/MacchineEAttrezzature";
-import {
-    createMacchinaEAttrezzaturaInFauna,
-    updateMacchinaEAttrezzaturaInFauna
-} from "../../../faunadb/api/macchinaEAttrezzaturaAPIs";
+import { useDynamoDBQuery } from '../../../dynamodb/hook/useDynamoDBQuery';
+import { createMacchinaEAttrezzaturaInDynamo, updateMacchinaEAttrezzaturaInDynamo } from '../../../dynamodb/api/macchinaEAttrezzaturaAPIs';
+
 
 export interface CreazioneMacchinaEAttrezzaturaProps {
     editabile: boolean,
@@ -30,14 +28,14 @@ const CreazioneMacchinaEAttrezzatura: React.FC<CreazioneMacchinaEAttrezzaturaPro
         editabile, modifica, setModifica
     }
 ) => {
-    const {execQuery} = useFaunaQuery()
+    const {execQuery2} = useDynamoDBQuery()
     const dispatch = useDispatch()
     const macchinaEAttrezzaturaSelezionato = useSelector(MacchinaEAttrezzaturaSelezionatoSelector)
     const macchinaEAttrezzaturaDaCreare = useSelector(MacchinaEAttrezzaturaDaCreareSelector)
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
 
     const [save, setSave] = useState(false)
-    const [uploadToFauna, setUploadToFauna] = useState(false)
+    const [uploadToDynamo, setUploadToDynamo] = useState(false)
     const [macchinaEAttrezzatura, setMacchinaEAttrezzatura] = useState<MacchinaEAttrezzatura>(macchinaEAttrezzaturaDefault)
 
     const onSubmit = (macchinaEAttrezzatura: MacchinaEAttrezzatura) => {
@@ -66,49 +64,39 @@ const CreazioneMacchinaEAttrezzatura: React.FC<CreazioneMacchinaEAttrezzaturaPro
 
     useEffect(() => {
         if (macchinaEAttrezzatura.documenti.filter(d => !d.file.value || typeof d.file.value === 'string').length === macchinaEAttrezzatura.documenti.length) {
-            setUploadToFauna(true)
+            setUploadToDynamo(true)
         } else {
-            setUploadToFauna(false)
+            setUploadToDynamo(false)
         }
     }, [macchinaEAttrezzatura])
 
     useEffect(() => {
-        if (save && uploadToFauna && !modifica) {
-            execQuery(createMacchinaEAttrezzaturaInFauna, {
+        if (save && uploadToDynamo && !modifica) {
+            let id = crypto.randomUUID()
+            execQuery2(createMacchinaEAttrezzaturaInDynamo, {
                 ...macchinaEAttrezzatura,
-                creatoDa: {
-                    id: impresaSelezionata?.faunaDocumentId as string,
-                    nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
-                }
+                creatoDa: impresaSelezionata?.id as string,
+                id: id
             }).then((res) => {
                 dispatch(addMacchinaEAttrezzatura({
                     ...macchinaEAttrezzatura,
-                    faunaDocumentId: res.ref.value.id,
-                    creatoDa: {
-                        id: impresaSelezionata?.faunaDocumentId as string,
-                        nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
-                    }
+                    id: id,
+                    creatoDa: impresaSelezionata?.id as string,
                 }))
                 dispatch(setMacchinaEAttrezzaturaSelezionato(undefined))
                 dispatch(setMacchinaEAttrezzaturaDaCreare(macchinaEAttrezzaturaDefault))
                 setSave(false)
             })
         }
-        if (save && uploadToFauna && modifica) {
-            execQuery(updateMacchinaEAttrezzaturaInFauna, {
+        if (save && uploadToDynamo && modifica) {
+            execQuery2(updateMacchinaEAttrezzaturaInDynamo, {
                 ...macchinaEAttrezzatura,
-                creatoDa: {
-                    id: impresaSelezionata?.faunaDocumentId as string,
-                    nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
-                }
+                creatoDa: impresaSelezionata?.id as string,
             }).then(() => {
-                dispatch(removeMacchinaEAttrezzatura(macchinaEAttrezzaturaSelezionato?.faunaDocumentId as string))
+                dispatch(removeMacchinaEAttrezzatura(macchinaEAttrezzaturaSelezionato?.id as string))
                 dispatch(addMacchinaEAttrezzatura({
                     ...macchinaEAttrezzatura,
-                    creatoDa: {
-                        id: impresaSelezionata?.faunaDocumentId as string,
-                        nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
-                    }
+                    creatoDa: impresaSelezionata?.id as string,
                 }))
                 setModifica(false)
                 dispatch(setMacchinaEAttrezzaturaSelezionato(undefined))
@@ -116,7 +104,7 @@ const CreazioneMacchinaEAttrezzatura: React.FC<CreazioneMacchinaEAttrezzaturaPro
                 setSave(false)
             })
         }
-    }, [save, uploadToFauna, macchinaEAttrezzatura])
+    }, [save, uploadToDynamo, macchinaEAttrezzatura])
 
     return (
         <>

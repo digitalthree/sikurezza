@@ -16,7 +16,7 @@ export const EstintoreSlice = createSlice({
             state.estintori.push(action.payload)
         },
         removeEstintore(state: EstintoreState, action: PayloadAction<string>){
-            state.estintori = state.estintori.filter(e => e.faunaDocumentId !== action.payload)
+            state.estintori = state.estintori.filter(e => e.id !== action.payload)
         },
         setEstintoreSelezionato(state: EstintoreState, action: PayloadAction<Estintore|undefined>){
             state.estintoreSelezionato = action.payload

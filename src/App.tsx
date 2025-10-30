@@ -42,14 +42,12 @@ function App() {
     if (!organization) {
         return <Login setOrganization={setOrganization}/>
     }
-
-
     return (
         <Auth0Provider
             domain={process.env.REACT_APP_AUTH0_DOMAIN as string}
             clientId={process.env.REACT_APP_AUTH0_ID as string}
             redirectUri={window.location.origin}
-            audience={process.env.REACT_APP_AUTH0_AUDIENCE as string}
+            // audience={process.env.REACT_APP_AUTH0_AUDIENCE as string}
             connection={organization as string}
             onRedirectCallback={() => setAuthorisedOrganizationFromTemporaryStorage()}
         >
@@ -59,7 +57,7 @@ function App() {
                         <Routes>
                             <Route path="/" element={<SharedLayout/>}>
                                 <Route index element={<Home/>}/>
-                                <Route path="impresa/:faunaDocumentId" element={<SezioneImpresa/>}>
+                                <Route path="impresa/:id" element={<SezioneImpresa/>}>
                                     <Route path="estintori" element={<EstintoreTab/>}/>
                                     <Route path="ponteggi" element={<PonteggioTab/>}/>
                                     <Route path="gru" element={<GruTab/>}/>

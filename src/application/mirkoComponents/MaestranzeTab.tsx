@@ -2,13 +2,15 @@ import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {ImpresaSelezionataSelector} from "../../store/impresaSlice";
-import {useFaunaQuery} from "../../faunadb/hooks/useFaunaQuery";
-import {getMaestranzaById} from "../../faunadb/api/maestranzaAPIs";
 import EditButtonMaestranza from "../../shared/tableComponents/EditButtonMaestranza";
 import {
     addMaestranzaToMaestranzaSlice,
     MaestranzeSelector, resetMaestranzeInMaestranzaSlice,
 } from "../../store/maestranzaSlice";
+import { useDynamoDBQuery } from "../../dynamodb/hook/useDynamoDBQuery";
+import { getMaestranzaById } from "../../dynamodb/api/maestranzaAPIs";
+import { convertFromDynamoDBFormat } from "../../dynamodb/utils/conversionFunctions";
+import { Maestranza } from "../../model/Maestranza";
 
 export interface MaestranzeTabProps {
 }
@@ -17,7 +19,7 @@ const MaestranzeTab: React.FC<MaestranzeTabProps> = () => {
 
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
     const navigate = useNavigate()
-    const {execQuery} = useFaunaQuery()
+    const {execQuery2} = useDynamoDBQuery()
     const dispatch = useDispatch()
 
     const maestranze = useSelector(MaestranzeSelector)
@@ -29,8 +31,9 @@ const MaestranzeTab: React.FC<MaestranzeTabProps> = () => {
         dispatch(resetMaestranzeInMaestranzaSlice())
         if(impresaSelezionata?.maestranze.length !== 0){
             impresaSelezionata?.maestranze.forEach(m => {
-                execQuery(getMaestranzaById, m).then(res => {
-                    dispatch(addMaestranzaToMaestranzaSlice(res))
+                execQuery2(getMaestranzaById, m).then(res => {
+                    let maestranza = convertFromDynamoDBFormat(res.Item) as Maestranza;
+                    dispatch(addMaestranzaToMaestranzaSlice(maestranza))
                 })
             })
         }else{
@@ -91,7 +94,7 @@ const MaestranzeTab: React.FC<MaestranzeTabProps> = () => {
                     <button
                         className="mt-8 btn btn-circle px-6 border-0 hover:bg-zinc-500 w-full text-white bg-zinc-300"
                         onClick={() => {
-                            navigate(`/impresa/${impresaSelezionata?.faunaDocumentId}/maestranza`, {
+                            navigate(`/impresa/${impresaSelezionata?.id}/maestranza`, {
                                 state: {
                                     editabile: true,
                                     modifica: false

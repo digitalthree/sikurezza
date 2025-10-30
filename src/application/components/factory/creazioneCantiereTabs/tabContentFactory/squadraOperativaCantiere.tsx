@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Select, {OnChangeValue} from "react-select";
-import makeAnimated, {MultiValue} from "react-select/animated";
+import makeAnimated from "react-select/animated";
 import {TfiSave} from "react-icons/tfi";
-import {getMaestranzaById} from "../../../../../faunadb/api/maestranzaAPIs";
 import {
     addMaestranzaToMaestranzaSlice,
     MaestranzeSelector,
@@ -10,15 +9,16 @@ import {
 } from "../../../../../store/maestranzaSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {ImpresaSelezionataSelector, ImpreseSelector} from "../../../../../store/impresaSlice";
-import {useFaunaQuery} from "../../../../../faunadb/hooks/useFaunaQuery";
 import {Maestranza} from "../../../../../model/Maestranza";
 import {
     CantiereSelezionatoSelector,
-    setAttributoAnagrafica,
     setAttributoSquadraOperativa
 } from "../../../../../store/cantiereSlice";
 import {useLocation} from "react-router-dom";
 import {Impresa} from "../../../../../model/Impresa";
+import { useDynamoDBQuery } from "../../../../../dynamodb/hook/useDynamoDBQuery";
+import { getMaestranzaById } from "../../../../../dynamodb/api/maestranzaAPIs";
+import { convertFromDynamoDBFormat } from '../../../../../dynamodb/utils/conversionFunctions';
 
 export interface SquadraOperativaCantieriProps {
     setIndex: (n: number) => void
@@ -39,14 +39,15 @@ const SquadraOperativaCantieriTab: React.FC<SquadraOperativaCantieriProps> = ({s
     const [RSPP, setRSPP] = useState([{label: "", value: cantiereSelezionato?.squadraOperativa.RSPP}])
     const [RSPPT, setRSPPT] = useState("")
 
-    const {execQuery} = useFaunaQuery()
+    const {execQuery2} = useDynamoDBQuery()
     const dispatch = useDispatch()
 
     useEffect(() => {
         if (impresaSelezionata?.maestranze.length !== 0) {
             impresaSelezionata?.maestranze.forEach(m => {
-                execQuery(getMaestranzaById, m).then(res => {
-                    dispatch(addMaestranzaToMaestranzaSlice(res))
+                execQuery2(getMaestranzaById, m).then(res => {
+                    let maestranza = convertFromDynamoDBFormat(res.Item) as Maestranza;
+                    dispatch(addMaestranzaToMaestranzaSlice(maestranza))
                 })
             })
         } else {

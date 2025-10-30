@@ -19,7 +19,7 @@ export const GruSlice = createSlice({
             state.gru.push(action.payload)
         },
         removeGru(state: GruState, action: PayloadAction<string>){
-            state.gru = state.gru.filter(g => g.faunaDocumentId !== action.payload)
+            state.gru = state.gru.filter(g => g.id !== action.payload)
         },
         setGruSelezionata(state: GruState, action: PayloadAction<Gru|undefined>){
             state.gruSelezionata = action.payload

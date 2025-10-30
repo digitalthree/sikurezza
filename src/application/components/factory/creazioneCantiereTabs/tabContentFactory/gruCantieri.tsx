@@ -5,9 +5,7 @@ import {TfiSave} from "react-icons/tfi";
 import {useDispatch, useSelector} from "react-redux";
 import {ImpresaSelezionataSelector} from "../../../../../store/impresaSlice";
 import {addGru, GruSelector, resetGru} from "../../../../../store/gruSlice";
-import {getAllGruByCreatoDa} from "../../../../../faunadb/api/gruAPIs";
 import {Gru} from "../../../../../model/Gru";
-import {useFaunaQuery} from "../../../../../faunadb/hooks/useFaunaQuery";
 import {
     CantiereSelezionatoSelector,
     setControlloCantiereGru,
@@ -16,6 +14,8 @@ import {
 import {ControlloCantiere} from "../../../../../model/Cantiere";
 import Nota from "./components/Nota";
 import {useLocation} from "react-router-dom";
+import { useDynamoDBQuery } from "../../../../../dynamodb/hook/useDynamoDBQuery";
+import { getAllGruByCreatoDa } from "../../../../../dynamodb/api/gruAPIs";
 
 export interface GruCantieriProps {
     setIndex: (n: number) => void
@@ -28,17 +28,17 @@ const GruCantieriTab: React.FC<GruCantieriProps> = ({setIndex}) => {
     const cantiereSelezionato = useSelector(CantiereSelezionatoSelector)
     const gruFromStore = useSelector(GruSelector)
     const dispatch = useDispatch()
-    const {execQuery} = useFaunaQuery()
+    const {execQuery2} = useDynamoDBQuery()
 
     useEffect(() => {
         dispatch(resetGru())
 
-        execQuery(getAllGruByCreatoDa, impresaSelezionata?.faunaDocumentId).then((res) => {
+        execQuery2(getAllGruByCreatoDa, impresaSelezionata?.id).then((res) => {
             res.forEach((g: { id: string; gru: Gru }) => {
                 dispatch(
                     addGru({
                         ...g.gru,
-                        faunaDocumentId: g.id,
+                        id: g.id,
                     } as Gru)
                 );
             });

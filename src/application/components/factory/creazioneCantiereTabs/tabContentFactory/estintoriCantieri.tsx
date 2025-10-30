@@ -3,13 +3,14 @@ import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import {TfiSave} from "react-icons/tfi";
 import {addEstintore, EstintoriSelector, resetEstintori} from "../../../../../store/estintoreSlice";
-import {getAllEstintoreByCreatoDa} from "../../../../../faunadb/api/estintoreAPIs";
 import {Estintore} from "../../../../../model/Estintore";
 import {useDispatch, useSelector} from "react-redux";
 import {ImpresaSelezionataSelector} from "../../../../../store/impresaSlice";
-import {useFaunaQuery} from "../../../../../faunadb/hooks/useFaunaQuery";
 import {CantiereSelezionatoSelector, setEstintoreInCantiere} from "../../../../../store/cantiereSlice";
 import {useLocation} from "react-router-dom";
+import { useDynamoDBQuery } from "../../../../../dynamodb/hook/useDynamoDBQuery";
+import { getAllEstintoreByCreatoDa } from "../../../../../dynamodb/api/estintoreAPIs";
+import { convertFromDynamoDBFormat } from '../../../../../dynamodb/utils/conversionFunctions';
 
 export interface EstintoriCantieriProps {
     setIndex: (n: number) => void
@@ -23,18 +24,16 @@ const EstintoriCantieriTab: React.FC<EstintoriCantieriProps> = ({setIndex}) => {
     const estintoriFromStore = useSelector(EstintoriSelector)
     const dispatch = useDispatch()
     const location = useLocation()
-    const {execQuery} = useFaunaQuery()
+    const {execQuery2} = useDynamoDBQuery()
 
     useEffect(() => {
         dispatch(resetEstintori())
 
-        execQuery(getAllEstintoreByCreatoDa, impresaSelezionata?.faunaDocumentId).then((res) => {
-            res.forEach((r: { id: string; estintore: Estintore }) => {
+        execQuery2(getAllEstintoreByCreatoDa, impresaSelezionata?.id).then((res) => {
+            res.Items.forEach((item:any) => {
+                let estintore = convertFromDynamoDBFormat(item) as Estintore;
                 dispatch(
-                    addEstintore({
-                        ...r.estintore,
-                        faunaDocumentId: r.id,
-                    } as Estintore)
+                    addEstintore(estintore)
                 );
             });
         });

@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {useFaunaQuery} from "../../../faunadb/hooks/useFaunaQuery";
 import {useDispatch, useSelector} from "react-redux";
 import {ImpresaSelezionataSelector} from "../../../store/impresaSlice";
 import {
@@ -10,10 +9,11 @@ import {
     setGruSelezionata, setVerificaInGru
 } from "../../../store/gruSlice";
 import {Gru, gruDefault} from "../../../model/Gru";
-import {createGruInFauna, updateGruInFauna} from "../../../faunadb/api/gruAPIs";
 import {uploadFileS3} from "../../../aws/s3APIs";
 import VisualizzaEliminaFile from "../../../shared/Files/VisualizzaEliminaFile";
 import InputFile from "../../../shared/Files/InputFile";
+import { useDynamoDBQuery } from '../../../dynamodb/hook/useDynamoDBQuery';
+import { createGruInDynamo, updateGruInDynamo } from '../../../dynamodb/api/gruAPIs';
 
 export interface CreazioneGruProps {
     editabile: boolean,
@@ -27,14 +27,14 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
     }
 ) => {
 
-    const {execQuery} = useFaunaQuery()
+    const {execQuery2} = useDynamoDBQuery()
     const dispatch = useDispatch()
     const gruSelezionata = useSelector(GruSelezionataSelector)
     const gruDaCreare = useSelector(GruDaCreareSelector)
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
 
     const [save, setSave] = useState(false)
-    const [uploadToFauna, setUploadToFauna] = useState(false)
+    const [uploadToDynamo, setUploadToDynamo] = useState(false)
     const [gru, setGru] = useState<Gru>(gruDefault)
 
     const onSubmit = (gru: Gru) => {
@@ -64,50 +64,40 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
 
     useEffect(() => {
         if (gru.documenti.filter(d => !d.file.value || typeof d.file.value === 'string').length === gru.documenti.length) {
-            setUploadToFauna(true)
+            setUploadToDynamo(true)
         } else {
-            setUploadToFauna(false)
+            setUploadToDynamo(false)
         }
     }, [gru])
 
     useEffect(() => {
         console.log(save)
-        if (save && uploadToFauna && !modifica) {
-            execQuery(createGruInFauna, {
+        if (save && uploadToDynamo && !modifica) {
+            let id = crypto.randomUUID()
+            execQuery2(createGruInDynamo, {
                 ...gru,
-                creatoDa: {
-                    id: impresaSelezionata?.faunaDocumentId as string,
-                    nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
-                }
+                creatoDa: impresaSelezionata?.id as string,
+                id: id
             }).then((res) => {
                 dispatch(addGru({
                     ...gru,
-                    faunaDocumentId: res.ref.value.id,
-                    creatoDa: {
-                        id: impresaSelezionata?.faunaDocumentId as string,
-                        nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
-                    }
+                    id: id,
+                    creatoDa: impresaSelezionata?.id as string,
                 }))
                 dispatch(setGruSelezionata(undefined))
                 dispatch(setGruDaCreare(gruDefault))
                 setSave(false)
             })
         }
-        if (save && uploadToFauna && modifica) {
-            execQuery(updateGruInFauna, {
+        if (save && uploadToDynamo && modifica) {
+            execQuery2(updateGruInDynamo, {
                 ...gru,
-                creatoDa: {
-                    id: impresaSelezionata?.faunaDocumentId as string,
-                    nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
-                }
+                creatoDa: impresaSelezionata?.id as string,
             }).then(() => {
-                dispatch(removeGru(gruSelezionata?.faunaDocumentId as string))
+                dispatch(removeGru(gruSelezionata?.id as string))
                 dispatch(addGru({
                     ...gru,
-                    creatoDa: {
-                        id: impresaSelezionata?.faunaDocumentId as string,
-                        nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
-                    }
+                    creatoDa: impresaSelezionata?.id as string,
                 }))
                 setModifica(false)
                 dispatch(setGruSelezionata(undefined))
@@ -115,7 +105,7 @@ const CreazioneGru: React.FC<CreazioneGruProps> = (
                 setSave(false)
             })
         }
-    }, [save, uploadToFauna, gru])
+    }, [save, uploadToDynamo, gru])
 
     return (
         <>

@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {SearchComponent} from "../../shared/slectComponent/SearchComponent";
 import {useDispatch, useSelector} from "react-redux";
 import {ImpreseSelector, setImpresaSelezionata} from "../../store/impresaSlice";
-import {useFaunaQuery} from "../../faunadb/hooks/useFaunaQuery";
 import {
     addItem,
     resetItem,
@@ -12,10 +11,6 @@ import {
     TotalControlRicercaByMacchinaEAttrezzaturaSelector,
     TotalControlRicercaByMaestranzaSelector, TotalControlRicercaByPonteggioSelector
 } from "../../store/totalControlSlice";
-import {getAllMacchineEAttrezzatureByCreatoDa} from "../../faunadb/api/macchinaEAttrezzaturaAPIs";
-import {getAllMaestranzeByCreatoDa} from "../../faunadb/api/maestranzaAPIs";
-import {getAllPonteggiByCreatoDa} from "../../faunadb/api/ponteggioAPIs";
-import {getAllGruByCreatoDa} from "../../faunadb/api/gruAPIs";
 import {Impresa} from "../../model/Impresa";
 import {MacchinaEAttrezzatura} from "../../model/MacchineEAttrezzature";
 import {Maestranza} from "../../model/Maestranza";
@@ -32,8 +27,13 @@ import {setPonteggioSelezionato} from "../../store/ponteggioSlice";
 import CreazioneGru from "../mirkoComponents/modal/CreazioneGru";
 import {setGruSelezionata} from "../../store/gruSlice";
 import {setMaestranzaSelezionata} from "../../store/maestranzaSlice";
-import {useNavigate} from "react-router-dom";
 import CreazioneMaestranzaModale from "../mirkoComponents/modal/CreazioneMaestranzaModale";
+import { useDynamoDBQuery } from '../../dynamodb/hook/useDynamoDBQuery';
+import { getAllMacchineEAttrezzatureByCreatoDa } from '../../dynamodb/api/macchinaEAttrezzaturaAPIs';
+import { getAllMaestranzeByCreatoDa } from '../../dynamodb/api/maestranzaAPIs';
+import { getAllPonteggiByCreatoDa } from '../../dynamodb/api/ponteggioAPIs';
+import { getAllGruByCreatoDa } from '../../dynamodb/api/gruAPIs';
+import { convertFromDynamoDBFormat } from '../../dynamodb/utils/conversionFunctions';
 
 export interface TotalControlProps {
 
@@ -50,8 +50,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
     const ricercaByMacchinaEAttrezzatura = useSelector(TotalControlRicercaByMacchinaEAttrezzaturaSelector)
     const ricercaByPonteggio = useSelector(TotalControlRicercaByPonteggioSelector)
     const ricercaByGru = useSelector(TotalControlRicercaByGruSelector)
-    const {execQuery} = useFaunaQuery()
-    const navigate = useNavigate()
+    const {execQuery2} = useDynamoDBQuery()
 
     const [modifica, setModifica] = useState(true)
 
@@ -60,51 +59,52 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
     useEffect(() => {
         dispatch(resetItem())
         imprese.forEach(i => {
-            execQuery(getAllMacchineEAttrezzatureByCreatoDa, i.faunaDocumentId).then((res) => {
-                res.forEach((r: { id: string; macchinaEAttrezzatura: MacchinaEAttrezzatura }) => {
-                    if (r.macchinaEAttrezzatura && (Date.parse(r.macchinaEAttrezzatura.ultimaRevisione.scadenza) - Date.now() < 45*24*3600*1000)) {
-                            dispatch(addItem({item: {
-                                ...r.macchinaEAttrezzatura,
-                                    faunaDocumentId: r.id,
-                                }, tipo: "MacchinaEAttrezzatura", scadenza: r.macchinaEAttrezzatura.ultimaRevisione.scadenza, problema: "Ultima Revisione"}))
+            execQuery2(getAllMacchineEAttrezzatureByCreatoDa, i.id).then((res) => {
+                res.Items.forEach((item:any) => {
+                    let r = convertFromDynamoDBFormat(item) as MacchinaEAttrezzatura;
+                    if (r && (Date.parse(r.ultimaRevisione.scadenza) - Date.now() < 45*24*3600*1000)) {
+                            dispatch(addItem({item: r, tipo: "MacchinaEAttrezzatura", scadenza: r.ultimaRevisione.scadenza, problema: "Ultima Revisione"}))
 
                     }
                 })
             })
-            execQuery(getAllMaestranzeByCreatoDa, i.faunaDocumentId).then((res) => {
-                res.forEach((r: { id: string; maestranza: Maestranza }) => {
-                    if (r.maestranza) {
-                        r.maestranza.documenti.forEach(d => {
+            execQuery2(getAllMaestranzeByCreatoDa, i.id).then((res) => {
+                res.Items.forEach((item:any) => {
+                    let maestranza = convertFromDynamoDBFormat(item) as Maestranza;
+                    if (maestranza) {
+                        maestranza.documenti.forEach(d => {
                             if((Date.parse(d.scadenza as string) - Date.now() < 45*24*3600*1000)){
-                                dispatch(addItem({item: {...r.maestranza, faunaDocumentId: r.id}, tipo: "Maestranza", scadenza: d.scadenza as string, problema: d.nome}))
+                                dispatch(addItem({item: maestranza, tipo: "Maestranza", scadenza: d.scadenza as string, problema: d.nome}))
                             }
                         })
-                        r.maestranza.corsi.forEach(d => {
+                        maestranza.corsi.forEach(d => {
                             if((Date.parse(d.scadenza as string) - Date.now() < 45*24*3600*1000)){
-                                dispatch(addItem({item: {...r.maestranza, faunaDocumentId: r.id}, tipo: "Maestranza", scadenza: d.scadenza as string, problema: d.nome}))
+                                dispatch(addItem({item: maestranza, tipo: "Maestranza", scadenza: d.scadenza as string, problema: d.nome}))
                             }
                         })
                     }
                 })
             })
-            execQuery(getAllPonteggiByCreatoDa, i.faunaDocumentId).then((res) => {
-                res.forEach((r: { id: string; ponteggio: Ponteggio }) => {
-                    if (r.ponteggio) {
-                        r.ponteggio.controlli.forEach(c => {
+            execQuery2(getAllPonteggiByCreatoDa, i.id).then((res) => {
+                res.Items.forEach((item:any) => {
+                    let ponteggio = convertFromDynamoDBFormat(item) as Ponteggio;
+                    if (ponteggio) {
+                        ponteggio.controlli.forEach(c => {
                             if((Date.parse(c.data) - Date.now() < 45*24*3600*1000)){
-                                dispatch(addItem({item: {...r.ponteggio, faunaDocumentId: r.id}, tipo: "Ponteggio", scadenza: c.data, problema: c.nome}))
+                                dispatch(addItem({item: ponteggio, tipo: "Ponteggio", scadenza: c.data, problema: c.nome}))
                             }
                         })
 
                     }
                 })
             })
-            execQuery(getAllGruByCreatoDa, i.faunaDocumentId).then((res) => {
-                res.forEach((r: { id: string; gru: Gru }) => {
-                    if (r.gru) {
-                        r.gru.verifiche.forEach(v => {
+            execQuery2(getAllGruByCreatoDa, i.id).then((res) => {
+                res.Items.forEach((item:any) => {
+                    let gru = convertFromDynamoDBFormat(item) as Gru;
+                    if (gru) {
+                        gru.verifiche.forEach(v => {
                             if((Date.parse(v.scadenza) - Date.now() < 45*24*3600*1000)){
-                                dispatch(addItem({item: {...r.gru, faunaDocumentId: r.id}, tipo: "Gru", scadenza: v.scadenza, problema: v.label}))
+                                dispatch(addItem({item: gru, tipo: "Gru", scadenza: v.scadenza, problema: v.label}))
                             }
                         })
                     }
@@ -120,7 +120,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
         if (ricercaByImpresa && ricercaByImpresa !== "") {
             let itemsRicerca = items.filter(i => {
                 if(i.tipo !== "Impresa"){
-                    if ((i.item as (Maestranza|MacchinaEAttrezzatura|Ponteggio|Gru)).creatoDa.nome.toLowerCase()
+                    if ((i.item as (Maestranza|MacchinaEAttrezzatura|Ponteggio|Gru)).creatoDa
                         .replace(/\s+/g, '')
                         .includes(ricercaByImpresa.toLowerCase().replace(/\s+/g, ''))) {
                         return i
@@ -215,17 +215,17 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                         dispatch(setRicerca({testo: ev.target.value, tipo: "Gru"}))
                     }}/>
                 </div>
-                <div className="overflow-x-auto overflow-y-hidden w-1/2 mt-3 border-t-zinc-300 border rounded-xl mt-20">
+                <div className="overflow-x-auto overflow-y-hidden w-1/2 border-t-zinc-300 border rounded-xl mt-20">
                     <table className="table table-zebra w-full ">
                         <tbody>
                         {/* row 1 */}
                         {itemsFiltered.map((i, index) => {
                             if (i.tipo === "MacchinaEAttrezzatura") {
                                 return (
-                                    <tr key={(i.item as MacchinaEAttrezzatura).faunaDocumentId}
+                                    <tr key={(i.item as MacchinaEAttrezzatura).id}
                                         className="link link-hover hover:text-sky-500">
                                         <th>{index + 1}</th>
-                                        <td>{(i.item as MacchinaEAttrezzatura).creatoDa.nome.toUpperCase()}</td>
+                                        <td>{(i.item as MacchinaEAttrezzatura).creatoDa}</td>
                                         <td>{(i.item as MacchinaEAttrezzatura).attr.filter(a => a.nome === "denominazione")[0].value}</td>
                                         <td>{i.problema}</td>
                                         <td>
@@ -235,7 +235,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                                         <td><label className="hover:cursor-pointer hover:underline hover:text-black"
                                                    htmlFor="my-modal-7"
                                                    onClick={() => {
-                                                       dispatch(setImpresaSelezionata(imprese.filter(im => im.faunaDocumentId === (i.item as MacchinaEAttrezzatura).creatoDa.id)[0]))
+                                                       dispatch(setImpresaSelezionata(imprese.filter(im => im.id === (i.item as MacchinaEAttrezzatura).creatoDa)[0]))
                                                        dispatch(setMacchinaEAttrezzaturaSelezionato(i.item as MacchinaEAttrezzatura));
                                                    }}
                                         >apri</label></td>
@@ -244,10 +244,10 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                             }
                             if (i.tipo === "Maestranza") {
                                 return (
-                                    <tr key={(i.item as Maestranza).faunaDocumentId}
+                                    <tr key={(i.item as Maestranza).id}
                                         className="link link-hover hover:text-sky-500">
                                         <th>{index + 1}</th>
-                                        <td>{(i.item as Maestranza).creatoDa.nome.toUpperCase()}</td>
+                                        <td>{(i.item as Maestranza).creatoDa}</td>
                                         <td>{(i.item as Maestranza).anagrafica.filter(m => m.label === 'nome')[0].value} {(i.item as Maestranza).anagrafica.filter(m => m.label === 'cognome')[0].value}</td>
                                         <td>{i.problema}</td>
                                         <td>
@@ -257,7 +257,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                                             htmlFor="my-modal-8"
                                             className="mr-4"
                                             onClick={() => {
-                                                dispatch(setImpresaSelezionata(imprese.filter(im => im.faunaDocumentId === (i.item as Maestranza).creatoDa.id)[0]))
+                                                dispatch(setImpresaSelezionata(imprese.filter(im => im.id === (i.item as Maestranza).creatoDa)[0]))
                                                 dispatch(setMaestranzaSelezionata(i.item as Maestranza));
                                             }}
                                         >apri</label>
@@ -267,10 +267,10 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                             }
                             if (i.tipo === "Ponteggio") {
                                 return (
-                                    <tr key={(i.item as Ponteggio).faunaDocumentId}
+                                    <tr key={(i.item as Ponteggio).id}
                                         className="link link-hover hover:text-sky-500">
                                         <th>{index + 1}</th>
-                                        <td>{(i.item as Ponteggio).creatoDa.nome.toUpperCase()}</td>
+                                        <td>{(i.item as Ponteggio).creatoDa}</td>
                                         <td>{(i.item as Ponteggio).attr.filter(a => a.nome === "tipologia")[0].value}</td>
                                         <td>{i.problema}</td>
                                         <td>
@@ -280,7 +280,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                                             htmlFor="my-modal-6"
                                             className="mr-4"
                                             onClick={() => {
-                                                dispatch(setImpresaSelezionata(imprese.filter(im => im.faunaDocumentId === (i.item as Ponteggio).creatoDa.id)[0]))
+                                                dispatch(setImpresaSelezionata(imprese.filter(im => im.id === (i.item as Ponteggio).creatoDa)[0]))
                                                 dispatch(setPonteggioSelezionato(i.item as Ponteggio));
                                             }}
                                         >apri</label>
@@ -290,10 +290,10 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                             }
                             if (i.tipo === "Gru") {
                                 return (
-                                    <tr key={(i.item as Gru).faunaDocumentId}
+                                    <tr key={(i.item as Gru).id}
                                         className="link link-hover hover:text-sky-500">
                                         <th>{index + 1}</th>
-                                        <td>{(i.item as Gru).creatoDa.nome.toUpperCase()}</td>
+                                        <td>{(i.item as Gru).creatoDa}</td>
                                         <td>{(i.item as Gru).attr.filter(a => a.nome === "tipologia")[0].value}</td>
                                         <td>{i.problema}</td>
                                         <td>
@@ -303,7 +303,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                                             htmlFor="my-modal-5"
                                             className="mr-4"
                                             onClick={() => {
-                                                dispatch(setImpresaSelezionata(imprese.filter(im => im.faunaDocumentId === (i.item as Gru).creatoDa.id)[0]))
+                                                dispatch(setImpresaSelezionata(imprese.filter(im => im.id === (i.item as Gru).creatoDa)[0]))
                                                 dispatch(setGruSelezionata(i.item as Gru));
                                             }}
                                         >apri</label>

@@ -17,7 +17,7 @@ export interface Cantiere {
     }
     estintori: Estintore[]
     impiantoElettrico: ImpiantoElettrico,
-    faunaDocumentId?: string,
+    id?: string,
     creatoDa: string
 }
 

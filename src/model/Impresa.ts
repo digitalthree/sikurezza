@@ -23,8 +23,8 @@ export interface Impresa {
     impreseSubappaltatrici: string[],
     documentiIdoneitaImpresa: Autodichiarazione[],
     comunicazioni: ItemComunicazione[],
-    creataDa: string
-    faunaDocumentId?: string
+    creatoDa: string
+    id?: string
 }
 
 export interface Autodichiarazione {
@@ -118,5 +118,5 @@ export const impresaTemporanea: Impresa = {
             email: ""
         }
     ],
-    creataDa: ""
+    creatoDa: ""
 }

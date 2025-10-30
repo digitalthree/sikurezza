@@ -1,16 +1,8 @@
 import React, {useEffect, useRef} from "react";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
-import { useFaunaQuery } from "../../../faunadb/hooks/useFaunaQuery";
 import { useDispatch, useSelector } from "react-redux";
 import { clearOrganizationStorages } from "../../../utils/auth0/auth0";
-import {
-    createImpresaInFauna,
-    deleteImpresaFromFauna,
-    getAllImpreseByCreataDa,
-    getImpresaById,
-    updateImpresaInFauna
-} from "../../../faunadb/api/impresaAPIs";
-import {Impresa, impresaTemporanea} from "../../../model/Impresa";
+import {Impresa} from "../../../model/Impresa";
 import {
     addImpresa, addImpresaSubId,
     ImpreseSelector, removeImpresa, resetBreadcrumbItems,
@@ -24,12 +16,15 @@ import {MacchinaEAttrezzatura} from "../../../model/MacchineEAttrezzature";
 import {addMacchinaEAttrezzatura} from "../../../store/macchinaEAttrezzaturaSlice";
 import {BsTrash} from "react-icons/bs";
 import {deleteFileS3} from "../../../aws/s3APIs";
+import { useDynamoDBQuery } from "../../../dynamodb/hook/useDynamoDBQuery";
+import { deleteImpresaFromDynamo, getAllImpreseByCreataDa, getImpresaById, updateImpresaInDynamo } from "../../../dynamodb/api/impresaAPIs";
+import { convertFromDynamoDBFormat } from "../../../dynamodb/utils/conversionFunctions";
 
 interface HomeProps {}
 
 const Home: React.FC<HomeProps> = () => {
   const { logout, user } = useAuth0();
-  const { execQuery } = useFaunaQuery();
+  const { execQuery2 } = useDynamoDBQuery();
 
   const imprese = useSelector(ImpreseSelector);
 
@@ -41,23 +36,21 @@ const Home: React.FC<HomeProps> = () => {
     dispatch(resetBreadcrumbItems())
     dispatch(setObjectToCreate(undefined))
     if (imprese.length === 0) {
-      execQuery(getAllImpreseByCreataDa, user?.email).then((res) => {
-        res.forEach((r: { id: string; impresa: Impresa }) => {
-            console.log(r.impresa)
+      execQuery2(getAllImpreseByCreataDa, user?.email).then((res) => {
+        res.Items.forEach((item: any) => {
+          let impresaItem = convertFromDynamoDBFormat(item) as Impresa;
           dispatch(
-              addImpresa({
-                ...r.impresa,
-                faunaDocumentId: r.id,
-              } as Impresa)
+              addImpresa(impresaItem)
           );
-          if(r.impresa.tipo === "Affidataria"){
-            r.impresa.impreseSubappaltatrici.forEach(is => {
-              execQuery(getImpresaById, is).then(res => {
-                dispatch(addImpresa({...res, tipo: "Subappaltatrice"} as Impresa))
+          if(impresaItem.tipo === "Affidataria"){
+            impresaItem.impreseSubappaltatrici.forEach(is => {
+              execQuery2(getImpresaById, is).then(res => {
+                let impresa = convertFromDynamoDBFormat(res.Item) as Impresa;
+                dispatch(addImpresa(impresa))
               })
             })
           }
-        });
+        })
       })
     }
   }, []);
@@ -92,7 +85,7 @@ const Home: React.FC<HomeProps> = () => {
                         navigate(
                             `/impresa/${
                                 imprese.filter((i) => i.tipo === "Affidataria")[0]
-                                    .faunaDocumentId
+                                    .id
                             }`
                         );
                       }}
@@ -111,11 +104,11 @@ const Home: React.FC<HomeProps> = () => {
                           return (
                               <div className="relative">
                                 <div
-                                    key={(is as Impresa).faunaDocumentId}
+                                    key={(is as Impresa).id}
                                     className="bg-gray-300 shadow-md rounded-3xl min-h-[180px] flex justify-center flex-col items-center hover:cursor-pointer hover:opacity-60 p-4"
                                     onClick={() => {
                                       dispatch(setImpresaSelezionata(is));
-                                      navigate(`impresa/${is.faunaDocumentId}`);
+                                      navigate(`impresa/${is.id}`);
                                     }}
                                 >
                                     <span className="text-white font-semibold text-xl uppercase text-center">
@@ -129,15 +122,15 @@ const Home: React.FC<HomeProps> = () => {
                                      onClick={() => {
                                          let confirm = window.confirm(`Sei sicuro di voler eliminare l'impresa ${(is as Impresa).anagrafica.attr.filter(a => a.label === 'denominazione')[0].value}`)
                                          if(confirm){
-                                             if(imprese.filter(i => i.tipo === "Affidataria")[0].impreseSubappaltatrici.filter(imp => imp === is.faunaDocumentId).length > 0){
-                                                 console.log(imprese.filter(i => i.tipo === "Affidataria")[0].impreseSubappaltatrici.filter(imp => imp !== is.faunaDocumentId))
-                                                 execQuery(updateImpresaInFauna,
+                                             if(imprese.filter(i => i.tipo === "Affidataria")[0].impreseSubappaltatrici.filter(imp => imp === is.id).length > 0){
+                                                 console.log(imprese.filter(i => i.tipo === "Affidataria")[0].impreseSubappaltatrici.filter(imp => imp !== is.id))
+                                                 execQuery2(updateImpresaInDynamo,
                                                      {...imprese.filter(i => i.tipo === "Affidataria")[0],
-                                                         impreseSubappaltatrici: imprese.filter(i => i.tipo === "Affidataria")[0].impreseSubappaltatrici.filter(imp => imp !== is.faunaDocumentId)} as Impresa)
+                                                         impreseSubappaltatrici: imprese.filter(i => i.tipo === "Affidataria")[0].impreseSubappaltatrici.filter(imp => imp !== is.id)} as Impresa)
                                                      .then((() => {})
                                                  )
                                              }else{
-                                                 execQuery(deleteImpresaFromFauna, is.faunaDocumentId).then((() => {}))
+                                                 execQuery2(deleteImpresaFromDynamo, is.id).then((() => {}))
                                                  is.documentiIdoneitaImpresa.forEach(d => {
                                                      if(typeof d.file.value === 'string'){
                                                          deleteFileS3(d.file.value).then(() => {})
@@ -189,18 +182,12 @@ const Home: React.FC<HomeProps> = () => {
                                 impresa: Impresa;
                                 macchineEAttrezzature: MacchinaEAttrezzatura[]
                               } = JSON.parse(value);
-                              /*execQuery(createImpresaInFauna, {
-                                  ...impresaDaImportare.impresa,
-                                  creataDa: user?.email
-                              }).then(res => {
-
-                              })*/
-                              execQuery(updateImpresaInFauna, {
+                              execQuery2(updateImpresaInDynamo, {
                                 ...imprese.filter((i) => i.tipo === "Affidataria")[0],
-                                impreseSubappaltatrici: [...imprese.filter((i) => i.tipo === "Affidataria")[0]?.impreseSubappaltatrici as string[], impresaDaImportare.impresa.faunaDocumentId]
+                                impreseSubappaltatrici: [...imprese.filter((i) => i.tipo === "Affidataria")[0]?.impreseSubappaltatrici as string[], impresaDaImportare.impresa.id]
                               }).then((res) => {
                                   console.log(res)
-                                dispatch(addImpresaSubId(impresaDaImportare.impresa.faunaDocumentId as string))
+                                dispatch(addImpresaSubId(impresaDaImportare.impresa.id as string))
                                 dispatch(addImpresa(impresaDaImportare.impresa))
                                 impresaDaImportare.macchineEAttrezzature.forEach(m => {
                                   dispatch(addMacchinaEAttrezzatura(m))

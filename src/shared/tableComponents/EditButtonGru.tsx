@@ -1,10 +1,10 @@
 import React from 'react';
 import {Gru, gruDefault} from "../../model/Gru";
 import {useDispatch} from "react-redux";
-import {useFaunaQuery} from "../../faunadb/hooks/useFaunaQuery";
 import {removeGru, setGruDaCreare, setGruSelezionata} from "../../store/gruSlice";
-import {deleteGruFromFauna} from "../../faunadb/api/gruAPIs";
 import {deleteFileS3} from "../../aws/s3APIs";
+import { useDynamoDBQuery } from '../../dynamodb/hook/useDynamoDBQuery';
+import { deleteGruFromDynamo } from '../../dynamodb/api/gruAPIs';
 
 export interface EditButtonGruProps{
     gruTarget: Gru;
@@ -14,7 +14,7 @@ export interface EditButtonGruProps{
 
 const EditButtonGru: React.FC<EditButtonGruProps> = ({gruTarget, setEditabile, setModifica}) => {
     const dispatch = useDispatch();
-    const { execQuery } = useFaunaQuery();
+    const { execQuery2 } = useDynamoDBQuery();
 
     return (
         <>
@@ -88,9 +88,9 @@ const EditButtonGru: React.FC<EditButtonGruProps> = ({gruTarget, setEditabile, s
                                 "Sei sicuro di voler eliminare " + removeVar.payload?.attr.filter(a => a.nome === 'tipologia')[0].value
                             );
                             if (messageConfirm) {
-                                execQuery(
-                                    deleteGruFromFauna,
-                                    gruTarget?.faunaDocumentId
+                                execQuery2(
+                                    deleteGruFromDynamo,
+                                    gruTarget?.id
                                 ).then(() => {
                                     gruTarget?.documenti.forEach(d => {
                                         if(typeof d.file.value === 'string'){
@@ -99,7 +99,7 @@ const EditButtonGru: React.FC<EditButtonGruProps> = ({gruTarget, setEditabile, s
 
                                     })
                                     dispatch(
-                                        removeGru(gruTarget?.faunaDocumentId as string)
+                                        removeGru(gruTarget?.id as string)
                                     );
                                     dispatch(setGruSelezionata(undefined))
                                     dispatch(setGruDaCreare(gruDefault))

@@ -21,7 +21,7 @@ export const ImpresaSlice = createSlice({
             state.imprese.push(action.payload)
         },
         removeImpresa(state: ImpresaState, action: PayloadAction<Impresa>){
-            state.imprese = state.imprese.filter(i => i.faunaDocumentId !== action.payload.faunaDocumentId)
+            state.imprese = state.imprese.filter(i => i.id !== action.payload.id)
         },
         setImpresaSelezionata(state: ImpresaState, action: PayloadAction<Impresa | undefined>){
             state.impresaSelezionata = action.payload
@@ -117,11 +117,11 @@ export const ImpresaSlice = createSlice({
             }
         },
         addMaestranza(state: ImpresaState, action: PayloadAction<{impresa: string, maestranza: string}>){
-            state.imprese.filter(i => i.faunaDocumentId === action.payload.impresa)[0].maestranze.push(action.payload.maestranza);
+            state.imprese.filter(i => i.id === action.payload.impresa)[0].maestranze.push(action.payload.maestranza);
             (state.impresaSelezionata) && state.impresaSelezionata.maestranze.push(action.payload.maestranza)
         },
         removeMaestranza(state: ImpresaState, action: PayloadAction<{impresa: string, maestranza: string}>){
-            state.imprese.filter(i => i.faunaDocumentId === action.payload.impresa)[0].maestranze = state.imprese.filter(i => i.faunaDocumentId === action.payload.impresa)[0].maestranze.filter(m => m !== action.payload.maestranza);
+            state.imprese.filter(i => i.id === action.payload.impresa)[0].maestranze = state.imprese.filter(i => i.id === action.payload.impresa)[0].maestranze.filter(m => m !== action.payload.maestranza);
             if(state.impresaSelezionata){
                 state.impresaSelezionata.maestranze = state.impresaSelezionata.maestranze.filter(m => m !== action.payload.maestranza);
             }

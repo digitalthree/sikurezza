@@ -1,13 +1,10 @@
 import React from 'react';
-import {Gru, gruDefault} from "../../model/Gru";
 import {Ponteggio, ponteggioDefault} from "../../model/Ponteggio";
 import {useDispatch} from "react-redux";
-import {useFaunaQuery} from "../../faunadb/hooks/useFaunaQuery";
-import {removeGru, setGruDaCreare, setGruSelezionata} from "../../store/gruSlice";
-import {deleteGruFromFauna} from "../../faunadb/api/gruAPIs";
 import {deleteFileS3} from "../../aws/s3APIs";
 import {removePonteggio, setPonteggioDaCreare, setPonteggioSelezionato} from "../../store/ponteggioSlice";
-import {deletePonteggioFromFauna} from "../../faunadb/api/ponteggioAPIs";
+import { useDynamoDBQuery } from '../../dynamodb/hook/useDynamoDBQuery';
+import { deletePonteggioFromDynamo } from '../../dynamodb/api/ponteggioAPIs';
 
 export interface EditButtonPonteggioProps{
     ponteggioTarget: Ponteggio;
@@ -21,7 +18,7 @@ const EditButtonPonteggio: React.FC<EditButtonPonteggioProps> = (
     }
 ) => {
     const dispatch = useDispatch();
-    const { execQuery } = useFaunaQuery();
+    const { execQuery2 } = useDynamoDBQuery();
 
     return (
         <>
@@ -95,9 +92,9 @@ const EditButtonPonteggio: React.FC<EditButtonPonteggioProps> = (
                                 "Sei sicuro di voler eliminare " + removeVar.payload?.attr.filter(a => a.nome === 'tipologia')[0].value
                             );
                             if (messageConfirm) {
-                                execQuery(
-                                    deletePonteggioFromFauna,
-                                    ponteggioTarget?.faunaDocumentId
+                                execQuery2(
+                                    deletePonteggioFromDynamo,
+                                    ponteggioTarget?.id
                                 ).then(() => {
                                     ponteggioTarget?.allegatiPonteggio.forEach(a => {
                                         if(typeof a.file.value === 'string'){
@@ -109,7 +106,7 @@ const EditButtonPonteggio: React.FC<EditButtonPonteggioProps> = (
                                             deleteFileS3(c.file.value).then(() => {})
                                         }
                                     })
-                                    dispatch(removePonteggio(ponteggioTarget?.faunaDocumentId as string))
+                                    dispatch(removePonteggio(ponteggioTarget?.id as string))
                                     dispatch(setPonteggioSelezionato(undefined))
                                     dispatch(setPonteggioDaCreare(ponteggioDefault))
                                 });

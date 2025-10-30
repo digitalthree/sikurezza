@@ -1,33 +1,24 @@
 import React, {useEffect, useState} from "react";
-import EditButtonEstintore from "../../shared/tableComponents/EditButtonEstintore";
 import {useDispatch, useSelector} from "react-redux";
-import {
-  addPonteggio,
-  PonteggioSelector,
-  resetPonteggio,
-  setPonteggioDaCreare,
-  setPonteggioSelezionato
-} from "../../store/ponteggioSlice";
-import {useFaunaQuery} from "../../faunadb/hooks/useFaunaQuery";
 import {ImpresaSelezionataSelector} from "../../store/impresaSlice";
-import {getAllPonteggiByCreatoDa} from "../../faunadb/api/ponteggioAPIs";
-import {Ponteggio, ponteggioDefault} from "../../model/Ponteggio";
 import {
   addMacchinaEAttrezzatura,
   MacchinaEAttrezzaturaSelector,
   resetMacchinaEAttrezzatura, setMacchinaEAttrezzaturaDaCreare, setMacchinaEAttrezzaturaSelezionato
 } from "../../store/macchinaEAttrezzaturaSlice";
-import {getAllMacchineEAttrezzatureByCreatoDa} from "../../faunadb/api/macchinaEAttrezzaturaAPIs";
 import {MacchinaEAttrezzatura, macchinaEAttrezzaturaDefault} from "../../model/MacchineEAttrezzature";
 import EditButtonMacchinaEAttrezzatura from "../../shared/tableComponents/EditButtonMacchinaEAttrezzatura";
 import CreazioneMacchinaEAttrezzatura from "./modal/CreazioneMacchinaEAttrezzatura";
+import { useDynamoDBQuery } from "../../dynamodb/hook/useDynamoDBQuery";
+import { getAllMacchineEAttrezzatureByCreatoDa } from "../../dynamodb/api/macchinaEAttrezzaturaAPIs";
+import { convertFromDynamoDBFormat } from "../../dynamodb/utils/conversionFunctions";
 
 export interface MacchineAttrezzatureTabProps {}
 
 const MacchineAttrezzatureTab: React.FC<MacchineAttrezzatureTabProps> = ({}) => {
 
   const macchineEAttrezzature = useSelector(MacchinaEAttrezzaturaSelector)
-  const {execQuery} = useFaunaQuery()
+  const {execQuery2} = useDynamoDBQuery()
   const dispatch = useDispatch()
   const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
   const [editabile, setEditabile] = useState<boolean>(true)
@@ -37,13 +28,11 @@ const MacchineAttrezzatureTab: React.FC<MacchineAttrezzatureTabProps> = ({}) => 
   useEffect(() => {
     dispatch(resetMacchinaEAttrezzatura())
 
-    execQuery(getAllMacchineEAttrezzatureByCreatoDa, impresaSelezionata?.faunaDocumentId).then((res) => {
-      res.forEach((m: { id: string; macchinaEAttrezzatura: MacchinaEAttrezzatura }) => {
+    execQuery2(getAllMacchineEAttrezzatureByCreatoDa, impresaSelezionata?.id).then((res) => {
+      res.Items.forEach((item:any) => {
+        let m = convertFromDynamoDBFormat(item) as MacchinaEAttrezzatura;
         dispatch(
-            addMacchinaEAttrezzatura({
-              ...m.macchinaEAttrezzatura,
-              faunaDocumentId: m.id,
-            } as MacchinaEAttrezzatura)
+            addMacchinaEAttrezzatura(m)
         );
       });
     });

@@ -1,17 +1,14 @@
 import React from 'react';
-import {Ponteggio, ponteggioDefault} from "../../model/Ponteggio";
 import {MacchinaEAttrezzatura, macchinaEAttrezzaturaDefault} from "../../model/MacchineEAttrezzature";
 import {useDispatch} from "react-redux";
-import {useFaunaQuery} from "../../faunadb/hooks/useFaunaQuery";
-import {removePonteggio, setPonteggioDaCreare, setPonteggioSelezionato} from "../../store/ponteggioSlice";
-import {deletePonteggioFromFauna} from "../../faunadb/api/ponteggioAPIs";
 import {deleteFileS3} from "../../aws/s3APIs";
 import {
     removeMacchinaEAttrezzatura,
     setMacchinaEAttrezzaturaDaCreare,
     setMacchinaEAttrezzaturaSelezionato
 } from "../../store/macchinaEAttrezzaturaSlice";
-import {deleteMacchinaEAttrezzaturaFromFauna} from "../../faunadb/api/macchinaEAttrezzaturaAPIs";
+import { useDynamoDBQuery } from '../../dynamodb/hook/useDynamoDBQuery';
+import { deleteMacchinaEAttrezzaturaFromDynamo } from '../../dynamodb/api/macchinaEAttrezzaturaAPIs';
 
 export interface EditButtonMacchinaEAttrezzaturaProps{
     macchinaEAttrezzaturaTarget: MacchinaEAttrezzatura;
@@ -25,7 +22,7 @@ const EditButtonMacchinaEAttrezzatura: React.FC<EditButtonMacchinaEAttrezzaturaP
     }
 ) => {
     const dispatch = useDispatch();
-    const { execQuery } = useFaunaQuery();
+    const { execQuery2 } = useDynamoDBQuery();
 
     return (
         <>
@@ -99,16 +96,16 @@ const EditButtonMacchinaEAttrezzatura: React.FC<EditButtonMacchinaEAttrezzaturaP
                                 "Sei sicuro di voler eliminare " + removeVar.payload?.attr.filter(a => a.nome === 'denominazione')[0].value
                             );
                             if (messageConfirm) {
-                                execQuery(
-                                    deleteMacchinaEAttrezzaturaFromFauna,
-                                    macchinaEAttrezzaturaTarget?.faunaDocumentId
+                                execQuery2(
+                                    deleteMacchinaEAttrezzaturaFromDynamo,
+                                    macchinaEAttrezzaturaTarget?.id
                                 ).then(() => {
                                     macchinaEAttrezzaturaTarget?.documenti.forEach(d => {
                                         if(typeof d.file.value === 'string'){
                                             deleteFileS3(d.file.value).then(() => {})
                                         }
                                     })
-                                    dispatch(removeMacchinaEAttrezzatura(macchinaEAttrezzaturaTarget?.faunaDocumentId as string))
+                                    dispatch(removeMacchinaEAttrezzatura(macchinaEAttrezzaturaTarget?.id as string))
                                     dispatch(setMacchinaEAttrezzaturaSelezionato(undefined))
                                     dispatch(setMacchinaEAttrezzaturaDaCreare(macchinaEAttrezzaturaDefault))
                                 });

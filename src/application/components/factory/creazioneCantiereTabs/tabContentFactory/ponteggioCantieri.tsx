@@ -1,26 +1,22 @@
 import React, {useEffect, useState} from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import {TfiClip, TfiSave} from "react-icons/tfi";
+import {TfiSave} from "react-icons/tfi";
 import {addPonteggio, PonteggioSelector, resetPonteggio} from "../../../../../store/ponteggioSlice";
-import {getAllPonteggiByCreatoDa} from "../../../../../faunadb/api/ponteggioAPIs";
 import {Ponteggio} from "../../../../../model/Ponteggio";
 import {useDispatch, useSelector} from "react-redux";
 import {ImpresaSelezionataSelector} from "../../../../../store/impresaSlice";
-import {GruSelector} from "../../../../../store/gruSlice";
-import {useFaunaQuery} from "../../../../../faunadb/hooks/useFaunaQuery";
 import {ControlloCantiere} from "../../../../../model/Cantiere";
-import {Gru} from "../../../../../model/Gru";
 import {
     CantiereSelezionatoSelector,
     setControlloCantierePonteggio,
-    setGruInCantiere,
     setPonteggioInCantiere
 } from "../../../../../store/cantiereSlice";
-import InputFile from "../../../../../shared/Files/InputFile";
-import VisualizzaEliminaFile from "../../../../../shared/Files/VisualizzaEliminaFile";
 import Nota from "./components/Nota";
 import {useLocation} from "react-router-dom";
+import { useDynamoDBQuery } from "../../../../../dynamodb/hook/useDynamoDBQuery";
+import { getAllPonteggiByCreatoDa } from "../../../../../dynamodb/api/ponteggioAPIs";
+import { convertFromDynamoDBFormat } from "../../../../../dynamodb/utils/conversionFunctions";
 
 export interface PonteggioCantieriProps {
     setIndex: (n: number) => void
@@ -33,18 +29,16 @@ const PonteggioCantieriTab: React.FC<PonteggioCantieriProps> = ({setIndex}) => {
     const cantiereSelezionato = useSelector(CantiereSelezionatoSelector)
     const ponteggiFromStore = useSelector(PonteggioSelector)
     const dispatch = useDispatch()
-    const {execQuery} = useFaunaQuery()
+    const {execQuery2} = useDynamoDBQuery()
 
     useEffect(() => {
         dispatch(resetPonteggio())
 
-        execQuery(getAllPonteggiByCreatoDa, impresaSelezionata?.faunaDocumentId).then((res) => {
-            res.forEach((p: { id: string; ponteggio: Ponteggio }) => {
+        execQuery2(getAllPonteggiByCreatoDa, impresaSelezionata?.id).then((res) => {
+            res.Items.forEach((item:any) => {
+                let p = convertFromDynamoDBFormat(item) as Ponteggio;
                 dispatch(
-                    addPonteggio({
-                        ...p.ponteggio,
-                        faunaDocumentId: p.id,
-                    } as Ponteggio)
+                    addPonteggio(p)
                 );
             });
         });

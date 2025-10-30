@@ -24,7 +24,7 @@ export const MacchinaEAttrezzaturaSlice = createSlice({
             state.macchineEAttrezzature.push(action.payload)
         },
         removeMacchinaEAttrezzatura(state: MacchinaEAttrezzaturaState, action: PayloadAction<string>){
-            state.macchineEAttrezzature = state.macchineEAttrezzature.filter(m => m.faunaDocumentId !== action.payload)
+            state.macchineEAttrezzature = state.macchineEAttrezzature.filter(m => m.id !== action.payload)
         },
         setMacchinaEAttrezzaturaSelezionato(state: MacchinaEAttrezzaturaState, action: PayloadAction<MacchinaEAttrezzatura|undefined>){
             state.macchinaEAttrezzaturaSelezionata = action.payload

@@ -60,7 +60,7 @@ export const HeaderImpresa: React.FC<HeaderImpresaProps> = ({}) => {
                                navigate(
                                    `/impresa/${
                                        imprese.filter((i) => i.tipo === "Affidataria")[0]
-                                           .faunaDocumentId
+                                           .id
                                    }`
                                );
                            }}
@@ -148,7 +148,7 @@ export const HeaderImpresa: React.FC<HeaderImpresaProps> = ({}) => {
                                 navigate(
                                     `/impresa/${
                                         imprese.filter((i) => i.tipo === "Affidataria")[0]
-                                            .faunaDocumentId
+                                            .id
                                     }`
                                 );
                             }}>

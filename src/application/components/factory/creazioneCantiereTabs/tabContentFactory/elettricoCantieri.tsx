@@ -6,7 +6,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {ImpresaSelezionataSelector, ImpreseSelector} from "../../../../../store/impresaSlice";
 import {Impresa} from "../../../../../model/Impresa";
 import {
-    addCantiere,
     CantiereDaCreareSelector, CantiereSelezionatoSelector, setControlloCantiereGru, setControlloCantierePonteggio,
     setDenunciaImpiantoElettricoInCantiere,
     setDocumentoImpiantoElettricoInCantiere,
@@ -15,16 +14,13 @@ import {
     setRegistroControlliImpiantoElettricoInCantiere,
     setTelefonoPrepostoImpiantoElettricoInCantiere, setVerifichePeriodicheImpiantoElettricoInCantiere
 } from "../../../../../store/cantiereSlice";
-import InputFile from "../../../../../shared/Files/InputFile";
-import VisualizzaEliminaFile from "../../../../../shared/Files/VisualizzaEliminaFile";
 import DocumentoImpiantoElettrico from "./components/DocumentoImpiantoElettrico";
-import {Cantiere, ControlloCantiere} from "../../../../../model/Cantiere";
+import {ControlloCantiere} from "../../../../../model/Cantiere";
 import Nota from "./components/Nota";
-import {createCantiereInFauna, updateCantiereInFauna} from "../../../../../faunadb/api/cantiereAPIs";
-import {useFaunaQuery} from "../../../../../faunadb/hooks/useFaunaQuery";
-import {useAuth0} from "@auth0/auth0-react";
 import {uploadFileS3} from "../../../../../aws/s3APIs";
 import {useLocation, useNavigate} from "react-router-dom";
+import { useDynamoDBQuery } from "../../../../../dynamodb/hook/useDynamoDBQuery";
+import { createCantiereInDynamo, updateCantiereInDynamo } from "../../../../../dynamodb/api/cantiereAPIs";
 
 export interface ElettricoCantieriProps {
     setIndex: (n: number) => void
@@ -54,11 +50,10 @@ const ElettricoCantieriTab: React.FC<ElettricoCantieriProps> = ({setIndex}) => {
 
     const [uploadToS3, setUploadToS3] = useState(false)
     const [savedToS3, setSavedToS3] = useState(false)
-    const [uploadToFauna, setUploadToFauna] = useState(false)
+    const [uploadToDynamo, setUploadToDynamo] = useState(false)
     const [update, setUpdate] = useState(false)
 
-    const {execQuery} = useFaunaQuery()
-    const {user} = useAuth0()
+    const {execQuery2} = useDynamoDBQuery()
 
     useEffect(() => {
         if(uploadToS3){
@@ -133,7 +128,7 @@ const ElettricoCantieriTab: React.FC<ElettricoCantieriProps> = ({setIndex}) => {
                         if(cantiereDaCreare.impiantoElettrico.verifichePeriodicheAUSL.filter(d => !d.file.value || typeof d.file.value === 'string').length === Object.entries(cantiereDaCreare.impiantoElettrico.verifichePeriodicheAUSL).length){
                             if(cantiereDaCreare.impiantoElettrico.registroControllo.filter(d => !d.file.value || typeof d.file.value === 'string').length === Object.entries(cantiereDaCreare.impiantoElettrico.registroControllo).length){
                                 if(cantiereDaCreare.impiantoElettrico.documentiImpiantoElettrico.filter(d => !d.file.value || typeof d.file.value === 'string').length === Object.entries(cantiereDaCreare.impiantoElettrico.documentiImpiantoElettrico).length){
-                                    setUploadToFauna(true)
+                                    setUploadToDynamo(true)
                                 }
                             }
                         }
@@ -145,25 +140,27 @@ const ElettricoCantieriTab: React.FC<ElettricoCantieriProps> = ({setIndex}) => {
     }, [cantiereDaCreare, savedToS3])
 
     useEffect(() => {
-        if(uploadToFauna && !update){
-            execQuery(createCantiereInFauna, {
+        if(uploadToDynamo && !update){
+            let id = crypto.randomUUID()
+            execQuery2(createCantiereInDynamo, {
                 ...cantiereDaCreare,
-                creatoDa: impresaSelezionata?.faunaDocumentId as string,
+                creatoDa: impresaSelezionata?.id as string,
+                id: id
             }).then(res => {
-                navigate(`/impresa/${impresaSelezionata?.faunaDocumentId}/cantieri`)
-                setUploadToFauna(false)
+                navigate(`/impresa/${impresaSelezionata?.id}/cantieri`)
+                setUploadToDynamo(false)
             })
         }
-        if(uploadToFauna && update){
-            execQuery(updateCantiereInFauna, {
+        if(uploadToDynamo && update){
+            execQuery2(updateCantiereInDynamo, {
                 ...cantiereSelezionato,
             }).then(res => {
-                navigate(`/impresa/${impresaSelezionata?.faunaDocumentId}/cantieri`)
-                setUploadToFauna(false)
+                navigate(`/impresa/${impresaSelezionata?.id}/cantieri`)
+                setUploadToDynamo(false)
                 setUpdate(false)
             })
         }
-    }, [uploadToFauna, update])
+    }, [uploadToDynamo, update])
 
     return (
         <>

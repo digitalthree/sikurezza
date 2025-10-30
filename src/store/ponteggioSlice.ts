@@ -19,7 +19,7 @@ export const PonteggioSlice = createSlice({
             state.ponteggi.push(action.payload)
         },
         removePonteggio(state: PonteggioState, action: PayloadAction<string>){
-            state.ponteggi = state.ponteggi.filter(p => p.faunaDocumentId !== action.payload)
+            state.ponteggi = state.ponteggi.filter(p => p.id !== action.payload)
         },
         setPonteggioSelezionato(state: PonteggioState, action: PayloadAction<Ponteggio|undefined>){
             state.ponteggioSelezionato = action.payload

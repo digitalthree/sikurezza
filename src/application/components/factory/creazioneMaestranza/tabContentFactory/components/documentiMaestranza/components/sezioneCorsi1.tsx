@@ -40,13 +40,17 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
         }
     }, [maestranzaSelezionata, maestranzaDaCreare])
 
+    useEffect(() => {
+        console.log("maestranza aggiornata: ", maestranza)
+    }, [maestranza])
+
     const dispatch = useDispatch()
 
     return (
         <>
             {maestranza.corsi.map(c => {
                 return (
-                    <div className="grid grid-cols-12 gap-4 mb-3">
+                    <div className="grid grid-cols-12 gap-4 mb-3" key={c.nome}>
                         <span className="font-bold col-span-2">{c.label}</span>
                         <div className="col-span-1 flex flex-row">
                             NR
@@ -65,7 +69,7 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                             />
                         </div>
                         <span className="font-bold col-span-1">scadenza: </span>
-                        <input type="date" {...register("corsoMacchineMovTerraScadenza")}
+                        <input type="date"
                                className="rounded border border-gray-400 shadow p-1 col-span-5"
                                onKeyDown={(e) => {
                                    if (e.key === "Enter") {
@@ -73,10 +77,11 @@ const SezioneCorsi1: React.FC<SezioneCorsi1Props> = (
                                    }
                                }}
                                disabled={!editabile || !maestranza.corsi?.filter(d => d.nome === c.nome)[0].richiedibile}
-                               onChange={(e) => dispatch(setScadenzaIlInMaestranza({
+                               onChange={(e) => {
+                                dispatch(setScadenzaIlInMaestranza({
                                    nome: c.nome,
                                    value: e.target.value
-                               }))}
+                               }))}}
                                defaultValue={maestranza.corsi?.filter(d => d.nome === c.nome)[0].scadenza}
                         />
                         {c.file ?

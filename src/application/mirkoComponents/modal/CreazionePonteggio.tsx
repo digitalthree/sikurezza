@@ -1,10 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {
-    setDocumentoInGru
-} from "../../../store/gruSlice";
 import VisualizzaEliminaFile from "../../../shared/Files/VisualizzaEliminaFile";
 import InputFile from "../../../shared/Files/InputFile";
-import {useFaunaQuery} from "../../../faunadb/hooks/useFaunaQuery";
 import {useDispatch, useSelector} from "react-redux";
 import {ImpresaSelezionataSelector} from "../../../store/impresaSlice";
 import {
@@ -15,7 +11,8 @@ import {
 } from "../../../store/ponteggioSlice";
 import {Ponteggio, ponteggioDefault} from "../../../model/Ponteggio";
 import {uploadFileS3} from "../../../aws/s3APIs";
-import {createPonteggioInFauna, updatePonteggioInFauna} from "../../../faunadb/api/ponteggioAPIs";
+import { useDynamoDBQuery } from '../../../dynamodb/hook/useDynamoDBQuery';
+import { createPonteggioInDynamo, updatePonteggioInDynamo } from '../../../dynamodb/api/ponteggioAPIs';
 
 export interface CreazionePonteggioProps {
     editabile: boolean,
@@ -29,14 +26,14 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
     }
 ) => {
 
-    const {execQuery} = useFaunaQuery()
+    const {execQuery2} = useDynamoDBQuery()
     const dispatch = useDispatch()
     const ponteggioSelezionato = useSelector(PonteggioSelezionatoSelector)
     const ponteggioDaCreare = useSelector(PonteggioDaCreareSelector)
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
 
     const [save, setSave] = useState(false)
-    const [uploadToFauna, setUploadToFauna] = useState(false)
+    const [uploadToDynamo, setUploadToDynamo] = useState(false)
     const [ponteggio, setPonteggio] = useState<Ponteggio>(ponteggioDefault)
 
     const onSubmit = (ponteggio: Ponteggio) => {
@@ -78,49 +75,39 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
 
     useEffect(() => {
         if (ponteggio.allegatiPonteggio.filter(a => !a.file.value || typeof a.file.value === 'string').length === ponteggio.allegatiPonteggio.length) {
-            setUploadToFauna(true)
+            setUploadToDynamo(true)
         } else {
-            setUploadToFauna(false)
+            setUploadToDynamo(false)
         }
     }, [ponteggio])
 
     useEffect(() => {
-        if (save && uploadToFauna && !modifica) {
-            execQuery(createPonteggioInFauna, {
+        if (save && uploadToDynamo && !modifica) {
+            let id = crypto.randomUUID()
+            execQuery2(createPonteggioInDynamo, {
                 ...ponteggio,
-                creatoDa: {
-                    id: impresaSelezionata?.faunaDocumentId as string,
-                    nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value
-                }
+                creatoDa: impresaSelezionata?.id as string,
+                id: id
             }).then((res) => {
                 dispatch(addPonteggio({
                     ...ponteggio,
-                    faunaDocumentId: res.ref.value.id,
-                    creatoDa: {
-                        id: impresaSelezionata?.faunaDocumentId as string,
-                        nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
-                    }
+                    id: id,
+                    creatoDa: impresaSelezionata?.id as string,
                 }))
                 dispatch(setPonteggioSelezionato(undefined))
                 dispatch(setPonteggioDaCreare(ponteggioDefault))
                 setSave(false)
             })
         }
-        if (save && uploadToFauna && modifica) {
-            execQuery(updatePonteggioInFauna, {
+        if (save && uploadToDynamo && modifica) {
+            execQuery2(updatePonteggioInDynamo, {
                 ...ponteggio,
-                creatoDa: {
-                    id: impresaSelezionata?.faunaDocumentId as string,
-                    nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value
-                }
+                creatoDa: impresaSelezionata?.id as string
             }).then(() => {
-                dispatch(removePonteggio(ponteggioSelezionato?.faunaDocumentId as string))
+                dispatch(removePonteggio(ponteggioSelezionato?.id as string))
                 dispatch(addPonteggio({
                     ...ponteggio,
-                    creatoDa: {
-                        id: impresaSelezionata?.faunaDocumentId as string,
-                        nome: impresaSelezionata?.anagrafica.attr.filter(a => a.label === 'denominazione')[0].value as string
-                    }
+                    creatoDa: impresaSelezionata?.id as string
                 }))
                 setModifica(false)
                 dispatch(setPonteggioSelezionato(undefined))
@@ -128,7 +115,7 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = (
                 setSave(false)
             })
         }
-    }, [save, uploadToFauna, ponteggio])
+    }, [save, uploadToDynamo, ponteggio])
 
     return (
         <>

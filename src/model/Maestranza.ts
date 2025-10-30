@@ -3,8 +3,8 @@ export interface Maestranza {
     documenti: Documento[],
     corsi: Corso[]
     comunicazioni: ComunicazioniMaestranza,
-    creatoDa: { id: string, nome: string }
-    faunaDocumentId?: string
+    creatoDa: string
+    id?: string
 }
 
 
@@ -204,5 +204,5 @@ export const maestranzaDefault: Maestranza = {
         cellulareAziendale: undefined,
         email: ""
     },
-    creatoDa: {id: "", nome: ""}
+    creatoDa: ""
 }

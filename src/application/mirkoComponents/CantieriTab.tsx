@@ -1,11 +1,7 @@
 import React, {useEffect, useState} from "react";
-import EditButtonEstintore from "../../shared/tableComponents/EditButtonEstintore";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {ImpresaSelezionataSelector} from "../../store/impresaSlice";
-import {addGru, resetGru} from "../../store/gruSlice";
-import {getAllGruByCreatoDa} from "../../faunadb/api/gruAPIs";
-import {Gru} from "../../model/Gru";
 import {
     addCantiere,
     CantieriSelector,
@@ -13,10 +9,11 @@ import {
     selezionaCantiere,
     setCantiereDaCreare
 } from "../../store/cantiereSlice";
-import {useFaunaQuery} from "../../faunadb/hooks/useFaunaQuery";
-import {getAllCantieriByCreatoDa} from "../../faunadb/api/cantiereAPIs";
 import {Cantiere, cantiereDefault} from "../../model/Cantiere";
 import EditButtonCantiere from "../../shared/tableComponents/EditButtonCantiere";
+import { useDynamoDBQuery } from "../../dynamodb/hook/useDynamoDBQuery";
+import { getAllCantieriByCreatoDa } from "../../dynamodb/api/cantiereAPIs";
+import { convertFromDynamoDBFormat } from "../../dynamodb/utils/conversionFunctions";
 
 export interface CantieriTabProps {
 }
@@ -27,20 +24,18 @@ const CantieriTab: React.FC<CantieriTabProps> = () => {
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
     const cantieri = useSelector(CantieriSelector)
     const dispatch = useDispatch()
-    const {execQuery} = useFaunaQuery()
+    const {execQuery2} = useDynamoDBQuery()
     const [editabile, setEditabile] = useState<boolean>(true)
 
     useEffect(() => {
         dispatch(resetCantieri())
         dispatch(setCantiereDaCreare(cantiereDefault))
         dispatch(selezionaCantiere(undefined))
-        execQuery(getAllCantieriByCreatoDa, impresaSelezionata?.faunaDocumentId).then((res) => {
-            res.forEach((c: { id: string; cantiere: Cantiere }) => {
+        execQuery2(getAllCantieriByCreatoDa, impresaSelezionata?.id).then((res) => {
+            res.Items.forEach((item:any) => {
+                let cantiere = convertFromDynamoDBFormat(item) as Cantiere;
                 dispatch(
-                    addCantiere({
-                        ...c.cantiere,
-                        faunaDocumentId: c.id,
-                    } as Cantiere)
+                    addCantiere(cantiere)
                 );
             });
         });
@@ -82,7 +77,7 @@ const CantieriTab: React.FC<CantieriTabProps> = () => {
                         {/* row 1 */}
                         {cantieri.map((c, index) => {
                             return(
-                                <tr className="link link-hover hover:text-sky-500" key={c.faunaDocumentId}>
+                                <tr className="link link-hover hover:text-sky-500" key={c.id}>
                                     <th>{index+1}</th>
                                     <td>{c.anagrafica.attr.filter(a => a.nome === 'denominazione')[0].value}</td>
                                     <td>{c.anagrafica.attr.filter(a => a.nome === 'indirizzo')[0].value}</td>
@@ -99,7 +94,7 @@ const CantieriTab: React.FC<CantieriTabProps> = () => {
                     <button
                         className="mt-8 btn btn-circle px-6 border-0 hover:bg-zinc-500 w-full text-white bg-zinc-300"
                         onClick={() => {
-                          navigate(`/impresa/${impresaSelezionata?.faunaDocumentId}/cantiere`, {
+                          navigate(`/impresa/${impresaSelezionata?.id}/cantiere`, {
                             state: {
                               editabile: true,
                               modifica: false

@@ -24,7 +24,7 @@ export const CantiereSlice = createSlice({
             state.cantieri.push(action.payload)
         },
         removeCantiere(state: CantiereState, action: PayloadAction<string>){
-            state.cantieri = state.cantieri.filter(c => c.faunaDocumentId !== action.payload)
+            state.cantieri = state.cantieri.filter(c => c.id !== action.payload)
         },
         selezionaCantiere(state: CantiereState, action: PayloadAction<Cantiere | undefined>){
             state.cantiereSelezionato = action.payload

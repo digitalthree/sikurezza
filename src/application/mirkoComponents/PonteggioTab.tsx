@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {useFaunaQuery} from "../../faunadb/hooks/useFaunaQuery";
 import {ImpresaSelezionataSelector} from "../../store/impresaSlice";
 import {
   addPonteggio,
@@ -9,17 +8,19 @@ import {
   setPonteggioDaCreare,
   setPonteggioSelezionato
 } from "../../store/ponteggioSlice";
-import {getAllPonteggiByCreatoDa} from "../../faunadb/api/ponteggioAPIs";
 import {Ponteggio, ponteggioDefault} from "../../model/Ponteggio";
 import EditButtonPonteggio from "../../shared/tableComponents/EditButtonPonteggio";
 import CreazionePonteggio from "./modal/CreazionePonteggio";
+import { useDynamoDBQuery } from "../../dynamodb/hook/useDynamoDBQuery";
+import { getAllPonteggiByCreatoDa } from "../../dynamodb/api/ponteggioAPIs";
+import { convertFromDynamoDBFormat } from "../../dynamodb/utils/conversionFunctions";
 
 export interface PonteggioTabProps {}
 
 const PonteggioTab: React.FC<PonteggioTabProps> = ({}) => {
 
   const ponteggi = useSelector(PonteggioSelector)
-  const {execQuery} = useFaunaQuery()
+  const {execQuery2} = useDynamoDBQuery()
   const dispatch = useDispatch()
   const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
   const [editabile, setEditabile] = useState<boolean>(true)
@@ -29,13 +30,11 @@ const PonteggioTab: React.FC<PonteggioTabProps> = ({}) => {
   useEffect(() => {
     dispatch(resetPonteggio())
 
-    execQuery(getAllPonteggiByCreatoDa, impresaSelezionata?.faunaDocumentId).then((res) => {
-      res.forEach((p: { id: string; ponteggio: Ponteggio }) => {
+    execQuery2(getAllPonteggiByCreatoDa, impresaSelezionata?.id).then((res) => {
+      res.Items.forEach((item:any) => {
+        let p = convertFromDynamoDBFormat(item) as Ponteggio;
         dispatch(
-            addPonteggio({
-              ...p.ponteggio,
-              faunaDocumentId: p.id,
-            } as Ponteggio)
+            addPonteggio(p)
         );
       });
     });

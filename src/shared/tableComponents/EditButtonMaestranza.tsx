@@ -1,13 +1,13 @@
 import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {useFaunaQuery} from "../../faunadb/hooks/useFaunaQuery";
 import {Maestranza} from "../../model/Maestranza";
 import {removeMaestranzaToMaestranzaSlice, setMaestranzaSelezionata} from "../../store/maestranzaSlice";
-import {deleteMaestranzaFromFauna} from "../../faunadb/api/maestranzaAPIs";
 import {ImpresaSelezionataSelector, removeMaestranza} from "../../store/impresaSlice";
-import {updateImpresaInFauna} from "../../faunadb/api/impresaAPIs";
 import {useNavigate} from "react-router-dom";
 import {deleteFileS3} from "../../aws/s3APIs";
+import { useDynamoDBQuery } from '../../dynamodb/hook/useDynamoDBQuery';
+import { deleteMaestranzaFromDynamo } from '../../dynamodb/api/maestranzaAPIs';
+import { updateImpresaInDynamo } from '../../dynamodb/api/impresaAPIs';
 
 export interface EditButtonMaestranzaProps {
     maestranzaTarget: Maestranza,
@@ -21,7 +21,7 @@ const EditButtonMaestranza: React.FC<EditButtonMaestranzaProps> = (
     }
 ) => {
     const dispatch = useDispatch()
-    const {execQuery} = useFaunaQuery()
+    const {execQuery2} = useDynamoDBQuery()
     const navigate = useNavigate()
 
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
@@ -33,7 +33,7 @@ const EditButtonMaestranza: React.FC<EditButtonMaestranzaProps> = (
                         onClick={() => {
                             dispatch(setMaestranzaSelezionata(maestranzaTarget))
                             setEditabile(false)
-                            navigate(`/impresa/${impresaSelezionata?.faunaDocumentId}/maestranza`, {
+                            navigate(`/impresa/${impresaSelezionata?.id}/maestranza`, {
                                 state: {
                                     editabile: false,
                                     modifica: false
@@ -69,7 +69,7 @@ const EditButtonMaestranza: React.FC<EditButtonMaestranzaProps> = (
                     <button className="btn btn-link btn-xs hover:bg-sky-500"
                             onClick={() => {
                                 dispatch(setMaestranzaSelezionata(maestranzaTarget))
-                                navigate(`/impresa/${impresaSelezionata?.faunaDocumentId}/maestranza`, {
+                                navigate(`/impresa/${impresaSelezionata?.id}/maestranza`, {
                                     state: {
                                         editabile: true,
                                         modifica: true
@@ -98,17 +98,17 @@ const EditButtonMaestranza: React.FC<EditButtonMaestranzaProps> = (
                             onClick={() => {
                                 let confirm = window.confirm(`Sei sicuro di voler eliminare la maetsranza ${maestranzaTarget.anagrafica.filter(m => m.label === 'nome')[0].value} ${maestranzaTarget.anagrafica.filter(m => m.label === 'cognome')[0].value}`)
                                 if (confirm) {
-                                    execQuery(deleteMaestranzaFromFauna, maestranzaTarget.faunaDocumentId).then(() => {
+                                    execQuery2(deleteMaestranzaFromDynamo, maestranzaTarget.id).then(() => {
                                         maestranzaTarget.documenti.forEach(d => deleteFileS3(d.file as string))
-                                        execQuery(updateImpresaInFauna, {
+                                        execQuery2(updateImpresaInDynamo, {
                                             ...impresaSelezionata,
-                                            maestranze: impresaSelezionata?.maestranze.filter(m => m !== maestranzaTarget.faunaDocumentId)
+                                            maestranze: impresaSelezionata?.maestranze.filter(m => m !== maestranzaTarget.id)
                                         }).then(() => {
                                             dispatch(removeMaestranza({
-                                                impresa: impresaSelezionata?.faunaDocumentId as string,
-                                                maestranza: maestranzaTarget.faunaDocumentId as string
+                                                impresa: impresaSelezionata?.id as string,
+                                                maestranza: maestranzaTarget.id as string
                                             }))
-                                            dispatch(removeMaestranzaToMaestranzaSlice(maestranzaTarget.faunaDocumentId as string))
+                                            dispatch(removeMaestranzaToMaestranzaSlice(maestranzaTarget.id as string))
                                         })
 
                                     })

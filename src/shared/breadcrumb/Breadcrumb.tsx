@@ -40,7 +40,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = () => {
                     } else if (typeof bi !== "string") {
                         return (
                             <li
-                                key={bi.faunaDocumentId}
+                                key={bi.id}
                                 className={`${
                                     index === breadcrumbsItems.length - 1
                                         ? "font-bold"

@@ -1,12 +1,12 @@
 import React from 'react';
 import {Cantiere} from "../../model/Cantiere";
 import {useDispatch, useSelector} from "react-redux";
-import {useFaunaQuery} from "../../faunadb/hooks/useFaunaQuery";
 import {useNavigate} from "react-router-dom";
 import {ImpresaSelezionataSelector} from "../../store/impresaSlice";
 import {deleteFileS3} from "../../aws/s3APIs";
 import {removeCantiere, selezionaCantiere} from "../../store/cantiereSlice";
-import {deleteCantiereFromFauna} from "../../faunadb/api/cantiereAPIs";
+import { useDynamoDBQuery } from '../../dynamodb/hook/useDynamoDBQuery';
+import { deleteCantiereFromDynamo } from '../../dynamodb/api/cantiereAPIs';
 
 export interface EditButtonCantiereProps {
     cantiereTarget: Cantiere,
@@ -16,7 +16,7 @@ export interface EditButtonCantiereProps {
 const EditButtonCantiere: React.FC<EditButtonCantiereProps> = ({cantiereTarget, setEditabile}) => {
 
     const dispatch = useDispatch()
-    const {execQuery} = useFaunaQuery()
+    const {execQuery2} = useDynamoDBQuery()
     const navigate = useNavigate()
 
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
@@ -28,7 +28,7 @@ const EditButtonCantiere: React.FC<EditButtonCantiereProps> = ({cantiereTarget, 
                         onClick={() => {
                             dispatch(selezionaCantiere(cantiereTarget))
                             setEditabile(false)
-                            navigate(`/impresa/${impresaSelezionata?.faunaDocumentId}/cantiere`, {
+                            navigate(`/impresa/${impresaSelezionata?.id}/cantiere`, {
                                 state: {
                                     editabile: false,
                                     modifica: false
@@ -64,7 +64,7 @@ const EditButtonCantiere: React.FC<EditButtonCantiereProps> = ({cantiereTarget, 
                     <button className="btn btn-link btn-xs hover:bg-sky-500"
                             onClick={() => {
                                 dispatch(selezionaCantiere(cantiereTarget))
-                                navigate(`/impresa/${impresaSelezionata?.faunaDocumentId}/cantiere`, {
+                                navigate(`/impresa/${impresaSelezionata?.id}/cantiere`, {
                                     state: {
                                         editabile: true,
                                         modifica: true
@@ -93,13 +93,13 @@ const EditButtonCantiere: React.FC<EditButtonCantiereProps> = ({cantiereTarget, 
                             onClick={() => {
                                 let confirm = window.confirm(`Sei sicuro di voler eliminare il cantiere ${cantiereTarget.anagrafica.attr.filter(a => a.nome === 'denominazione')[0].value}`)
                                 if (confirm) {
-                                    execQuery(deleteCantiereFromFauna, cantiereTarget.faunaDocumentId).then(() => {
+                                    execQuery2(deleteCantiereFromDynamo, cantiereTarget.id).then(() => {
                                         cantiereTarget.ponteggi.controlliPeriodici.forEach(cp => deleteFileS3(cp.file.value as string))
                                         cantiereTarget.gruMezziDiSollevamento.controlliPeriodici.forEach(cpg => deleteFileS3(cpg.file.value as string))
                                         cantiereTarget.impiantoElettrico.documentiImpiantoElettrico.forEach(d => deleteFileS3(d.file.value as string))
                                         cantiereTarget.impiantoElettrico.verifichePeriodicheAUSL.forEach(v => deleteFileS3(v.file.value as string))
                                         cantiereTarget.impiantoElettrico.registroControllo.forEach(rc => deleteFileS3(rc.file.value as string))
-                                        dispatch(removeCantiere(cantiereTarget.faunaDocumentId as string))
+                                        dispatch(removeCantiere(cantiereTarget.id as string))
                                     })
                                 }
                             }}

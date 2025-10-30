@@ -5,8 +5,8 @@ import {
   removeEstintore,
   setEstintoreSelezionato,
 } from "../../store/estintoreSlice";
-import { useFaunaQuery } from "../../faunadb/hooks/useFaunaQuery";
-import { deleteEstintoreFromFauna } from "../../faunadb/api/estintoreAPIs";
+import { useDynamoDBQuery } from "../../dynamodb/hook/useDynamoDBQuery";
+import { deleteEstintoreFromDynamo } from "../../dynamodb/api/estintoreAPIs";
 
 export interface EditButtonProps {
   estintoreTarget?: Estintore;
@@ -20,7 +20,7 @@ const EditButtonEstintore: React.FC<EditButtonProps> = ({
   setModifica,
 }) => {
   const dispatch = useDispatch();
-  const { execQuery } = useFaunaQuery();
+  const { execQuery2 } = useDynamoDBQuery();
 
   return (
     <>
@@ -96,12 +96,12 @@ const EditButtonEstintore: React.FC<EditButtonProps> = ({
                 "Sei sicuro di voler eliminare " + removeVar.payload?.nome
               );
               if (messageConfirm) {
-                execQuery(
-                  deleteEstintoreFromFauna,
-                  estintoreTarget?.faunaDocumentId
+                execQuery2(
+                  deleteEstintoreFromDynamo,
+                  estintoreTarget?.id
                 ).then(() => {
                   dispatch(
-                    removeEstintore(estintoreTarget?.faunaDocumentId as string)
+                    removeEstintore(estintoreTarget?.id as string)
                   );
                 });
               }

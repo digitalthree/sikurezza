@@ -9,11 +9,11 @@ import {
 import {Outlet, useNavigate} from "react-router-dom";
 import {TiExportOutline} from "react-icons/ti";
 import {exportToJsonFileThis} from "../../../../utils/ImportExportFunctions";
-import {addMacchinaEAttrezzatura, MacchinaEAttrezzaturaSelector} from "../../../../store/macchinaEAttrezzaturaSlice";
-import {getAllMacchineEAttrezzatureByCreatoDa} from "../../../../faunadb/api/macchinaEAttrezzaturaAPIs";
 import {MacchinaEAttrezzatura} from "../../../../model/MacchineEAttrezzature";
-import {useFaunaQuery} from "../../../../faunadb/hooks/useFaunaQuery";
 import {Impresa} from "../../../../model/Impresa";
+import { useDynamoDBQuery } from "../../../../dynamodb/hook/useDynamoDBQuery";
+import { getAllMacchineEAttrezzatureByCreatoDa } from "../../../../dynamodb/api/macchinaEAttrezzaturaAPIs";
+import { convertFromDynamoDBFormat } from "../../../../dynamodb/utils/conversionFunctions";
 
 export interface SezioneImpresaProps {
 }
@@ -24,12 +24,13 @@ const SezioneImpresa: React.FC<SezioneImpresaProps> = () => {
     const navigate = useNavigate();
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
     const [macchineEAttrezzature, setMacchineEAttrezzature] = useState<MacchinaEAttrezzatura[]>([])
-    const {execQuery} = useFaunaQuery()
+    const {execQuery2} = useDynamoDBQuery()
 
     useEffect(() => {
-        execQuery(getAllMacchineEAttrezzatureByCreatoDa, impresaSelezionata?.faunaDocumentId).then((res) => {
-            res.forEach((m: { id: string; macchinaEAttrezzatura: MacchinaEAttrezzatura }) => {
-                setMacchineEAttrezzature([...macchineEAttrezzature, m.macchinaEAttrezzatura])
+        execQuery2(getAllMacchineEAttrezzatureByCreatoDa, impresaSelezionata?.id).then((res) => {
+            res.Items.forEach((item: any) => {
+                let m = convertFromDynamoDBFormat(item) as MacchinaEAttrezzatura;
+                setMacchineEAttrezzature([...macchineEAttrezzature, m])
             });
         });
     }, [])

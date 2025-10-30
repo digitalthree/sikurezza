@@ -1,7 +1,5 @@
 import React, {useEffect} from 'react';
 import {Estintore, estintoreDefault} from "../../../model/Estintore";
-import {createEstintoreInFauna, updateEstintoreInFauna} from "../../../faunadb/api/estintoreAPIs";
-import {useFaunaQuery} from "../../../faunadb/hooks/useFaunaQuery";
 import {useDispatch, useSelector} from "react-redux";
 import {
     addEstintore,
@@ -10,6 +8,8 @@ import {
     setEstintoreSelezionato
 } from "../../../store/estintoreSlice";
 import {ImpresaSelezionataSelector} from "../../../store/impresaSlice";
+import { useDynamoDBQuery } from '../../../dynamodb/hook/useDynamoDBQuery';
+import { createEstintoreInDynamo, updateEstintoreInDynamo } from '../../../dynamodb/api/estintoreAPIs';
 
 export interface CreazioneEstintoreProps{
     estintoreDaCreare: Estintore,
@@ -25,7 +25,7 @@ const CreazioneEstintore: React.FC<CreazioneEstintoreProps> = (
     }
 ) => {
 
-    const {execQuery} = useFaunaQuery()
+    const {execQuery2} = useDynamoDBQuery()
     const dispatch = useDispatch()
     const estintoreSelezionato = useSelector(EstintoreSelezionatoSelector)
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
@@ -155,14 +155,16 @@ const CreazioneEstintore: React.FC<CreazioneEstintoreProps> = (
                     {editabile && !modifica &&
                         <div className="modal-action"
                              onClick={() => {
-                                 execQuery(createEstintoreInFauna, {
+                                let id = crypto.randomUUID()
+                                 execQuery2(createEstintoreInDynamo, {
                                      ...estintoreDaCreare,
-                                     creatoDa: impresaSelezionata?.faunaDocumentId
+                                     creatoDa: impresaSelezionata?.id,
+                                     id: id
                                  }).then((res) => {
                                      dispatch(addEstintore({
                                          ...estintoreDaCreare,
-                                         faunaDocumentId: res.ref.value.id,
-                                         creatoDa: impresaSelezionata?.faunaDocumentId as string
+                                         id: id,
+                                         creatoDa: impresaSelezionata?.id as string
                                      }))
                                      setEstintoreDaCreare(estintoreDefault)
                                      dispatch(setEstintoreSelezionato(undefined))
@@ -175,14 +177,14 @@ const CreazioneEstintore: React.FC<CreazioneEstintoreProps> = (
                     {editabile && modifica &&
                         <div className="modal-action"
                              onClick={() => {
-                                 execQuery(updateEstintoreInFauna, {
+                                 execQuery2(updateEstintoreInDynamo, {
                                      ...estintoreDaCreare,
-                                     creatoDa: impresaSelezionata?.faunaDocumentId
+                                     creatoDa: impresaSelezionata?.id
                                  }).then(() => {
-                                     dispatch(removeEstintore(estintoreSelezionato?.faunaDocumentId as string))
+                                     dispatch(removeEstintore(estintoreSelezionato?.id as string))
                                      dispatch(addEstintore({
                                          ...estintoreDaCreare,
-                                         creatoDa: impresaSelezionata?.faunaDocumentId as string
+                                         creatoDa: impresaSelezionata?.id as string
                                      }))
                                      setEstintoreDaCreare(estintoreDefault)
                                      setModifica(false)

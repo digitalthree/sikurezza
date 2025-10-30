@@ -10,11 +10,11 @@ import {
     setImpresaDaCreare, setLogoImpresa, setObjectToCreate
 } from "../../../../../../store/impresaSlice";
 import {Impresa, impresaTemporanea, ItemComunicazione} from "../../../../../../model/Impresa";
-import {useFaunaQuery} from "../../../../../../faunadb/hooks/useFaunaQuery";
-import {createImpresaInFauna, updateImpresaInFauna} from "../../../../../../faunadb/api/impresaAPIs";
 import {uploadFileS3} from "../../../../../../aws/s3APIs";
 import {useAuth0} from "@auth0/auth0-react";
 import {useNavigate} from "react-router-dom";
+import { useDynamoDBQuery } from '../../../../../../dynamodb/hook/useDynamoDBQuery';
+import { createImpresaInDynamo, updateImpresaInDynamo } from '../../../../../../dynamodb/api/impresaAPIs';
 
 interface ComunicazioniProps {
 }
@@ -25,7 +25,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
 
     const impresaDaCreare = useSelector(ImpreseDaCreareSelector)
-    const [uploadToFauna, setUploadToFauna] = useState(false)
+    const [uploadToDynamo, setUploadToDynamo] = useState(false)
     const [creaImpresa, setCreaImpresa] = useState(false)
     const [aggiornaImpresa, setAggiornaImpresa] = useState(false)
     const [nuovaMansione, setNuovaMansione] = useState<ItemComunicazione>({
@@ -35,7 +35,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
 
     const {user} = useAuth0()
 
-    const {execQuery} = useFaunaQuery()
+    const {execQuery2} = useDynamoDBQuery()
     const navigate = useNavigate()
 
     const {handleSubmit} = useForm();
@@ -58,22 +58,24 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
         if (impresaDaCreare.documentiIdoneitaImpresa.filter(d => !d.file.value || typeof d.file.value === 'string').length === impresaDaCreare.documentiIdoneitaImpresa.length
             //|| !impresaDaCreare.anagrafica.logo.value || typeof impresaDaCreare.anagrafica.logo.value === 'string'
         ) {
-            setUploadToFauna(true)
+            setUploadToDynamo(true)
         }
     }, [impresaDaCreare])
 
     useEffect(() => {
         //TODO: aggiungere l'update dell'impresa nel caso in cui l'utente sia nel tab anagrafica della sezione impresa
-        if (uploadToFauna && creaImpresa) {
-            execQuery(createImpresaInFauna, {
+        if (uploadToDynamo && creaImpresa) {
+            let id = crypto.randomUUID()
+            execQuery2(createImpresaInDynamo, {
                 ...impresaDaCreare,
-                creataDa: user?.email
+                creatoDa: user?.email,
+                id: id
             }).then((res) => {
                 console.log(res)
                 dispatch(addImpresa({
                     ...impresaDaCreare,
-                    creataDa: user?.email as string,
-                    faunaDocumentId: res.ref.value.id
+                    creatoDa: user?.email as string,
+                    id: id
                 }))
                 dispatch(setImpresaDaCreare(impresaTemporanea))
                 dispatch(setObjectToCreate(undefined))
@@ -85,16 +87,15 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
                 navigate('/')
             })
         }
-        if (uploadToFauna && aggiornaImpresa) {
-            execQuery(updateImpresaInFauna, {
+        if (uploadToDynamo && aggiornaImpresa) {
+            execQuery2(updateImpresaInDynamo, {
                 ...impresaDaCreare,
-                creataDa: user?.email
+                creatoDa: user?.email
             }).then((res) => {
                 dispatch(removeImpresa(impresaSelezionata as Impresa))
                 dispatch(addImpresa({
                     ...impresaDaCreare,
-                    creataDa: user?.email as string,
-                    faunaDocumentId: res.ref.value.id
+                    creatoDa: user?.email as string,
                 }))
                 dispatch(setImpresaDaCreare(impresaTemporanea))
                 dispatch(setObjectToCreate(undefined))
@@ -106,7 +107,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
                 navigate('/')
             })
         }
-    }, [uploadToFauna, creaImpresa, aggiornaImpresa])
+    }, [uploadToDynamo, creaImpresa, aggiornaImpresa])
 
 
     return (
