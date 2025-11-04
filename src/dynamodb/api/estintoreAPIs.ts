@@ -5,7 +5,7 @@ import { convertToDynamoDBFormat } from "../utils/conversionFunctions";
 
 export const createEstintoreInDynamo = async (estintoreDaSalvare: Estintore) => {
     let params: PutItemInput = {
-        TableName: "Cantieri",
+        TableName: "Estintori",
         Item: convertToDynamoDBFormat(estintoreDaSalvare),
       };
       return await dynamoDB

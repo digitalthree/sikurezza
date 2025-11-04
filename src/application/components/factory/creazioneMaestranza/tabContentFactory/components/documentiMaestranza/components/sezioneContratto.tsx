@@ -39,7 +39,7 @@ const SezioneContratto: React.FC<SezioneContrattoProps> = (
 
     return (
         <>
-            <div className="grid grid-cols-12 gap-4">
+            <div className="grid grid-cols-12 gap-4 items-center">
                 <span className="font-bold col-span-3">Tipologia Contratto*: </span>
                 <div className="flex flex-col col-span-6">
                     <select {...register("tipologiaContratto", {required: true})}

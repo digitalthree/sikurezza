@@ -69,7 +69,7 @@ const GruTab: React.FC<GruTabProps> = ({}) => {
               {/* row 1 */}
               {grus.map((g, index) => {
                 return (
-                  <tr className="link link-hover hover:text-sky-500">
+                  <tr className="link link-hover hover:text-yellow-500">
                     <th>{index + 1}</th>
                     <td>
                       {g.attr.filter((gr) => gr.nome === "marca")[0].value}

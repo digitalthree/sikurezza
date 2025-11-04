@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {SearchComponent} from "../../shared/slectComponent/SearchComponent";
 import {useDispatch, useSelector} from "react-redux";
-import {ImpreseSelector, setImpresaSelezionata} from "../../store/impresaSlice";
+import {addBreadcrumbItem, ImpreseSelector, resetBreadcrumbItems, setImpresaSelezionata} from "../../store/impresaSlice";
 import {
     addItem,
     resetItem,
@@ -55,6 +55,11 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
     const [modifica, setModifica] = useState(true)
 
     const [itemsFiltered, setItemFiltered] = useState<{item: Impresa | MacchinaEAttrezzatura | Maestranza | Ponteggio | Gru, tipo: "Impresa" | "Maestranza" | "MacchinaEAttrezzatura" | "Ponteggio" | "Gru", scadenza: string, problema: string}[]>([])
+
+    useEffect(() => {
+        dispatch(resetBreadcrumbItems())
+        dispatch(addBreadcrumbItem("Total Control"))
+    }, [])
 
     useEffect(() => {
         dispatch(resetItem())

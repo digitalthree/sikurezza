@@ -10,7 +10,7 @@ export interface MacchinaEAttrezzatura {
 export interface DocumentoMacchinaEAttrezzatura {
     nome: string,
     presenza: boolean,
-    file: {nome: string, value: File|string|undefined},
+    file: File|string|undefined,
 }
 
 export const macchinaEAttrezzaturaDefault: MacchinaEAttrezzatura = {
@@ -24,17 +24,17 @@ export const macchinaEAttrezzaturaDefault: MacchinaEAttrezzatura = {
         {
             nome: "Dichiarazione di Conformità",
             presenza: false,
-            file: {nome: "", value: undefined}
+            file: undefined
         },
         {
             nome: "Marcatura CE",
             presenza: false,
-            file: {nome: "", value: undefined}
+            file: undefined
         },
         {
             nome: "Libretto",
             presenza: false,
-            file: {nome: "", value: undefined}
+            file: undefined
         }
     ],
     ultimaRevisione: {nome: 'ultimaRevisione', effettuataIl: '', scadenza: '', label: "Ultima Revisione del"},

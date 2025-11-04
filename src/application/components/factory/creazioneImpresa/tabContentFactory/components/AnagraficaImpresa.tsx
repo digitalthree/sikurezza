@@ -48,13 +48,13 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
 
     return (
         <>
-            <form onSubmit={(e) => e.preventDefault()} className="w-[40%] p-10 shadow-2xl">
+            <form onSubmit={(e) => e.preventDefault()} className="xl:w-[40%] w-full md:p-10 p-3 shadow-2xl">
 
                 <div className="flex justify-between items-center">
-                    <span className="font-bold">Tipologia Impresa*: </span>
+                    <span className="font-bold md:text-base text-sm">Tipologia Impresa*: </span>
                     <div className="flex flex-col">
                         <select placeholder="Tipologia Impresa" {...register("tipologiaImpresa", {required: true})}
-                                className="rounded border border-gray-400 shadow p-1"
+                                className="rounded border border-gray-400 shadow p-1 md:text-base text-sm"
                                 disabled
                                 value={primoAccesso ? "Affidataria" : "Subappaltatrice"}
                                 onChange={(e) => {
@@ -92,10 +92,10 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                 </div>*/}
 
                 <div className="flex justify-between items-center mt-2">
-                    <span className="font-bold">Denominazione*: </span>
+                    <span className="font-bold md:text-base text-sm">Denominazione*: </span>
                     <div className="flex flex-col">
                         <input placeholder="Denominazione" {...register("denominazione", {required: true})}
-                               className="rounded border border-gray-400 shadow p-1"
+                               className="rounded border border-gray-400 shadow p-1 md:text-base text-sm"
                                onKeyDown={(e) => {
                                    if(e.key === "Enter"){
                                        e.preventDefault()
@@ -110,10 +110,10 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
 
 
                 <div className="flex justify-between items-center mt-2">
-                    <span className="font-bold">Sede Legale*: </span>
+                    <span className="font-bold md:text-base text-sm">Sede Legale*: </span>
                     <div className="flex flex-col">
                         <input placeholder="Sede Legale" {...register("sedeLegale", {required: true})}
-                               className="rounded border border-gray-400 shadow p-1"
+                               className="rounded border border-gray-400 shadow p-1 md:text-base text-sm"
                                onKeyDown={(e) => {
                                    if(e.key === "Enter"){
                                        e.preventDefault()
@@ -127,9 +127,9 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                 </div>
 
                 <div className="flex justify-between items-center mt-2">
-                    <span className="font-bold">Codice Fiscale: </span>
+                    <span className="font-bold md:text-base text-sm">Codice Fiscale: </span>
                     <input {...register("codiceFiscale")}
-                           className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                           className="rounded border border-gray-400 shadow p-1 w-[262px] md:text-base text-sm"
                            onKeyDown={(e) => {
                                    if(e.key === "Enter"){
                                        e.preventDefault()
@@ -141,9 +141,9 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                 </div>
 
                 <div className="flex justify-between items-center mt-2">
-                    <span className="font-bold">P. Iva </span>
+                    <span className="font-bold md:text-base text-sm">P. Iva </span>
                     <input {...register("partitaIva")}
-                           className="rounded border border-gray-400 shadow p-1"
+                           className="rounded border border-gray-400 shadow p-1 md:text-base text-sm"
                            onKeyDown={(e) => {
                                    if(e.key === "Enter"){
                                        e.preventDefault()
@@ -155,9 +155,9 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                 </div>
 
                 <div className="flex justify-between items-center mt-2">
-                    <span className="font-bold">Forma Giuridica: </span>
+                    <span className="font-bold md:text-base text-sm">Forma Giuridica: </span>
                     <input {...register("formaGiuridica")}
-                           className="rounded border border-gray-400 shadow p-1"
+                           className="rounded border border-gray-400 shadow p-1 md:text-base text-sm"
                            onKeyDown={(e) => {
                                    if(e.key === "Enter"){
                                        e.preventDefault()
@@ -168,10 +168,10 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                     />
                 </div>
 
-                <div className="flex justify-between items-center mt-2">
-                    <span className="font-bold">Amministratore: </span>
+                <div className="flex justify-between items-center mt-2 ">
+                    <span className="font-bold md:text-base text-sm">Amministratore: </span>
                     <input {...register("amministratore")}
-                           className="rounded border border-gray-400 shadow p-1"
+                           className="rounded border border-gray-400 shadow p-1 md:text-base text-sm"
                            onKeyDown={(e) => {
                                    if(e.key === "Enter"){
                                        e.preventDefault()
@@ -183,9 +183,9 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                 </div>
 
                 <div className="flex justify-between items-center mt-2">
-                    <span className="font-bold">Codice fiscale Amministratore: </span>
+                    <span className="font-bold md:text-base text-sm">Codice fiscale Amministratore: </span>
                     <input {...register("codiceFiscaleAmministratore")}
-                           className="rounded border border-gray-400 shadow p-1"
+                           className="rounded border border-gray-400 shadow p-1 md:text-base text-sm"
                            onKeyDown={(e) => {
                                    if(e.key === "Enter"){
                                        e.preventDefault()
@@ -198,9 +198,9 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
 
                 <div className="grid grid-cols-2 gap-8">
                     <div className="flex justify-between items-center mt-2">
-                        <span className="font-bold">DURC: </span>
+                        <span className="font-bold md:text-base text-sm">DURC: </span>
                         <input type="date" {...register("durc")}
-                               className="rounded border border-gray-400 shadow p-1"
+                               className="rounded border border-gray-400 shadow p-1 md:text-base text-sm"
                                onKeyDown={(e) => {
                                    if(e.key === "Enter"){
                                        e.preventDefault()
@@ -211,9 +211,9 @@ export const AnagraficaImpresa: React.FC<AnagraficaProps> = ({setTabActive, prim
                         />
                     </div>
                     <div className="flex justify-between items-center mt-2">
-                        <span className="font-bold">scadenza: </span>
+                        <span className="font-bold md:text-base text-sm">scadenza: </span>
                         <input type="date" {...register("scadenza")}
-                               className="rounded border border-gray-400 shadow p-1"
+                               className="rounded border border-gray-400 shadow p-1 md:text-base text-sm"
                                onKeyDown={(e) => {
                                    if(e.key === "Enter"){
                                        e.preventDefault()

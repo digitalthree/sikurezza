@@ -41,9 +41,9 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
     const {handleSubmit} = useForm();
     const onSubmit = () => {
         impresaDaCreare.documentiIdoneitaImpresa.forEach(d => {
-            if (d.file && typeof d.file.value !== 'string') {
-                uploadFileS3(d.file.value as File).then(res => {
-                    dispatch(setFileInDocumenti({nome: d.nome, file: {nome: d.file.nome, value: res?.key as string}}))
+            if (d.file && typeof d.file !== 'string') {
+                uploadFileS3(d.file as File).then(res => {
+                    dispatch(setFileInDocumenti({nome: d.nome, file: res?.key as string}))
                 })
             }
         })
@@ -55,7 +55,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
     }
 
     useEffect(() => {
-        if (impresaDaCreare.documentiIdoneitaImpresa.filter(d => !d.file.value || typeof d.file.value === 'string').length === impresaDaCreare.documentiIdoneitaImpresa.length
+        if (impresaDaCreare.documentiIdoneitaImpresa.filter(d => !d.file || typeof d.file === 'string').length === impresaDaCreare.documentiIdoneitaImpresa.length
             //|| !impresaDaCreare.anagrafica.logo.value || typeof impresaDaCreare.anagrafica.logo.value === 'string'
         ) {
             setUploadToDynamo(true)
@@ -112,13 +112,13 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)} className="w-[50%] p-10 shadow-2xl flex flex-col">
+            <form onSubmit={handleSubmit(onSubmit)} className="md:w-[40%] w-full p-10 shadow-2xl flex flex-col">
                 {impresaDaCreare.comunicazioni.map(c => {
                     return (
                         <div key={c.mansione}>
                             <div className="flex justify-between items-center">
-                                <span className="font-bold">{c.mansione}: </span>
-                                <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                <span className="font-bold md:text-base text-sm">{c.mansione}: </span>
+                                <input className="rounded border border-gray-400 shadow p-1 ma- md:text-base text-sm"
                                        onKeyDown={(e) => {
                                            if (e.key === "Enter") {
                                                e.preventDefault()
@@ -133,8 +133,8 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
                                 />
                             </div>
                             <div className="flex justify-between items-center mt-2">
-                                <span className="font-bold">Telefono: </span>
-                                <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                <span className="font-bold md:text-base text-sm">Telefono: </span>
+                                <input className="rounded border border-gray-400 shadow p-1 ma- md:text-base text-sm"
                                        onKeyDown={(e) => {
                                            if (e.key === "Enter") {
                                                e.preventDefault()
@@ -149,8 +149,8 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
                                 />
                             </div>
                             <div className="flex justify-between items-center mt-2">
-                                <span className="font-bold">Email: </span>
-                                <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                                <span className="font-bold md:text-base text-sm">Email: </span>
+                                <input className="rounded border border-gray-400 shadow p-1 ma-w-[262px] w-fit md:text-base text-sm"
                                        onKeyDown={(e) => {
                                            if (e.key === "Enter") {
                                                e.preventDefault()
@@ -177,7 +177,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
                     <label className="modal-box relative">
                         <div className="flex justify-between items-center">
                             <span className="font-bold">Mansione: </span>
-                            <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                            <input className="rounded border border-gray-400 shadow p-1 ma-"
                                    onKeyDown={(e) => {
                                        if (e.key === "Enter") {
                                            e.preventDefault()
@@ -193,7 +193,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
                         </div>
                         <div className="flex justify-between items-center mt-1">
                             <span className="font-bold">Nome: </span>
-                            <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                            <input className="rounded border border-gray-400 shadow p-1 ma-"
                                    onKeyDown={(e) => {
                                        if (e.key === "Enter") {
                                            e.preventDefault()
@@ -209,7 +209,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
                         </div>
                         <div className="flex justify-between items-center mt-1">
                             <span className="font-bold">Telefono: </span>
-                            <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                            <input className="rounded border border-gray-400 shadow p-1 ma-"
                                    onKeyDown={(e) => {
                                        if (e.key === "Enter") {
                                            e.preventDefault()
@@ -225,7 +225,7 @@ export const ComunicazioniImpresa: React.FC<ComunicazioniProps> = ({}) => {
                         </div>
                         <div className="flex justify-between items-center mt-1">
                             <span className="font-bold">Email: </span>
-                            <input className="rounded border border-gray-400 shadow p-1 w-[262px]"
+                            <input className="rounded border border-gray-400 shadow p-1 ma-"
                                    onKeyDown={(e) => {
                                        if (e.key === "Enter") {
                                            e.preventDefault()

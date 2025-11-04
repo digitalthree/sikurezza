@@ -1,4 +1,5 @@
 import {Cantiere} from "./Cantiere";
+import { MacchinaEAttrezzatura } from "./MacchineEAttrezzature";
 import {Maestranza} from "./Maestranza";
 
 export interface Impresa {
@@ -20,6 +21,34 @@ export interface Impresa {
         }
     },
     maestranze: string[],
+    macchineEAttrezzature: string[],
+    impreseSubappaltatrici: string[],
+    documentiIdoneitaImpresa: Autodichiarazione[],
+    comunicazioni: ItemComunicazione[],
+    creatoDa: string
+    id?: string
+}
+
+export interface ImpresaDaImportare {
+    tipo: 'Affidataria' | 'Subappaltatrice',
+    anagrafica: {
+        attr: {label: string, value: string}[],
+        logo: {nome: string, value: File|string|undefined},
+        dvr: {
+            nome: string,
+            presenza: boolean,
+            file: {nome: string, value: File|string|undefined},
+            dataAggiornamento: string
+        },
+        certificatoCCIAA: {
+            nome: string,
+            presenza: boolean,
+            file: {nome: string, value: File|string|undefined},
+            scadenza: string
+        }
+    },
+    maestranze: Maestranza[],
+    macchineEAttrezzature: MacchinaEAttrezzatura[],
     impreseSubappaltatrici: string[],
     documentiIdoneitaImpresa: Autodichiarazione[],
     comunicazioni: ItemComunicazione[],
@@ -30,7 +59,7 @@ export interface Impresa {
 export interface Autodichiarazione {
     nome: string,
     presenza: boolean
-    file: {nome: string, value: File|string|undefined}
+    file: File|string|undefined
 }
 
 export interface ItemComunicazione {
@@ -69,6 +98,7 @@ export const impresaTemporanea: Impresa = {
         }
     },
     maestranze: [],
+    macchineEAttrezzature: [],
     impreseSubappaltatrici: [],
     documentiIdoneitaImpresa: [
         {
@@ -76,25 +106,25 @@ export const impresaTemporanea: Impresa = {
                 "oggetto di provvedimenti di \n" +
                 "sospensione",
             presenza: false,
-            file: {nome: "", value: undefined}
+            file: undefined
         },
         {
             nome: "Autodichiarazione Organico\n" +
                 "medio annuo",
             presenza: false,
-            file: {nome: "", value: undefined}
+            file: undefined
         },
         {
             nome: "Autodichiarazione CCNL applicato\n" +
                 "ai dipendenti",
             presenza: false,
-            file: {nome: "", value: undefined}
+            file: undefined
         },
         {
             nome: "Autodichiarazione di iscrizione alla \n" +
                 "CCIAA con dicitura antimafia",
             presenza: false,
-            file: {nome: "", value: undefined}
+            file: undefined
         }
     ],
 

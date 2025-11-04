@@ -74,7 +74,7 @@ const PonteggioTab: React.FC<PonteggioTabProps> = ({}) => {
               {/* row 1 */}
               {ponteggi.map((p, index) => {
                 return(
-                    <tr className="link link-hover hover:text-sky-500">
+                    <tr className="link link-hover hover:text-yellow-500">
                       <th>{index+1}</th>
                       <td>{p.attr.filter(po => po.nome === 'marca')[0].value}</td>
                       <td>{p.attr.filter(po => po.nome === 'tipologia')[0].value}</td>

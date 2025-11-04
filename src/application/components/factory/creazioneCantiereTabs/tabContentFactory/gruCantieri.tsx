@@ -16,6 +16,7 @@ import Nota from "./components/Nota";
 import {useLocation} from "react-router-dom";
 import { useDynamoDBQuery } from "../../../../../dynamodb/hook/useDynamoDBQuery";
 import { getAllGruByCreatoDa } from "../../../../../dynamodb/api/gruAPIs";
+import { convertFromDynamoDBFormat } from "../../../../../dynamodb/utils/conversionFunctions";
 
 export interface GruCantieriProps {
     setIndex: (n: number) => void
@@ -34,12 +35,10 @@ const GruCantieriTab: React.FC<GruCantieriProps> = ({setIndex}) => {
         dispatch(resetGru())
 
         execQuery2(getAllGruByCreatoDa, impresaSelezionata?.id).then((res) => {
-            res.forEach((g: { id: string; gru: Gru }) => {
+            res.Items.forEach((item:any) => {
+                let gru = convertFromDynamoDBFormat(item) as Gru;
                 dispatch(
-                    addGru({
-                        ...g.gru,
-                        id: g.id,
-                    } as Gru)
+                    addGru(gru)
                 );
             });
         });

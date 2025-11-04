@@ -2,7 +2,7 @@ import React from 'react';
 import {Cantiere} from "../../model/Cantiere";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import {ImpresaSelezionataSelector} from "../../store/impresaSlice";
+import {addBreadcrumbItem, ImpresaSelezionataSelector} from "../../store/impresaSlice";
 import {deleteFileS3} from "../../aws/s3APIs";
 import {removeCantiere, selezionaCantiere} from "../../store/cantiereSlice";
 import { useDynamoDBQuery } from '../../dynamodb/hook/useDynamoDBQuery';
@@ -23,10 +23,11 @@ const EditButtonCantiere: React.FC<EditButtonCantiereProps> = ({cantiereTarget, 
 
     return (
         <>
-            <div className="text-right">
+            <div className="text-right flex flex-row justify-end items-center">
                 <button className="mr-4"
                         onClick={() => {
                             dispatch(selezionaCantiere(cantiereTarget))
+                            dispatch(addBreadcrumbItem(cantiereTarget.id as string))
                             setEditabile(false)
                             navigate(`/impresa/${impresaSelezionata?.id}/cantiere`, {
                                 state: {
@@ -40,9 +41,9 @@ const EditButtonCantiere: React.FC<EditButtonCantiereProps> = ({cantiereTarget, 
                 </button>
                 {/* Icona ingranaggio */}
 
-                <div className="tooltip tooltip-left tooltip-info" data-tip="Opzioni">
+                <div className="tooltip tooltip-left tooltip-warning" data-tip="Opzioni">
 
-                    <button className="btn btn-link btn-xs hover:bg-sky-500">
+                    <button className="btn btn-link btn-xs hover:bg-yellow-500">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="17.736"
@@ -60,8 +61,8 @@ const EditButtonCantiere: React.FC<EditButtonCantiereProps> = ({cantiereTarget, 
                 </div>
 
                 {/* Icona chiave inglese */}
-                <div className="tooltip tooltip-left tooltip-info" data-tip="Modifica">
-                    <button className="btn btn-link btn-xs hover:bg-sky-500"
+                <div className="tooltip tooltip-left tooltip-warning" data-tip="Modifica">
+                    <button className="btn btn-link btn-xs hover:bg-yellow-500"
                             onClick={() => {
                                 dispatch(selezionaCantiere(cantiereTarget))
                                 navigate(`/impresa/${impresaSelezionata?.id}/cantiere`, {
@@ -88,8 +89,8 @@ const EditButtonCantiere: React.FC<EditButtonCantiereProps> = ({cantiereTarget, 
                 </div>
 
                 {/* Icona cestino */}
-                <div className="tooltip tooltip-left tooltip-info z-10" data-tip="Elimina">
-                    <button className="btn btn-link btn-xs hover:bg-sky-500"
+                <div className="tooltip tooltip-left tooltip-warning z-10" data-tip="Elimina">
+                    <button className="btn btn-link btn-xs hover:bg-yellow-500"
                             onClick={() => {
                                 let confirm = window.confirm(`Sei sicuro di voler eliminare il cantiere ${cantiereTarget.anagrafica.attr.filter(a => a.nome === 'denominazione')[0].value}`)
                                 if (confirm) {

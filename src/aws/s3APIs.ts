@@ -28,7 +28,7 @@ export const getFileFromS3 = (url: string | File) => {
             Key: url,
         }, (err, data) => {
             if (data) {
-                const file = new Blob([data.Body as Uint8Array], {type: "application/pdf"})
+                const file = new Blob([data.Body as BlobPart], {type: "application/pdf"})
                 const fileURL = URL.createObjectURL(file);
                 const pdfWindow = window.open();
                 if (pdfWindow) {
@@ -44,3 +44,24 @@ export const getFileFromS3 = (url: string | File) => {
         }
     }
 }
+
+export const retriveFileFromS3Clean = async (url: string): Promise<File|Blob> => {
+    // 1. Usiamo .promise() per trasformare la chiamata in una Promise che possiamo 'await'
+    const result = await s3.getObject({
+        Bucket: process.env.REACT_APP_AWS_BUCKET_NAME as string,
+        Key: url,
+    }).promise(); 
+
+    if (result && result.Body) {
+        const contentType = result.ContentType || "application/pdf";
+        const fileBlob = new Blob([result.Body as BlobPart], { type: contentType });
+
+        // // Creazione dell'oggetto File
+        // const fileName = url.substring(url.lastIndexOf('/') + 1) || 'downloaded-file.pdf';
+        // const file = new File([fileBlob], fileName, { type: contentType });
+        
+        return fileBlob;
+    } 
+
+    throw new Error("File non trovato o corpo dati assente.");
+};

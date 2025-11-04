@@ -5,11 +5,8 @@ import {TfiSave} from "react-icons/tfi";
 import {
     MaestranzaDaCreareSelector,
     MaestranzaSelezionataSelector,
-    setAnagraficaMaestranza, setMaestranzaDaCreare
-} from "../../../../../../store/maestranzaSlice";
-import {Impresa} from "../../../../../../model/Impresa";
-import {estintoreDefault} from "../../../../../../model/Estintore";
-import {maestranzaDefault} from "../../../../../../model/Maestranza";
+    setAnagraficaMaestranza,
+    setMaestranzaSelezionata} from "../../../../../../store/maestranzaSlice";
 import {
     addBreadcrumbItem,
     BreadcrumbItemsSelector,
@@ -51,7 +48,7 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
 
     return (
         <>
-            <form className="w-[40%] p-10 shadow-2xl">
+            <form className="xl:w-[40%] w-full p-10 shadow-2xl">
                 <div className="flex justify-between items-center">
                     <span className="font-bold">Nome*: </span>
                     <div className="flex flex-col">

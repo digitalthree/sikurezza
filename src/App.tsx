@@ -16,7 +16,7 @@ import {
     Route,
     Routes
 } from "react-router-dom";
-import SezioneImpresa from "./application/components/home/components/SezioneImpresa";
+import SezioneImpresa from "./application/components/cruscotto/SezioneImpresa";
 import {CreazioneImpresa} from "./application/components/factory/creazioneImpresa/CreazioneImpresa";
 import SharedLayout from "./shared/sharedLayout/SharedLayout";
 import EstintoreTab from "./application/mirkoComponents/EstintoreTab";
@@ -30,6 +30,8 @@ import CreazioneCantiereTabs from "./application/components/factory/creazioneCan
 import Assistenza from './application/mirkoComponents/Assistenza';
 import {PersistGate} from 'redux-persist/integration/react';
 import CantieriTab from "./application/mirkoComponents/CantieriTab";
+import Cantieri from './application/components/cantieri/Cantieri';
+import { Breadcrumb } from './shared/breadcrumb/Breadcrumb';
 
 function App() {
 
@@ -69,6 +71,7 @@ function App() {
                                     <Route path="cantiere" element={<CreazioneCantiereTabs/>}/>
                                 </Route>
                                 <Route path="assistenza" element={<Assistenza/>}/>
+                                <Route path="cantieri" element={<Cantieri/>}/>
                                 <Route path="creazione/impresa" element={<CreazioneImpresa primoAccesso={false }/>}/>
                                 <Route path="totalControl" element={<TotalControl/>}/>
                             </Route>

@@ -22,10 +22,8 @@ const VisualizzaEliminaFile: React.FC<VisualizzaEliminaFileProps> = ({file, modi
                                 if(typeof file === "string"){
                                     let confirm = window.confirm("Sicuro di eliminare il file?")
                                     if(confirm){
-                                        deleteFileS3(file).then((res) => {
-                                            if(res !== false){
-                                                eliminaFunction()
-                                            }
+                                        deleteFileS3(file).then(() => {
+                                            eliminaFunction()
                                         })
                                     }
                                 }else{

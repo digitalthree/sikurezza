@@ -1,15 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {FieldErrors} from "react-hook-form";
-import {Maestranza} from "../../../../../../../../model/Maestranza";
 import {useDispatch, useSelector} from "react-redux";
 import {
     addCorsoMaestranza,
     MaestranzaDaCreareSelector,
     MaestranzaSelezionataSelector,
-    setConsegnatoInMaestranza,
-    setEffettuatoIlInMaestranza, setFileInCorsiMaestranza,
-    setFileInDocumentiMaestranza, setMansioneInMaestranza, setRichiedibileInCorsoMaestranza,
-    setRichiedibileInMaestranza,
+    setFileInCorsiMaestranza,
+    setRichiedibileInCorsoMaestranza,
     setScadenzaIlInMaestranza
 } from "../../../../../../../../store/maestranzaSlice";
 import VisualizzaEliminaFile from "../../../../../../../../shared/Files/VisualizzaEliminaFile";

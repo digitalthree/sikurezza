@@ -17,18 +17,18 @@ export const CreazioneImpresa: React.FC<CreazioneImpresaProps> = ({primoAccesso}
         <>
             {!impresaSelezionata && <Breadcrumb />}
             <div className="w-full flex flex-col items-center">
-                <div className="tabs">
-                    <a className={`tab tab-bordered p-[50px] text-xl ${tabActive === "Anagrafica" ? 'tab-active' : ''}`}
+                <div className="tabs mb-10">
+                    <a className={`tab tab-bordered xl:p-[50px] p-8 xl:text-xl ${tabActive === "Anagrafica" ? 'tab-active' : ''}`}
                        onClick={() => setTabActive("Anagrafica")}
                     >
                         Anagrafica
                     </a>
-                    <a className={`tab tab-bordered p-[50px] text-xl ${tabActive === "Documenti" ? 'tab-active' : ''}`}
+                    <a className={`tab tab-bordered xl:p-[50px] p-8 xl:text-xl ${tabActive === "Documenti" ? 'tab-active' : ''}`}
                        onClick={() => setTabActive("Documenti")}
                     >
                         Documenti
                     </a>
-                    <a className={`tab tab-bordered p-[50px] text-xl ${tabActive === "Comunicazioni" ? 'tab-active' : ''}`}
+                    <a className={`tab tab-bordered xl:p-[50px] p-8 xl:text-xl ${tabActive === "Comunicazioni" ? 'tab-active' : ''}`}
                        onClick={() => setTabActive("Comunicazioni")}
                     >
                         Comunicazioni

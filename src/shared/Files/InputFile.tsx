@@ -18,7 +18,7 @@ const InputFile: React.FC<InputFileProps> = ({editabile, onChangeFunction, accep
                            e.preventDefault()
                        }
                    }}
-                   className="file-input file-input-secondary file-input-sm w-full max-w-xs flex col-span-3 mx-auto"
+                   className="file-input file-input-secondary xl:file-input-sm file-input-xs w-full max-w-xs flex col-span-3 mx-auto"
                    disabled={!editabile}
                    onChange={(e) => onChangeFunction(e)}
             />

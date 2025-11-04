@@ -76,7 +76,8 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = () => {
                 })}
             </ul>
             <button
-                className="btn btn-circle btn-sm bg-amber-400 border-0 hover:bg-amber-500"
+                className="btn btn-circle btn-sm bg-amber-400 border-0 hover:cursor-pointer hover:bg-amber-500 disabled:opacity-50 disabled:hover:cursor-not-allowed"
+                disabled={breadcrumbsItems.length === 1}
                 onClick={() => {
                     navigate(-1)
                     dispatch(setObjectToCreate(undefined));

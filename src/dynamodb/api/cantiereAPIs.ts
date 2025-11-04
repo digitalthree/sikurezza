@@ -4,6 +4,7 @@ import {
   PutItemInput,
   QueryInput,
   QueryOutput,
+  ScanInput,
 } from "aws-sdk/clients/dynamodb";
 import { convertToDynamoDBFormat } from "../utils/conversionFunctions";
 import { dynamoDB } from "../../aws/s3Config";
@@ -44,6 +45,34 @@ export const getAllCantieriByCreatoDa = async (creatoDa: string) => {
       }
 
       const result = await dynamoDB.query(params).promise();
+      if (result && result.Items) {
+        allItems.push(...result.Items);
+      }
+      lastEvaluatedKey = result?.LastEvaluatedKey;
+    } while (lastEvaluatedKey);
+
+    return { Items: allItems } as QueryOutput; // Restituisci un oggetto simile a QueryOutput
+  } catch (err: any) {
+    console.log("cantieri api:", err);
+    return undefined; // Indica che c'è stato un errore
+  }
+};
+
+export const getAllCantieri = async () => {
+  let params: ScanInput = {
+    TableName: "Cantieri",
+    Limit: 3,
+  };
+  let allItems: any[] = [];
+  let lastEvaluatedKey: Record<string, any> | undefined;
+
+  try {
+    do {
+      if (lastEvaluatedKey) {
+        params.ExclusiveStartKey = lastEvaluatedKey;
+      }
+
+      const result = await dynamoDB.scan(params).promise();
       if (result && result.Items) {
         allItems.push(...result.Items);
       }

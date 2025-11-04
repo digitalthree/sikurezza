@@ -71,7 +71,7 @@ const MacchineAttrezzatureTab: React.FC<MacchineAttrezzatureTabProps> = ({}) => 
               <tbody>
               {macchineEAttrezzature.map((m, index) => {
                 return(
-                    <tr className="link link-hover hover:text-sky-500">
+                    <tr className="link link-hover hover:text-yellow-500">
                       <th>{index+1}</th>
                       <td>{m.attr.filter(ma => ma.nome === 'denominazione')[0].value}</td>
                       <td>{m.attr.filter(ma => ma.nome === 'targa')[0].value}</td>

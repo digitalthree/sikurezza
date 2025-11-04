@@ -78,7 +78,7 @@ export const ImpresaSlice = createSlice({
                 })
             }
         },
-        setFileInDocumenti(state: ImpresaState, action: PayloadAction<{nome: string, file: {nome: string, value: string|File|undefined}}>){
+        setFileInDocumenti(state: ImpresaState, action: PayloadAction<{nome: string, file: string|File|undefined}>){
             state.impresaDaCreare.documentiIdoneitaImpresa.forEach((d) => {
                 if(d.nome === action.payload.nome) {
                     d.file = action.payload.file

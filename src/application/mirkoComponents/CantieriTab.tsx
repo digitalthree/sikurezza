@@ -77,7 +77,7 @@ const CantieriTab: React.FC<CantieriTabProps> = () => {
                         {/* row 1 */}
                         {cantieri.map((c, index) => {
                             return(
-                                <tr className="link link-hover hover:text-sky-500" key={c.id}>
+                                <tr className="link link-hover hover:text-yellow-500" key={c.id}>
                                     <th>{index+1}</th>
                                     <td>{c.anagrafica.attr.filter(a => a.nome === 'denominazione')[0].value}</td>
                                     <td>{c.anagrafica.attr.filter(a => a.nome === 'indirizzo')[0].value}</td>

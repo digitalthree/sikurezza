@@ -27,6 +27,7 @@ const DocumentiMaestranza: React.FC<DocumentiMaestranzaProps> = (
 
 
     const maestranzaSelezionata = useSelector(MaestranzaSelezionataSelector)
+    console.log(maestranzaSelezionata)
     const maestranzaDaCreare = useSelector(MaestranzaDaCreareSelector)
     const {register, formState: {errors}} = useForm();
 

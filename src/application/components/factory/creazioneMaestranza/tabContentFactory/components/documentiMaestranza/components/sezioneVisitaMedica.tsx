@@ -37,11 +37,11 @@ const SezioneVisitaMedica: React.FC<SezioneVisitaMedicaProps> = (
 
     return (
         <>
-            <div className="grid grid-cols-12 gap-4">
+            <div className="grid grid-cols-12 gap-4 items-center">
                 <span className="font-bold col-span-3">Visita Medica: </span>
-                <span className="font-bold col-span-1">scadenza: </span>
+                <span className="font-bold xl:col-span-1 col-span-3">scadenza: </span>
                 <input type="date" {...register("visitaMedicascadenza")}
-                       className="rounded border border-gray-400 shadow p-1 col-span-5"
+                       className="rounded border border-gray-400 shadow p-1 xl:col-span-5 col-span-6"
                        onKeyDown={(e) => {
                            if(e.key === "Enter"){
                                e.preventDefault()

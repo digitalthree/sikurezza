@@ -26,7 +26,7 @@ const EditButtonMacchinaEAttrezzatura: React.FC<EditButtonMacchinaEAttrezzaturaP
 
     return (
         <>
-            <div className="text-right">
+            <div className="text-right flex flex-row justify-end items-center">
                 <label
                     htmlFor="my-modal-7"
                     className="mr-4"
@@ -39,8 +39,8 @@ const EditButtonMacchinaEAttrezzatura: React.FC<EditButtonMacchinaEAttrezzaturaP
                 </label>
                 {/* Icona ingranaggio */}
 
-                <div className="tooltip tooltip-left tooltip-info" data-tip="Opzioni">
-                    <button className="btn btn-link btn-xs hover:bg-sky-500">
+                <div className="tooltip tooltip-left tooltip-warning" data-tip="Opzioni">
+                    <button className="btn btn-link btn-xs hover:bg-yellow-500">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="17.736"
@@ -58,10 +58,10 @@ const EditButtonMacchinaEAttrezzatura: React.FC<EditButtonMacchinaEAttrezzaturaP
                 </div>
 
                 {/* Icona chiave inglese */}
-                <div className="tooltip tooltip-left tooltip-info" data-tip="Modifica">
+                <div className="tooltip tooltip-left tooltip-warning" data-tip="Modifica">
                     <label
                         htmlFor="my-modal-7"
-                        className="btn btn-link btn-xs hover:bg-sky-500"
+                        className="btn btn-link btn-xs hover:bg-yellow-500"
                         onClick={() => {
                             dispatch(setMacchinaEAttrezzaturaSelezionato(macchinaEAttrezzaturaTarget));
                             setEditabile(true);
@@ -85,11 +85,11 @@ const EditButtonMacchinaEAttrezzatura: React.FC<EditButtonMacchinaEAttrezzaturaP
 
                 {/* Icona cestino */}
                 <div
-                    className="tooltip tooltip-left tooltip-info z-10"
+                    className="tooltip tooltip-left tooltip-warning z-10"
                     data-tip="Elimina"
                 >
                     <button
-                        className="btn btn-link btn-xs hover:bg-sky-500"
+                        className="btn btn-link btn-xs hover:bg-yellow-500"
                         onClick={() => {
                             const removeVar = dispatch(setMacchinaEAttrezzaturaSelezionato(macchinaEAttrezzaturaTarget));
                             let messageConfirm = window.confirm(
@@ -101,8 +101,8 @@ const EditButtonMacchinaEAttrezzatura: React.FC<EditButtonMacchinaEAttrezzaturaP
                                     macchinaEAttrezzaturaTarget?.id
                                 ).then(() => {
                                     macchinaEAttrezzaturaTarget?.documenti.forEach(d => {
-                                        if(typeof d.file.value === 'string'){
-                                            deleteFileS3(d.file.value).then(() => {})
+                                        if(typeof d.file === 'string'){
+                                            deleteFileS3(d.file).then(() => {})
                                         }
                                     })
                                     dispatch(removeMacchinaEAttrezzatura(macchinaEAttrezzaturaTarget?.id as string))

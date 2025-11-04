@@ -28,7 +28,7 @@ const EditButtonMaestranza: React.FC<EditButtonMaestranzaProps> = (
 
     return (
         <>
-            <div className="text-right">
+            <div className="text-right flex flex-row justify-end items-center">
                 <button className="mr-4"
                         onClick={() => {
                             dispatch(setMaestranzaSelezionata(maestranzaTarget))
@@ -45,9 +45,9 @@ const EditButtonMaestranza: React.FC<EditButtonMaestranzaProps> = (
                 </button>
                 {/* Icona ingranaggio */}
 
-                <div className="tooltip tooltip-left tooltip-info" data-tip="Opzioni">
+                <div className="tooltip tooltip-left tooltip-warning" data-tip="Opzioni">
 
-                    <button className="btn btn-link btn-xs hover:bg-sky-500">
+                    <button className="btn btn-link btn-xs hover:bg-yellow-500">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="17.736"
@@ -65,8 +65,8 @@ const EditButtonMaestranza: React.FC<EditButtonMaestranzaProps> = (
                 </div>
 
                 {/* Icona chiave inglese */}
-                <div className="tooltip tooltip-left tooltip-info" data-tip="Modifica">
-                    <button className="btn btn-link btn-xs hover:bg-sky-500"
+                <div className="tooltip tooltip-left tooltip-warning" data-tip="Modifica">
+                    <button className="btn btn-link btn-xs hover:bg-yellow-500"
                             onClick={() => {
                                 dispatch(setMaestranzaSelezionata(maestranzaTarget))
                                 navigate(`/impresa/${impresaSelezionata?.id}/maestranza`, {
@@ -93,13 +93,14 @@ const EditButtonMaestranza: React.FC<EditButtonMaestranzaProps> = (
                 </div>
 
                 {/* Icona cestino */}
-                <div className="tooltip tooltip-left tooltip-info z-10" data-tip="Elimina">
-                    <button className="btn btn-link btn-xs hover:bg-sky-500"
+                <div className="tooltip tooltip-left tooltip-warning z-10" data-tip="Elimina">
+                    <button className="btn btn-link btn-xs hover:bg-yellow-500"
                             onClick={() => {
                                 let confirm = window.confirm(`Sei sicuro di voler eliminare la maetsranza ${maestranzaTarget.anagrafica.filter(m => m.label === 'nome')[0].value} ${maestranzaTarget.anagrafica.filter(m => m.label === 'cognome')[0].value}`)
                                 if (confirm) {
                                     execQuery2(deleteMaestranzaFromDynamo, maestranzaTarget.id).then(() => {
                                         maestranzaTarget.documenti.forEach(d => deleteFileS3(d.file as string))
+                                        maestranzaTarget.corsi.forEach(c => deleteFileS3(c.file as string))
                                         execQuery2(updateImpresaInDynamo, {
                                             ...impresaSelezionata,
                                             maestranze: impresaSelezionata?.maestranze.filter(m => m !== maestranzaTarget.id)

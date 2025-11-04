@@ -6,9 +6,8 @@ import {
     setFileInDocumenti,
     setPresenzaInDocumenti
 } from "../../../../../../store/impresaSlice";
-import {useForm} from "react-hook-form";
 import {TfiSave} from "react-icons/tfi";
-import {Impresa, impresaTemporanea} from "../../../../../../model/Impresa";
+import {impresaTemporanea} from "../../../../../../model/Impresa";
 import VisualizzaEliminaFile from "../../../../../../shared/Files/VisualizzaEliminaFile";
 import InputFile from "../../../../../../shared/Files/InputFile";
 
@@ -40,39 +39,37 @@ export const DocumentiImpresa: React.FC<DocumentiProps> = (
 
     return (
         <>
-            <form onSubmit={(e) => e.preventDefault()} className="w-[80%] p-10 shadow-2xl">
+            <form onSubmit={(e) => e.preventDefault()} className="xl:w-[80%] w-full md:p-10 p-3 shadow-2xl">
                 {impresa.documentiIdoneitaImpresa.map((d, index) => {
                     return (
-                        <div className="grid grid-cols-5 text-center py-3" key={d.nome}>
+                        <div className="grid grid-cols-5 text-center items-center py-3" key={d.nome}>
 
                             <div className="col-span-2">
-                                <span className="font-bold">{d.nome}</span>
+                                <span className="font-bold text-sm md:text-base">{d.nome}</span>
                             </div>
-                            <div className="flex flex-row justify-center">
-                                NO
+                            <div className="flex flex-row justify-center text-sm">
                                 <input type="checkbox"
-                                       className="toggle ml-2 mr-2"
+                                       className="toggle toggle-xs md:toggle-md ml-2 mr-2"
                                        checked={d.presenza}
                                        onChange={() => dispatch(setPresenzaInDocumenti({
                                            id: index,
                                            value: !d.presenza
                                        }))}
                                 />
-                                SI
                             </div>
                             <div className="col-span-2" key={`div${index}`}>
                                 <div className="flex justify-center">
-                                    {d.file.value ?
-                                        <VisualizzaEliminaFile file={d.file.value} modifica={editabile} nome="" eliminaFunction={() => {
+                                    {d.file ?
+                                        <VisualizzaEliminaFile file={d.file} modifica={editabile} nome="" eliminaFunction={() => {
                                             dispatch(setFileInDocumenti({
                                                 nome: d.nome,
-                                                file: {nome: "", value: undefined}
+                                                file: undefined
                                             }))
                                         }}/> :
-                                        <InputFile editabile={editabile} onChangeFunction={(e) => {
+                                        <InputFile editabile={d.presenza} onChangeFunction={(e) => {
                                             dispatch(setFileInDocumenti({
                                                 nome: d.nome,
-                                                file: {nome: d.nome, value: (e.target.files) ? e.target.files[0] : undefined}
+                                                file: (e.target.files) ? e.target.files[0] : undefined
                                             }))
                                         }}/>
                                     }

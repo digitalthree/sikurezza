@@ -71,12 +71,12 @@ const MaestranzeTab: React.FC<MaestranzeTabProps> = () => {
                     </select>
                 </div>
                 <div className="overflow-x-auto overflow-y-hidden w-full mt-3 border-t-zinc-300 border rounded-xl">
-                    <table className="table table-zebra w-full  ">
+                    <table className="table table-zebra w-full text-sm md:text-base">
                         <tbody>
                         {/* row 1 */}
                         {maestranze.map((m, index) => {
                             return (
-                                <tr className="link link-hover hover:text-sky-500">
+                                <tr className="link link-hover hover:text-yellow-500">
                                     <th>{index + 1}</th>
                                     <td>{`${m.anagrafica.filter(m => m.label === 'nome')[0].value} ${m.anagrafica.filter(m => m.label === 'cognome')[0].value}`}</td>
                                     <td>{m.anagrafica.filter(m => m.label === 'impresaAppartenenza')[0].value}</td>

@@ -72,7 +72,7 @@ const EstintoreTab: React.FC<EstintoreTabProps> = ({}) => {
               {/* row 1 */}
               {estintori.map((e, index) => {
                 return (
-                  <tr key={e.id} className="link link-hover hover:text-sky-500">
+                  <tr key={e.id} className="link link-hover hover:text-yellow-500">
                     <th>{index + 1}</th>
                     <td>{e.nome}</td>
                     <td>{e.cantiere}</td>
