@@ -97,13 +97,13 @@ const EditButtonPonteggio: React.FC<EditButtonPonteggioProps> = (
                                     ponteggioTarget?.id
                                 ).then(() => {
                                     ponteggioTarget?.allegatiPonteggio.forEach(a => {
-                                        if(typeof a.file.value === 'string'){
-                                            deleteFileS3(a.file.value).then(() => {})
+                                        if(typeof a.file === 'string'){
+                                            deleteFileS3(a.file).then(() => {})
                                         }
                                     })
                                     ponteggioTarget?.controlli.forEach(c => {
-                                        if(typeof c.file.value === 'string'){
-                                            deleteFileS3(c.file.value).then(() => {})
+                                        if(typeof c.file === 'string'){
+                                            deleteFileS3(c.file).then(() => {})
                                         }
                                     })
                                     dispatch(removePonteggio(ponteggioTarget?.id as string))

@@ -93,14 +93,12 @@ const EditButtonGru: React.FC<EditButtonGruProps> = ({gruTarget, setEditabile, s
                                     gruTarget?.id
                                 ).then(() => {
                                     gruTarget?.documenti.forEach(d => {
-                                        if(typeof d.file.value === 'string'){
-                                            deleteFileS3(d.file.value).then(() => {})
+                                        if(typeof d.file === 'string'){
+                                            deleteFileS3(d.file).then(() => {})
                                         }
 
                                     })
-                                    dispatch(
-                                        removeGru(gruTarget?.id as string)
-                                    );
+                                    dispatch(removeGru(gruTarget?.id as string));
                                     dispatch(setGruSelezionata(undefined))
                                     dispatch(setGruDaCreare(gruDefault))
                                 });

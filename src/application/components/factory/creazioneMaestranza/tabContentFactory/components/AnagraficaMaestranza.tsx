@@ -1,17 +1,24 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {useForm} from "react-hook-form";
 import {TfiSave} from "react-icons/tfi";
 import {
     MaestranzaDaCreareSelector,
     MaestranzaSelezionataSelector,
-    setAnagraficaMaestranza,
-    setMaestranzaSelezionata} from "../../../../../../store/maestranzaSlice";
+    setAnagraficaMaestranza} from "../../../../../../store/maestranzaSlice";
 import {
     addBreadcrumbItem,
     BreadcrumbItemsSelector,
     ImpresaSelezionataSelector
 } from "../../../../../../store/impresaSlice";
+
+// Funzione ausiliaria per estrarre un valore dall'array di anagrafica
+const getAnagraficaValue = (anagraficaArray: any, label: string, defaultValue: any = '') => {
+    const item = anagraficaArray?.filter((a: any) => a.label === label)[0];
+    // Gestisci valori booleani correttamente
+    if (typeof item?.value === 'boolean') return item.value;
+    return item?.value ?? defaultValue;
+};
 
 export interface AnagraficaMaestranzaProps{
     setTabActive: (s:string) => void
@@ -28,31 +35,75 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
     const maestranzaSelezionata = useSelector(MaestranzaSelezionataSelector)
     const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
     const breadcrumbItems = useSelector(BreadcrumbItemsSelector)
+    
+    // Prepara i dati iniziali
+    const currentAnagrafica = maestranzaSelezionata?.anagrafica || maestranzaDaCreare.anagrafica;
+    
+    // Memoizzazione dei default values
+    const defaultValues = useMemo(() => {
+        return {
+            nome: getAnagraficaValue(currentAnagrafica, 'nome'),
+            cognome: getAnagraficaValue(currentAnagrafica, 'cognome'),
+            dataNascita: getAnagraficaValue(currentAnagrafica, 'dataNascita'),
+            luogoNascita: getAnagraficaValue(currentAnagrafica, 'luogoNascita'),
+            codiceFiscale: getAnagraficaValue(currentAnagrafica, 'codiceFiscale'),
+            impresaAppartenenza: maestranzaSelezionata 
+                ? getAnagraficaValue(currentAnagrafica, 'impresaAppartenenza')
+                : impresaSelezionata?.anagrafica.attr.filter(a => a.label === "denominazione")[0].value,
+            datoreLavoro: getAnagraficaValue(currentAnagrafica, 'datoreLavoro', false),
+        };
+    }, [maestranzaSelezionata, maestranzaDaCreare, impresaSelezionata]);
 
+    const {register, handleSubmit, formState: {errors}, reset} = useForm({
+        defaultValues: defaultValues 
+    });
+
+    // 1. Aggiorna il form quando cambiano i dati iniziali
     useEffect(() => {
-        dispatch(setAnagraficaMaestranza({label: 'impresaAppartenenza', value: impresaSelezionata?.anagrafica.attr.filter(a => a.label === "denominazione")[0].value as string}))
-    }, [impresaSelezionata])
+        reset(defaultValues);
+    }, [defaultValues, reset]);
 
-
+    // 2. Gestione Logica Immagine/Breadcrumb (come era prima)
     useEffect(() => {
-        if(maestranzaSelezionata && breadcrumbItems.filter(bi => bi === `${maestranzaSelezionata.anagrafica.filter(a => a.label === "nome")[0].value} ${maestranzaSelezionata.anagrafica.filter(a => a.label === "cognome")[0].value}`).length === 0){
-            dispatch(addBreadcrumbItem(`${maestranzaSelezionata.anagrafica.filter(a => a.label === "nome")[0].value} ${maestranzaSelezionata.anagrafica.filter(a => a.label === "cognome")[0].value}`))
+        // Logica per aggiornare l'impresa di appartenenza solo se stiamo creando una nuova maestranza
+        if (!maestranzaSelezionata && impresaSelezionata) {
+            dispatch(setAnagraficaMaestranza({
+                label: 'impresaAppartenenza', 
+                value: impresaSelezionata.anagrafica.attr.filter(a => a.label === "denominazione")[0].value as string
+            }));
         }
-    }, [])
+    }, [impresaSelezionata, maestranzaSelezionata, dispatch])
 
-
-
-    const {register,  formState: {errors}} = useForm();
-
+    useEffect(() => {
+        if(maestranzaSelezionata && breadcrumbItems.filter(bi => bi === `${getAnagraficaValue(maestranzaSelezionata.anagrafica, 'nome')} ${getAnagraficaValue(maestranzaSelezionata.anagrafica, 'cognome')}`).length === 0){
+            dispatch(addBreadcrumbItem(`${getAnagraficaValue(maestranzaSelezionata.anagrafica, 'nome')} ${getAnagraficaValue(maestranzaSelezionata.anagrafica, 'cognome')}`))
+        }
+    }, [maestranzaSelezionata, breadcrumbItems, dispatch])
+    
+    
+    // Funzione chiamata DA RHF dopo una validazione con successo
+    const onSubmit = (data: typeof defaultValues) => {
+        // Mappa e invia i dati a Redux
+        Object.entries(data).forEach(([key, value]) => {
+            dispatch(setAnagraficaMaestranza({label: key, value: value}));
+        });
+        
+        // Prosegui solo dopo il successo della validazione
+        setTabActive("Documenti");
+    };
 
 
     return (
         <>
-            <form className="xl:w-[40%] w-full p-10 shadow-2xl">
+            {/* L'azione del submit va gestita da handleSubmit */}
+            <form className="xl:w-[40%] w-full p-10 shadow-2xl" onSubmit={handleSubmit(onSubmit)}>
+                
+                {/* NOME (Obbligatorio) */}
                 <div className="flex justify-between items-center">
                     <span className="font-bold">Nome*: </span>
                     <div className="flex flex-col">
-                        <input placeholder="Nome" {...register("nome", {required: true})}
+                        <input placeholder="Nome" 
+                               {...register("nome", {required: "Campo obbligatorio"})}
                                onKeyDown={(e) => {
                                    if(e.key === "Enter"){
                                        e.preventDefault()
@@ -60,17 +111,17 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                                }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
-                               value={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.filter(m => m.label === 'nome')[0].value as string : maestranzaDaCreare.anagrafica.filter(m => m.label === 'nome')[0].value as string}
-                               onChange={(e) => dispatch(setAnagraficaMaestranza({label: 'nome', value: e.target.value}))}
                         />
-                        {errors.nome && <span className="font-bold text-red-600">Campo obbligatorio</span>}
+                        {errors.nome && <span className="font-bold text-red-600">{errors.nome.message as string}</span>}
                     </div>
                 </div>
 
+                {/* COGNOME (Obbligatorio) */}
                 <div className="flex justify-between items-center mt-2">
                     <span className="font-bold">Cognome*: </span>
                     <div className="flex flex-col">
-                        <input placeholder="Cognome" {...register("cognome", {required: true})}
+                        <input placeholder="Cognome" 
+                               {...register("cognome", {required: "Campo obbligatorio"})}
                                onKeyDown={(e) => {
                                    if(e.key === "Enter"){
                                        e.preventDefault()
@@ -78,17 +129,17 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                                }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
-                               value={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.filter(m => m.label === 'cognome')[0].value as string : maestranzaDaCreare.anagrafica.filter(m => m.label === 'cognome')[0].value as string}
-                               onChange={(e) => dispatch(setAnagraficaMaestranza({label: 'cognome', value: e.target.value}))}
                         />
-                        {errors.cognome && <span className="font-bold text-red-600">Campo obbligatorio</span>}
+                        {errors.cognome && <span className="font-bold text-red-600">{errors.cognome.message as string}</span>}
                     </div>
                 </div>
 
+                {/* DATA DI NASCITA (Obbligatorio) */}
                 <div className="flex justify-between items-center mt-2">
                     <span className="font-bold">Data Di Nascita*: </span>
                     <div className="flex flex-col">
-                        <input type="date" {...register("dataNascita")}
+                        <input type="date" 
+                               {...register("dataNascita", {required: "Campo obbligatorio"})} // <--- ORA OBBLIGATORIO
                                onKeyDown={(e) => {
                                    if(e.key === "Enter"){
                                        e.preventDefault()
@@ -96,17 +147,17 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                                }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
-                               value={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.filter(m => m.label === 'dataNascita')[0].value as string : maestranzaDaCreare.anagrafica.filter(m => m.label === 'dataNascita')[0].value as string}
-                               onChange={(e) => dispatch(setAnagraficaMaestranza({label: 'dataNascita', value: e.target.value}))}
                         />
-                        {errors.dataNascita && <span className="font-bold text-red-600">Campo obbligatorio</span>}
+                        {errors.dataNascita && <span className="font-bold text-red-600">{errors.dataNascita.message as string}</span>}
                     </div>
                 </div>
 
+                {/* LUOGO DI NASCITA (Obbligatorio) */}
                 <div className="flex justify-between items-center mt-2">
                     <span className="font-bold">Luogo di Nascita*: </span>
                     <div className="flex flex-col">
-                        <input placeholder="Luogo di Nascita" {...register("luogoNascita", {required: true})}
+                        <input placeholder="Luogo di Nascita" 
+                               {...register("luogoNascita", {required: "Campo obbligatorio"})}
                                onKeyDown={(e) => {
                                    if(e.key === "Enter"){
                                        e.preventDefault()
@@ -114,17 +165,17 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                                }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
-                               value={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.filter(m => m.label === 'luogoNascita')[0].value as string : maestranzaDaCreare.anagrafica.filter(m => m.label === 'luogoNascita')[0].value as string}
-                               onChange={(e) => dispatch(setAnagraficaMaestranza({label: 'luogoNascita', value: e.target.value}))}
                         />
-                        {errors.luogoNascita && <span className="font-bold text-red-600">Campo obbligatorio</span>}
+                        {errors.luogoNascita && <span className="font-bold text-red-600">{errors.luogoNascita.message as string}</span>}
                     </div>
                 </div>
 
+                {/* CODICE FISCALE (Obbligatorio) */}
                 <div className="flex justify-between items-center mt-2">
                     <span className="font-bold">Codice Fiscale*: </span>
                     <div className="flex flex-col">
-                        <input placeholder="Codice Fiscale" {...register("codiceFiscale", {required: true})}
+                        <input placeholder="Codice Fiscale" 
+                               {...register("codiceFiscale", {required: "Campo obbligatorio"})}
                                onKeyDown={(e) => {
                                    if(e.key === "Enter"){
                                        e.preventDefault()
@@ -132,17 +183,17 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                                }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
-                               value={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.filter(m => m.label === 'codiceFiscale')[0].value as string : maestranzaDaCreare.anagrafica.filter(m => m.label === 'codiceFiscale')[0].value as string}
-                               onChange={(e) => dispatch(setAnagraficaMaestranza({label: 'codiceFiscale', value: e.target.value}))}
                         />
-                        {errors.codiceFiscale && <span className="font-bold text-red-600">Campo obbligatorio</span>}
+                        {errors.codiceFiscale && <span className="font-bold text-red-600">{errors.codiceFiscale.message as string}</span>}
                     </div>
                 </div>
 
+                {/* IMPRESA APPARTENENZA (Gestito da Redux, reso readOnly) */}
                 <div className="flex justify-between items-center mt-2">
-                    <span className="font-bold">Impresa di appartenenza*: </span>
+                    <span className="font-bold">Impresa di appartenenza: </span>
                     <div className="flex flex-col">
-                        <input placeholder="Impresa di appartenenza" {...register("impresaAppartenenza", {required: true})}
+                        <input placeholder="Impresa di appartenenza" 
+                               {...register("impresaAppartenenza")}
                                onKeyDown={(e) => {
                                    if(e.key === "Enter"){
                                        e.preventDefault()
@@ -150,36 +201,37 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
                                }}
                                className="rounded border border-gray-400 shadow p-1"
                                disabled={!editabile}
-                               value={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.filter(m => m.label === 'impresaAppartenenza')[0].value as string : impresaSelezionata?.anagrafica.attr.filter(a => a.label === "denominazione")[0].value}
+                               readOnly // Importante: evita che l'utente modifichi il campo
                         />
-                        {errors.impresaAppartenenza && <span className="font-bold text-red-600">Campo obbligatorio</span>}
                     </div>
                 </div>
 
+                {/* DATORE DI LAVORO (Checkbox) */}
                 <div className="flex justify-between items-center mt-2">
                     <span className="font-bold">Datore di lavoro: </span>
                     <div className="flex flex-row items-center">
                         NO
-                        <input type="checkbox" className="toggle ml-2 mr-2" {...register("datoreLavoro")}
+                        <input type="checkbox" className="toggle ml-2 mr-2" 
+                               {...register("datoreLavoro")} // RHF gestisce il valore booleano
                                onKeyDown={(e) => {
                                    if(e.key === "Enter"){
                                        e.preventDefault()
                                    }
                                }}
                                disabled={!editabile}
-                               checked={(maestranzaSelezionata) ? maestranzaSelezionata.anagrafica.filter(m => m.label === 'datoreLavoro')[0].value as boolean : maestranzaDaCreare.anagrafica.filter(m => m.label === 'datoreLavoro')[0].value as boolean}
-                               onChange={(e) => dispatch(setAnagraficaMaestranza({label: 'datoreLavoro', value: e.target.checked}))}
                         />
                         SI
                     </div>
                 </div>
 
+                {/* PULSANTE SUBMIT */}
                 {editabile  &&
                     <div className="flex mt-10">
                         <div className="rounded-bl rounded-tl bg-amber-600 p-2">
                             <TfiSave size="30px" className="text-white"/>
                         </div>
-                        <button onClick={() => setTabActive("Documenti")}
+                        {/* Il pulsante DEVE essere di tipo submit e DEVE essere dentro il form */}
+                        <button type="submit" 
                             className="rounded-br rounded-tr bg-amber-400 p-2 w-full text-white hover:cursor-pointer font-bold">
                             Salva e Prosegui
                         </button>

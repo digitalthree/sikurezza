@@ -53,6 +53,7 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
     const {execQuery2} = useDynamoDBQuery()
 
     const [modifica, setModifica] = useState(true)
+    const [saving, setsaving] = useState(false)
 
     const [itemsFiltered, setItemFiltered] = useState<{item: Impresa | MacchinaEAttrezzatura | Maestranza | Ponteggio | Gru, tipo: "Impresa" | "Maestranza" | "MacchinaEAttrezzatura" | "Ponteggio" | "Gru", scadenza: string, problema: string}[]>([])
 
@@ -322,9 +323,9 @@ const TotalControl: React.FC<TotalControlProps> = ({}) => {
                 </div>
             </div>
             {/*<CreazioneMaestranzaModale/>*/}
-            <CreazioneMacchinaEAttrezzatura editabile={true} modifica={true} setModifica={setModifica}/>
-            <CreazionePonteggio editabile={true} modifica={true} setModifica={setModifica}/>
-            <CreazioneGru editabile={true} modifica={true} setModifica={setModifica}/>
+            <CreazioneMacchinaEAttrezzatura editabile={true} modifica={true} setModifica={setModifica} setsaving={setsaving}/>
+            <CreazionePonteggio editabile={true} modifica={true} setModifica={setModifica} setsaving={setsaving}/>
+            <CreazioneGru editabile={true} modifica={true} setModifica={setModifica} setsaving={setsaving}/>
             <CreazioneMaestranzaModale editabile={true} modifica={true}/>
         </>
     )

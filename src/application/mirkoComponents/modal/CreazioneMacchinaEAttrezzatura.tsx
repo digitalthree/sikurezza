@@ -30,11 +30,12 @@ export interface CreazioneMacchinaEAttrezzaturaProps {
   editabile: boolean;
   modifica: boolean;
   setModifica: (v: boolean) => void;
+  setsaving: (v: boolean) => void;
 }
 
 const CreazioneMacchinaEAttrezzatura: React.FC<
   CreazioneMacchinaEAttrezzaturaProps
-> = ({ editabile, modifica, setModifica }) => {
+> = ({ editabile, modifica, setModifica, setsaving }) => {
   const { execQuery2 } = useDynamoDBQuery();
   const dispatch = useDispatch();
   const macchinaEAttrezzaturaSelezionato = useSelector(
@@ -45,27 +46,37 @@ const CreazioneMacchinaEAttrezzatura: React.FC<
   );
   const impresaSelezionata = useSelector(ImpresaSelezionataSelector);
 
+  //stato utilizzato per rappresentare il click sul pulsante crea/modifica macchina
   const [save, setSave] = useState(false);
+  //stato utilizzato per rappresentare l'avvenuto caricamento di tutti i documenti su s3
   const [uploadToDynamo, setUploadToDynamo] = useState(false);
   const [macchinaEAttrezzatura, setMacchinaEAttrezzatura] =
     useState<MacchinaEAttrezzatura>(macchinaEAttrezzaturaDefault);
 
-  const onSubmit = (macchinaEAttrezzatura: MacchinaEAttrezzatura) => {
-    macchinaEAttrezzatura.documenti.forEach((d) => {
-      if (d.file && typeof d.file !== "string") {
-        uploadFileS3(d.file).then((res) => {
-          if (res) {
-            dispatch(
-              setDocumentoInMacchinaEAttrezzatura({
-                nome: d.nome,
-                value: { ...d, file: res?.key },
-              })
-            );
-          }
-        });
-      }
-    });
-    setSave(true);
+  const onSubmit = async (macchinaEAttrezzatura: MacchinaEAttrezzatura) => {
+    setsaving(true);
+    setSave(true)
+    // 2. Prepara un array per contenere tutte le Promise di upload S3
+    const uploadPromises = macchinaEAttrezzatura.documenti
+      .filter((d) => d.file && typeof d.file !== "string") // Filtra solo i documenti con file binari da uplodare
+      .map(async (d) => {
+        // Mappa ciascuno in una Promise asincrona
+
+        // Upload del file su S3
+        const res = await uploadFileS3(d.file as File);
+
+        if (res && res.key) {
+          // Troviamo il documento originale nell'array per aggiornare il file (se necessario, a seconda di come gestisci lo stato)
+          dispatch(
+            setDocumentoInMacchinaEAttrezzatura({
+              nome: d.nome,
+              value: { nome: d.nome, presenza: d.presenza, file: res.key },
+            })
+          );
+        }
+      });
+    await Promise.all(uploadPromises);
+    setUploadToDynamo(true);
   };
 
   useEffect(() => {
@@ -77,18 +88,12 @@ const CreazioneMacchinaEAttrezzatura: React.FC<
   }, [macchinaEAttrezzaturaDaCreare, macchinaEAttrezzaturaSelezionato]);
 
   useEffect(() => {
-    if (
-      macchinaEAttrezzatura.documenti.filter(
-        (d) => !d.file || typeof d.file === "string"
-      ).length === macchinaEAttrezzatura.documenti.length
-    ) {
-      setUploadToDynamo(true);
-    } else {
-      setUploadToDynamo(false);
-    }
-  }, [macchinaEAttrezzatura]);
-
-  useEffect(() => {
+    /*
+      Caso 1: creazione di una macchina
+        save a true -> pulsante cliccato
+        uploadToDynamo a true -> documenti caricati su s3
+        modifica a false -> creazione macchina
+    */
     if (save && uploadToDynamo && !modifica) {
       let id = crypto.randomUUID();
       execQuery2(createMacchinaEAttrezzaturaInDynamo, {
@@ -114,9 +119,16 @@ const CreazioneMacchinaEAttrezzatura: React.FC<
         dispatch(
           setMacchinaEAttrezzaturaDaCreare(macchinaEAttrezzaturaDefault)
         );
-        setSave(false);
       });
+      setsaving(false);
+      setSave(false)
     }
+    /*
+      Caso 2: modifica di una macchina già esistente
+        save a true -> pulsante cliccato
+        uploadToDynamo a true -> documenti caricati su s3
+        modifica a true -> modifica macchina esistente
+    */
     if (save && uploadToDynamo && modifica) {
       execQuery2(updateMacchinaEAttrezzaturaInDynamo, {
         ...macchinaEAttrezzatura,
@@ -138,10 +150,11 @@ const CreazioneMacchinaEAttrezzatura: React.FC<
         dispatch(
           setMacchinaEAttrezzaturaDaCreare(macchinaEAttrezzaturaDefault)
         );
-        setSave(false);
       });
+      setsaving(false);
+      setSave(false)
     }
-  }, [save, uploadToDynamo, macchinaEAttrezzatura]);
+  }, [uploadToDynamo, macchinaEAttrezzatura]);
 
   return (
     <>

@@ -25,6 +25,7 @@ const PonteggioTab: React.FC<PonteggioTabProps> = ({}) => {
   const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
   const [editabile, setEditabile] = useState<boolean>(true)
   const [modifica, setModifica] = useState<boolean>(false)
+  const [saving, setsaving] = useState<boolean>(false)
 
 
   useEffect(() => {
@@ -43,7 +44,13 @@ const PonteggioTab: React.FC<PonteggioTabProps> = ({}) => {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center w-100">
+    {saving && (
+        <div className="flex flex-col items-center gap-2 fixed z-50 bg-white top-[50%] left-1/2 -translate-x-1/2 border border-gray-200 p-6 rounded-xl shadow-2xl">
+          <progress className="progress progress-warning w-40" />
+          <label>Creazione in corso</label>
+        </div>
+      )}
+      <div className={`flex flex-col justify-center items-center w-100 ${saving ? 'opacity-50' : 'opacity-100'}`}>
         <div className="flex flex-row justify-center w-10/12 sm:w-8/12 md:w-6/12 xl:w-5/12">
           <img
             src="\img\loghi_schede\logo_ponteggio.png"
@@ -101,7 +108,7 @@ const PonteggioTab: React.FC<PonteggioTabProps> = ({}) => {
           </label>
         </div>
       </div>
-      <CreazionePonteggio editabile={editabile} modifica={modifica} setModifica={setModifica}/>
+      <CreazionePonteggio editabile={editabile} modifica={modifica} setModifica={setModifica} setsaving={setsaving}/>
     </>
   );
 };

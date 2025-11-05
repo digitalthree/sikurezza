@@ -23,7 +23,7 @@ const MacchineAttrezzatureTab: React.FC<MacchineAttrezzatureTabProps> = ({}) => 
   const impresaSelezionata = useSelector(ImpresaSelezionataSelector)
   const [editabile, setEditabile] = useState<boolean>(true)
   const [modifica, setModifica] = useState<boolean>(false)
-
+  const [saving, setsaving] = useState(false)
 
   useEffect(() => {
     dispatch(resetMacchinaEAttrezzatura())
@@ -41,7 +41,13 @@ const MacchineAttrezzatureTab: React.FC<MacchineAttrezzatureTabProps> = ({}) => 
 
   return (
       <>
-        <div className="flex flex-col justify-center items-center w-100">
+        {saving && (
+        <div className="flex flex-col items-center gap-2 fixed z-50 bg-white top-[50%] left-1/2 -translate-x-1/2 border border-gray-200 p-6 rounded-xl shadow-2xl">
+          <progress className="progress progress-warning w-40" />
+          <label>Creazione in corso</label>
+        </div>
+      )}
+        <div className={`flex flex-col justify-center items-center w-100 ${saving ? 'opacity-50' : 'opacity-100'}`}>
           <div className="flex flex-row justify-center w-10/12 sm:w-8/12 md:w-6/12 xl:w-5/12">
             <img
                 src="\img\loghi_schede\logo_macchine_attrezzature.png"
@@ -98,7 +104,7 @@ const MacchineAttrezzatureTab: React.FC<MacchineAttrezzatureTabProps> = ({}) => 
             </label>
           </div>
         </div>
-        <CreazioneMacchinaEAttrezzatura editabile={editabile} modifica={modifica} setModifica={setModifica}/>
+        <CreazioneMacchinaEAttrezzatura editabile={editabile} modifica={modifica} setModifica={setModifica} setsaving={setsaving}/>
       </>
   );
 };

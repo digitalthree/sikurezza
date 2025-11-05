@@ -17,7 +17,7 @@ export interface Verifica {
 export interface DocumentoFondazioneGru {
     nome: string
     presenza: boolean | "SI" | "NO" | "NR",
-    file: {nome: string, value: File|string|undefined}
+    file: File|string|undefined
 }
 
 export const gruDefault: Gru = {
@@ -51,32 +51,32 @@ export const gruDefault: Gru = {
         {
             nome: 'Progetto e Relazione della Struttura di Fondazione',
             presenza: false,
-            file: {nome: "", value: undefined}
+            file: undefined
         },
         {
             nome: 'Idoneità del Piano Di Posa',
             presenza: false,
-            file: {nome: "", value: undefined}
+            file: undefined
         },
         {
             nome: 'Libretto',
             presenza: false,
-            file: {nome: "", value: undefined}
+            file: undefined
         },
         {
             nome: 'Dichiarazione Di Conformita',
             presenza: false,
-            file: {nome: "", value: undefined}
+            file: undefined
         },
         {
             nome: 'Dichiarazione Di Corretta Installazione',
             presenza: false,
-            file: {nome: "", value: undefined}
+            file: undefined
         },
         {
             nome: 'Collaudo',
             presenza: "SI",
-            file: {nome: "", value: undefined}
+            file: undefined
         },
     ],
     creatoDa: ""

@@ -9,14 +9,14 @@ export interface Ponteggio {
 export interface AllegatoPonteggio {
     nome: string,
     presenza: boolean | "SI" | "NO" | "NR",
-    file: {nome: string, value: File|string|undefined}
+    file: File|string|undefined
 }
 
 export interface ControlloPonteggio {
     nome: string,
     effettuato: boolean,
     data: string,
-    file: {nome: string, value: File|string|undefined}
+    file: File|string|undefined
 }
 
 export const ponteggioDefault: Ponteggio = {
@@ -39,37 +39,37 @@ export const ponteggioDefault: Ponteggio = {
         {
             nome: "Progetto del ponteggio",
             presenza: "NO",
-            file: {nome: "", value: undefined}
+            file: undefined
         },
         {
             nome: "Relazione di calcolo",
             presenza: "NO",
-            file: {nome: "", value: undefined}
+            file: undefined
         },
         {
             nome: "Autorizzazioni ministeriali per ogni marchio",
             presenza: false,
-            file: {nome: "", value: undefined}
+            file: undefined
         },
         {
             nome: "Pi.M.U.S.",
             presenza: false,
-            file: {nome: "", value: undefined}
+            file: undefined
         },
         {
             nome: "Registro di controllo",
             presenza: false,
-            file: {nome: "", value: undefined}
+            file: undefined
         },
         {
             nome: "Autorizzazione d'uso del ponteggio da parte dell'installatore",
             presenza: false,
-            file: {nome: "", value: undefined}
+            file: undefined
         }
     ],
     controlli: [
-        {nome: "Controlli periodici", effettuato: false, data: "", file: {nome: "", value: undefined}},
-        {nome: "Controllo straordinario", effettuato: false, data: "", file: {nome: "", value: undefined}}
+        {nome: "Controlli periodici", effettuato: false, data: "", file: undefined},
+        {nome: "Controllo straordinario", effettuato: false, data: "", file: undefined}
     ],
     creatoDa: ""
 
