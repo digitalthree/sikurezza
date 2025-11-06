@@ -27,6 +27,7 @@ export interface CreazionePonteggioProps {
   modifica: boolean;
   setModifica: (v: boolean) => void;
   setsaving: (v: boolean) => void;
+  setmodificaEffettuata?: Function;
 }
 
 const CreazionePonteggio: React.FC<CreazionePonteggioProps> = ({
@@ -34,6 +35,7 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = ({
   modifica,
   setModifica,
   setsaving,
+  setmodificaEffettuata
 }) => {
   const { execQuery2 } = useDynamoDBQuery();
   const dispatch = useDispatch();
@@ -107,6 +109,9 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = ({
 
 
   useEffect(() => {
+    console.log("save: ", save)
+    console.log("uploadToDynamo: ", uploadToDynamo)
+    console.log("modifica: ", modifica)
     if (save && uploadToDynamo && !modifica) {
       let id = crypto.randomUUID();
       execQuery2(createPonteggioInDynamo, {
@@ -125,6 +130,7 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = ({
         dispatch(setPonteggioDaCreare(ponteggioDefault));
       });
       setSave(false);
+      setUploadToDynamo(false)
       setsaving(false)
     }
     if (save && uploadToDynamo && modifica) {
@@ -139,11 +145,12 @@ const CreazionePonteggio: React.FC<CreazionePonteggioProps> = ({
             creatoDa: impresaSelezionata?.id as string,
           })
         );
-        setModifica(false);
         dispatch(setPonteggioSelezionato(undefined));
         dispatch(setPonteggioDaCreare(ponteggioDefault));
+        setmodificaEffettuata && setmodificaEffettuata((prev:boolean) => !prev)
       });
       setSave(false);
+      setUploadToDynamo(false)
       setsaving(false)
     }
   }, [uploadToDynamo, ponteggio]);

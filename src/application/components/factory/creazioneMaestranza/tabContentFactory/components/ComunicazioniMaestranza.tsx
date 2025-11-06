@@ -30,11 +30,13 @@ import { updateImpresaInDynamo } from "../../../../../../dynamodb/api/impresaAPI
 export interface ComunicazioniMaestranzaProps {
   editabile: boolean;
   modifica: boolean;
+  setmodificaEffettuata?: Function
 }
 
 const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = ({
   editabile,
   modifica,
+  setmodificaEffettuata
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -56,7 +58,7 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = ({
   const { execQuery2 } = useDynamoDBQuery();
 
   const { handleSubmit } = useForm();
-  const onSubmit = (data: any) => {
+  const onSubmit = () => {
     maestranza.documenti.forEach((e) => {
       if (e.file && typeof e.file !== "string") {
         uploadFileS3(e.file as File).then((res) => {
@@ -139,7 +141,8 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = ({
         dispatch(setMaestranzaDaCreare(maestranzaDefault));
         setSpinner(false);
         dispatch(setObjectToCreate(undefined));
-        navigate(`/impresa/${impresaSelezionata?.id}/maestranze`);
+        !setmodificaEffettuata ? navigate(`/impresa/${impresaSelezionata?.id}/maestranze`) : navigate(`/totalControl`)
+        setmodificaEffettuata && setmodificaEffettuata((prev:boolean) => !prev)
       });
     }
   }, [uploadToDynamo, save]);
@@ -250,16 +253,17 @@ const ComunicazioniMaestranza: React.FC<ComunicazioniMaestranzaProps> = ({
           </div>
         </div>
         {editabile && (
-          <div className="flex mt-10">
+          <div className="flex mt-10 modal-action">
             <div className="rounded-bl rounded-tl bg-amber-600 p-2">
               <TfiSave size="30px" className="text-white" />
             </div>
-            <button
-              type="submit"
-              className="rounded-br rounded-tr bg-amber-400 p-2 w-full text-white hover:cursor-pointer font-bold"
+            <label
+              htmlFor="my-modal-8"
+              onClick={() => onSubmit()}
+              className="rounded-br text-center rounded-tr bg-amber-400 p-2 w-full text-white hover:cursor-pointer font-bold"
             >
               {`${modifica ? "Modifica Maestranza" : "Crea Maestranza"}`}
-            </button>
+            </label>
           </div>
         )}
       </form>

@@ -27,6 +27,7 @@ export interface CreazioneGruProps {
   modifica: boolean;
   setModifica: (v: boolean) => void;
   setsaving: (v: boolean) => void;
+  setmodificaEffettuata?: Function;
 }
 
 const CreazioneGru: React.FC<CreazioneGruProps> = ({
@@ -34,6 +35,7 @@ const CreazioneGru: React.FC<CreazioneGruProps> = ({
   modifica,
   setModifica,
   setsaving,
+  setmodificaEffettuata
 }) => {
   const { execQuery2 } = useDynamoDBQuery();
   const dispatch = useDispatch();
@@ -99,6 +101,7 @@ const CreazioneGru: React.FC<CreazioneGruProps> = ({
       });
       setSave(false);
       setsaving(false);
+      setUploadToDynamo(false);
     }
     if (save && uploadToDynamo && modifica) {
       execQuery2(updateGruInDynamo, {
@@ -115,9 +118,11 @@ const CreazioneGru: React.FC<CreazioneGruProps> = ({
         setModifica(false);
         dispatch(setGruSelezionata(undefined));
         dispatch(setGruDaCreare(gruDefault));
+        setmodificaEffettuata && setmodificaEffettuata((prev:boolean) => !prev)
       });
       setSave(false);
       setsaving(false);
+      setUploadToDynamo(false);
     }
   }, [uploadToDynamo, gru]);
 

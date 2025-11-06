@@ -11,23 +11,24 @@ export interface TabContentMaestranzaFactoryProps{
     setTabActive: (s:string) => void
     editabile: boolean
     modifica: boolean
+    setmodificaEffettuata?: (v:boolean) => void
 }
 
 const TabContentMaestranzaFactory: React.FC<TabContentMaestranzaFactoryProps> = (
     {
-        selectedTab, setTabActive, editabile, modifica
+        selectedTab, setTabActive, editabile, modifica, setmodificaEffettuata
     }
 ) => {
 
 
     switch (selectedTab) {
         case "Anagrafica":
-            return <AnagraficaMaestranza setTabActive={setTabActive} editabile={editabile}/>
+            return <AnagraficaMaestranza setTabActive={setTabActive} editabile={editabile} setmodificaEffettuata={setmodificaEffettuata}/>
         case "Documenti":
             return <DocumentiMaestranza setTabActive={setTabActive} editabile={editabile} modifica={modifica}/>
         case "Comunicazioni":
-            return <ComunicazioniMaestranza  editabile={editabile} modifica={modifica}/>
-        default: return <AnagraficaMaestranza setTabActive={setTabActive} editabile={editabile}/>
+            return <ComunicazioniMaestranza  editabile={editabile} modifica={modifica} setmodificaEffettuata={setmodificaEffettuata}/>
+        default: return <AnagraficaMaestranza setTabActive={setTabActive} editabile={editabile} setmodificaEffettuata={setmodificaEffettuata}/>
     }
 }
 

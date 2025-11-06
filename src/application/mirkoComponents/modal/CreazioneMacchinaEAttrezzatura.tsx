@@ -31,11 +31,12 @@ export interface CreazioneMacchinaEAttrezzaturaProps {
   modifica: boolean;
   setModifica: (v: boolean) => void;
   setsaving: (v: boolean) => void;
+  setmodificaEffettuata?: Function;
 }
 
 const CreazioneMacchinaEAttrezzatura: React.FC<
   CreazioneMacchinaEAttrezzaturaProps
-> = ({ editabile, modifica, setModifica, setsaving }) => {
+> = ({ editabile, modifica, setModifica, setsaving, setmodificaEffettuata }) => {
   const { execQuery2 } = useDynamoDBQuery();
   const dispatch = useDispatch();
   const macchinaEAttrezzaturaSelezionato = useSelector(
@@ -121,6 +122,7 @@ const CreazioneMacchinaEAttrezzatura: React.FC<
         );
       });
       setsaving(false);
+      setUploadToDynamo(false);
       setSave(false)
     }
     /*
@@ -150,8 +152,10 @@ const CreazioneMacchinaEAttrezzatura: React.FC<
         dispatch(
           setMacchinaEAttrezzaturaDaCreare(macchinaEAttrezzaturaDefault)
         );
+        setmodificaEffettuata && setmodificaEffettuata((prev:boolean) => !prev)
       });
       setsaving(false);
+      setUploadToDynamo(false);
       setSave(false)
     }
   }, [uploadToDynamo, macchinaEAttrezzatura]);

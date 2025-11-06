@@ -21,13 +21,14 @@ const getAnagraficaValue = (anagraficaArray: any, label: string, defaultValue: a
 };
 
 export interface AnagraficaMaestranzaProps{
-    setTabActive: (s:string) => void
-    editabile: boolean,
+    setTabActive: (s:string) => void;
+    editabile: boolean;
+    setmodificaEffettuata?: Function;
 }
 
 const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
     {
-        setTabActive, editabile
+        setTabActive, editabile, setmodificaEffettuata
     }
 ) => {
     const dispatch = useDispatch()
@@ -75,7 +76,7 @@ const AnagraficaMaestranza: React.FC<AnagraficaMaestranzaProps> = (
     }, [impresaSelezionata, maestranzaSelezionata, dispatch])
 
     useEffect(() => {
-        if(maestranzaSelezionata && breadcrumbItems.filter(bi => bi === `${getAnagraficaValue(maestranzaSelezionata.anagrafica, 'nome')} ${getAnagraficaValue(maestranzaSelezionata.anagrafica, 'cognome')}`).length === 0){
+        if(maestranzaSelezionata && !setmodificaEffettuata && breadcrumbItems.filter(bi => bi === `${getAnagraficaValue(maestranzaSelezionata.anagrafica, 'nome')} ${getAnagraficaValue(maestranzaSelezionata.anagrafica, 'cognome')}`).length === 0){
             dispatch(addBreadcrumbItem(`${getAnagraficaValue(maestranzaSelezionata.anagrafica, 'nome')} ${getAnagraficaValue(maestranzaSelezionata.anagrafica, 'cognome')}`))
         }
     }, [maestranzaSelezionata, breadcrumbItems, dispatch])

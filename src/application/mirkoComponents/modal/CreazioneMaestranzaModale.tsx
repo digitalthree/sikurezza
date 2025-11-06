@@ -4,9 +4,10 @@ import CreazioneMaestranza from "../../components/factory/creazioneMaestranza/Cr
 export interface CreazioneMaestranzaModaleProps{
     editabile: boolean
     modifica: boolean
+    setmodificaEffettuata?: (v:boolean) => void
 }
 
-const CreazioneMaestranzaModale: React.FC<CreazioneMaestranzaModaleProps> = ({editabile, modifica}) => {
+const CreazioneMaestranzaModale: React.FC<CreazioneMaestranzaModaleProps> = ({editabile, modifica, setmodificaEffettuata}) => {
     return(
         <>
             <input type="checkbox"
@@ -20,7 +21,7 @@ const CreazioneMaestranzaModale: React.FC<CreazioneMaestranzaModaleProps> = ({ed
             />
             <label htmlFor="my-modal-8" className="modal cursor-pointer">
                 <label className="modal-box relative max-w-[1440px]">
-                    <CreazioneMaestranza editabile={editabile} modifica={modifica}/>
+                    <CreazioneMaestranza editabile={editabile} modifica={modifica} setmodificaEffettuata={setmodificaEffettuata}/>
                 </label>
             </label>
         </>

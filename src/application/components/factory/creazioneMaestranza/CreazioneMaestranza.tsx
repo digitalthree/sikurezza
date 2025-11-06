@@ -5,9 +5,10 @@ import {useLocation} from "react-router-dom";
 export interface CreazioneMaestranzaProps {
     editabile?: boolean
     modifica?: boolean
+    setmodificaEffettuata?: (v:boolean) => void
 }
 
-const CreazioneMaestranza: React.FC<CreazioneMaestranzaProps> = ({editabile, modifica}) => {
+const CreazioneMaestranza: React.FC<CreazioneMaestranzaProps> = ({editabile, modifica, setmodificaEffettuata}) => {
 
     const [tabActive, setTabActive] = useState("Anagrafica");
     const location = useLocation()
@@ -40,7 +41,9 @@ const CreazioneMaestranza: React.FC<CreazioneMaestranzaProps> = ({editabile, mod
             </div>
             <TabContentMaestranzaFactory selectedTab={tabActive} setTabActive={setTabActive}
                                          editabile={editabile ? editabile : location.state.editabile as boolean}
-                                         modifica={modifica ? modifica : location.state.modifica as boolean}/>
+                                         modifica={modifica ? modifica : location.state.modifica as boolean}
+                                         setmodificaEffettuata={setmodificaEffettuata}
+                                         />
         </div>
     )
 }
